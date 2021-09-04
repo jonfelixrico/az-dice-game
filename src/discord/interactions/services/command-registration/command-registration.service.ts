@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config'
 import { Client } from 'discord.js'
 import { REST } from '@discordjs/rest'
 import { ROLL_COMMAND } from './builders/roll.command-builder'
-import { Routes } from 'discord-api-types'
+import { Routes } from 'discord-api-types/v9'
 
 const COMMAND_BUILDERS = [ROLL_COMMAND]
 
