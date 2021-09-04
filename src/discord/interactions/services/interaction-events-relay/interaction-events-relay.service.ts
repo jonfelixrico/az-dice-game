@@ -1,24 +1,18 @@
 import { Injectable, OnModuleInit } from '@nestjs/common'
-import { Client, Interaction } from 'discord.js'
-import { Subject } from 'rxjs'
-import { InteractionBus } from './interaction-bus.class'
+import { EventBus } from '@nestjs/cqrs'
+import { Client } from 'discord.js'
+import { InteractionEvent } from './interaction-event.event'
 
 @Injectable()
 /**
  * Wraps around the Discord client's `interactionCreate` events and relays it as an RxJS observable.
  */
 export class InteractionEventsRelayService implements OnModuleInit {
-  private subject = new Subject<Interaction>()
-
-  constructor(private client: Client) {}
-
-  get bus$(): InteractionBus {
-    return this.subject.asObservable()
-  }
+  constructor(private client: Client, private eventBus: EventBus) {}
 
   onModuleInit() {
-    this.client.on('interactionCreate', (interaction) => {
-      this.subject.next(interaction)
-    })
+    this.client.on('interactionCreate', (i) =>
+      this.eventBus.publish(new InteractionEvent(i))
+    )
   }
 }
