@@ -1,6 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common'
 import { EventBus } from '@nestjs/cqrs'
 import { Client } from 'discord.js'
+import { InteractionCreatedEvent } from './interaction-created.event'
 
 @Injectable()
 /**
@@ -10,6 +11,8 @@ export class InteractionEventsRelayService implements OnModuleInit {
   constructor(private client: Client, private eventBus: EventBus) {}
 
   onModuleInit() {
-    this.client.on('interactionCreate', (i) => this.eventBus.publish(i))
+    this.client.on('interactionCreate', (i) => {
+      this.eventBus.publish(new InteractionCreatedEvent(i))
+    })
   }
 }

@@ -1,15 +1,17 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs'
-import { Interaction } from 'discord.js'
-@EventsHandler(Interaction)
+import { InteractionCreatedEvent } from 'src/interactions/services/interaction-events-relay/interaction-created.event'
+@EventsHandler(InteractionCreatedEvent)
 export class RollInteractionHandlerService
-  implements IEventHandler<Interaction>
+  implements IEventHandler<InteractionCreatedEvent>
 {
-  async handle(interaction: Interaction) {
+  async handle({ interaction }: InteractionCreatedEvent) {
     if (!interaction.isCommand() || interaction.commandName !== 'roll') {
       return
     }
 
     await interaction.deferReply()
+
+    // TODO implement rolling
     await interaction.editReply('hello')
   }
 }
