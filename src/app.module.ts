@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { DiscordModule } from './discord/discord.module'
+import { GlobalModule } from './global/global.module'
 
 @Module({
   imports: [
@@ -9,6 +10,7 @@ import { DiscordModule } from './discord/discord.module'
       isGlobal: true,
     }),
     DiscordModule,
+    GlobalModule,
   ],
 })
 export class AppModule {}
