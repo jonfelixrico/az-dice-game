@@ -1,4 +1,15 @@
-import { Injectable } from '@nestjs/common'
+import { EventsHandler, IEventHandler } from '@nestjs/cqrs'
+import { Interaction } from 'discord.js'
+@EventsHandler(Interaction)
+export class RollInteractionHandlerService
+  implements IEventHandler<Interaction>
+{
+  async handle(interaction: Interaction) {
+    if (!interaction.isCommand() || interaction.commandName !== 'roll') {
+      return
+    }
 
-@Injectable()
-export class RollInteractionHandlerService {}
+    await interaction.deferReply()
+    await interaction.editReply('hello')
+  }
+}
