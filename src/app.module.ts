@@ -7,11 +7,11 @@ import { InteractionsModule } from './interactions/interactions.module'
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.dev.env', '.env'],
+      envFilePath: ['.env', '.dev.env'],
       isGlobal: true,
     }),
-    DiscordModule,
     GlobalModule,
+    DiscordModule,
     InteractionsModule,
   ],
 })
