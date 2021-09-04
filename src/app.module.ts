@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { DiscordModule } from './discord/discord.module'
 import { GlobalModule } from './global/global.module'
+import { InteractionsModule } from './interactions/interactions.module'
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { GlobalModule } from './global/global.module'
     }),
     DiscordModule,
     GlobalModule,
+    InteractionsModule,
   ],
 })
 export class AppModule {}
