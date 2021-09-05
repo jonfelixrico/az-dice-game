@@ -1,9 +1,9 @@
-import { IEvent } from '@nestjs/cqrs'
+import { IBaseEvent } from '../events/base-event.interface'
 
 export class BaseDomain {
-  events: IEvent[]
+  events: IBaseEvent[]
 
-  apply(event: IEvent) {
+  apply(event: IBaseEvent) {
     this.events.push(event)
   }
 }

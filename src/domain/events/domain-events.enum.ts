@@ -1,0 +1,5 @@
+export enum DomainEvents {
+  ROLL_CREATED = 'ROLL_CREATED',
+  ROLL_REMOVED = 'ROLL_REMOVED',
+  ROLL_RESTORED = 'ROLL_RESTORED',
+}
