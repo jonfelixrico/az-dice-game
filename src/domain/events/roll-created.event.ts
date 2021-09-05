@@ -8,8 +8,10 @@ export interface IRollCreatedEventPayload extends IUserRoll {
 
 export class RollCreatedEvent extends BaseDomainEvent<IRollCreatedEventPayload> {
   constructor(payload) {
+    const { channelId, guildId } = payload
+
     super({
-      entityId: payload.channelId,
+      entityId: [guildId, channelId].join('/'),
       eventName: 'ROLL_CREATED',
       payload,
     })
