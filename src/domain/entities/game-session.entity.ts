@@ -1,4 +1,5 @@
 import { random } from 'lodash'
+import { nanoid } from 'nanoid'
 import { DomainError } from '../domain-error.class'
 import { RollCreatedEvent } from '../events/roll-created.event'
 import { BaseDomain } from './base-entity.class'
@@ -33,6 +34,7 @@ export class GameSession extends BaseDomain implements IGameSession {
       ...others,
       roll: roll ?? rollD6(),
       timestamp: new Date(),
+      rollId: nanoid(),
     }
 
     this.apply(new RollCreatedEvent({ guildId, channelId, ...newLastRoll }))

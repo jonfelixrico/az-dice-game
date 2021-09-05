@@ -13,4 +13,5 @@ export interface IUserRoll {
   roll: DiceRoll
   timestamp: Date
   type: keyof typeof RollType
+  rollId: string
 }
