@@ -7,7 +7,7 @@ enum RollType {
   MANUAL = 'MANUAL',
 }
 
-export interface IUserRoll {
+export interface IRoll {
   rollOwner: string
   rollExecutor: string
   roll: DiceRoll

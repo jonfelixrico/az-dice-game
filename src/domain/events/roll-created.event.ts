@@ -1,7 +1,7 @@
-import { IUserRoll } from '../entities/user-roll.interface'
+import { IRoll } from '../entities/user-roll.interface'
 import { BaseDomainEvent } from './base-domain-event.interface'
 
-export interface IRollCreatedEventPayload extends IUserRoll {
+export interface IRollCreatedEventPayload extends IRoll {
   channelId: string
   guildId: string
 }

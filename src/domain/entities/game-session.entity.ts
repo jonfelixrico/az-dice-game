@@ -3,13 +3,13 @@ import { nanoid } from 'nanoid'
 import { DomainError } from '../domain-error.class'
 import { RollCreatedEvent } from '../events/roll-created.event'
 import { BaseDomain, IBaseDomain } from './base-entity.abstract'
-import { DiceRoll, IUserRoll } from './user-roll.interface'
+import { DiceRoll, IRoll } from './user-roll.interface'
 
 function rollD6(): DiceRoll {
   return new Array(6).fill(null).map(() => random(1, 6)) as DiceRoll
 }
 
-type LastRoll = IUserRoll | null
+type LastRoll = IRoll | null
 
 export interface IGameSession extends IBaseDomain {
   channelId: string
@@ -18,7 +18,7 @@ export interface IGameSession extends IBaseDomain {
 }
 
 interface IDoRollInput
-  extends Pick<IUserRoll, 'rollExecutor' | 'rollOwner' | 'type'> {
+  extends Pick<IRoll, 'rollExecutor' | 'rollOwner' | 'type'> {
   roll?: DiceRoll
 }
 
@@ -39,7 +39,7 @@ export class GameSession extends BaseDomain implements IGameSession {
   private doRoll({ roll, ...others }: IDoRollInput) {
     const { guildId, channelId } = this
 
-    const newLastRoll: IUserRoll = {
+    const newLastRoll: IRoll = {
       ...others,
       roll: roll ?? rollD6(),
       timestamp: new Date(),

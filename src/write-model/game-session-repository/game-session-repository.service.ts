@@ -1,14 +1,14 @@
 import { EventStoreDBClient, JSONEventType } from '@eventstore/db-client'
 import { Injectable } from '@nestjs/common'
 import { GameSession } from 'src/domain/entities/game-session.entity'
-import { IUserRoll } from 'src/domain/entities/user-roll.interface'
+import { IRoll } from 'src/domain/entities/user-roll.interface'
 import { EventName } from 'src/domain/events/base-domain-event.interface'
 
 interface IBaseRoll extends Record<string | number, unknown> {
   rollId: string
 }
 
-interface EsdbUserRoll extends IUserRoll, IBaseRoll {}
+interface EsdbRoll extends IRoll, IBaseRoll {}
 
 @Injectable()
 export class GameSessionRepositoryService {
@@ -21,7 +21,7 @@ export class GameSessionRepositoryService {
     const restorePool = new Set<string>()
     const removePool = new Set<string>()
 
-    let lastRoll: IUserRoll
+    let lastRoll: IRoll
     let lastRev: bigint
 
     const stream = this.client.readStream<JSONEventType<EventName, IBaseRoll>>(
@@ -59,7 +59,7 @@ export class GameSessionRepositoryService {
           continue
         }
 
-        lastRoll = data as EsdbUserRoll
+        lastRoll = data as EsdbRoll
       }
     }
 
