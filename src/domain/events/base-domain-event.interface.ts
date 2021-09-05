@@ -1,7 +1,7 @@
 import { IEvent } from '@nestjs/cqrs'
 import { DomainEvents } from './domain-events.enum'
 
-type EventName = DomainEvents | keyof typeof DomainEvents
+export type EventName = DomainEvents | keyof typeof DomainEvents
 
 interface IDomainEvent<PayloadType = any> {
   readonly entityId: string
