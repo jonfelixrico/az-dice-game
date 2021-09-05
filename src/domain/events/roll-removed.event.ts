@@ -1,6 +1,9 @@
-import { BaseDomainEvent } from './base-domain-event.interface'
+import {
+  BaseDomainEvent,
+  BaseEventPayload,
+} from './base-domain-event.interface'
 
-export interface IRollRemovedEventPayload {
+export interface IRollRemovedEventPayload extends BaseEventPayload {
   rollId: string
   guildId: string
   channelId: string

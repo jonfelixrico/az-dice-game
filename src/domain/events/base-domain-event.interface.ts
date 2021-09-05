@@ -3,14 +3,19 @@ import { DomainEvents } from './domain-events.enum'
 
 export type EventName = DomainEvents | keyof typeof DomainEvents
 
-interface IDomainEvent<PayloadType = any> {
+export type BaseEventPayload = Record<string, unknown>
+
+interface IDomainEvent<
+  PayloadType extends BaseEventPayload = BaseEventPayload
+> {
   readonly entityId: string
   readonly eventName: EventName
   readonly payload: PayloadType
 }
 
-export class BaseDomainEvent<PayloadType = any>
-  implements IEvent, IDomainEvent<PayloadType>
+export class BaseDomainEvent<
+  PayloadType extends BaseEventPayload = BaseEventPayload
+> implements IEvent, IDomainEvent<PayloadType>
 {
   readonly entityId: string
   readonly eventName: EventName
