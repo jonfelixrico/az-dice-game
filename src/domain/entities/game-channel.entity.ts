@@ -94,6 +94,7 @@ export class GameChannel extends BaseDomain implements IGameChannel {
         channelId,
         guildId,
         rollId,
+        timestamp: new Date(),
       })
     )
 

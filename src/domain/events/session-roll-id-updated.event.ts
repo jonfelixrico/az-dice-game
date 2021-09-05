@@ -4,6 +4,7 @@ export interface ISessionRollIdUpdatedEventPayload {
   channelId: string
   guildId: string
   rollId: string
+  timestamp: Date
 }
 
 export class SessionRollIdUpdatedEvent extends BaseDomainEvent<ISessionRollIdUpdatedEventPayload> {
