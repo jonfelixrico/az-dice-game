@@ -4,7 +4,7 @@ export interface IRollRemovedEventPayload {
   rollId: string
   guildId: string
   channelId: string
-  timestamp: string
+  timestamp: Date
 }
 
 export class RollRemovedEvent extends BaseDomainEvent<IRollRemovedEventPayload> {

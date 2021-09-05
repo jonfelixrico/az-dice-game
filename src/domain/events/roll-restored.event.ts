@@ -4,7 +4,7 @@ export interface IRollRestoredEventPayload {
   rollId: string
   guildId: string
   channelId: string
-  timestamp: string
+  timestamp: Date
 }
 
 export class RollRestoredEvent extends BaseDomainEvent<IRollRestoredEventPayload> {
