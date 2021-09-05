@@ -2,7 +2,7 @@ import { random } from 'lodash'
 import { nanoid } from 'nanoid'
 import { DomainError } from '../domain-error.class'
 import { RollCreatedEvent } from '../events/roll-created.event'
-import { BaseDomain } from './base-entity.class'
+import { BaseDomain, IBaseDomain } from './base-entity.abstract'
 import { DiceRoll, IUserRoll } from './user-roll.interface'
 
 function rollD6(): DiceRoll {
@@ -11,7 +11,7 @@ function rollD6(): DiceRoll {
 
 type LastRoll = IUserRoll | null
 
-export interface IGameSession {
+export interface IGameSession extends IBaseDomain {
   channelId: string
   guildId: string
   lastRoll: LastRoll
@@ -26,6 +26,15 @@ export class GameSession extends BaseDomain implements IGameSession {
   channelId: string
   guildId: string
   lastRoll: LastRoll
+  revision: bigint
+
+  constructor({ channelId, guildId, lastRoll, revision }: IGameSession) {
+    super()
+    this.channelId = channelId
+    this.guildId = guildId
+    this.lastRoll = lastRoll
+    this.revision = revision
+  }
 
   private doRoll({ roll, ...others }: IDoRollInput) {
     const { guildId, channelId } = this
