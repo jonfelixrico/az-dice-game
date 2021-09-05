@@ -8,7 +8,7 @@ export interface IRollRestoredEventPayload {
 }
 
 export class RollRestoredEvent extends BaseDomainEvent<IRollRestoredEventPayload> {
-  constructor(payload) {
+  constructor(payload: IRollRestoredEventPayload) {
     const { channelId, guildId } = payload
 
     super({
