@@ -14,7 +14,7 @@ export class BaseDomainEvent<PayloadType = any>
 {
   readonly entityId: string
   readonly eventName: EventName
-  readonly payload: any
+  readonly payload: PayloadType
 
   constructor({ entityId, eventName, payload }: IDomainEvent<PayloadType>) {
     this.entityId = entityId
