@@ -27,11 +27,11 @@ export class GameSession extends BaseDomain implements IGameSession {
       throw new DomainError('USER_WAS_LAST_ROLL')
     }
 
-    // const newLastRoll: IUserRoll = {
-    //   userId,
-    //   type: 'NATURAL',
-    //   roll: rollD6(),
-    //   timestamp: new Date(),
-    // }
+    const newLastRoll: IUserRoll = {
+      userId,
+      type: 'NATURAL',
+      roll: rollD6(),
+      timestamp: new Date(),
+    }
   }
 }

@@ -1,9 +1,9 @@
-import { IBaseEvent } from '../events/base-event.interface'
+import { BaseDomainEvent } from '../events/base-domain-event.interface'
 
 export class BaseDomain {
-  events: IBaseEvent[]
+  events: BaseDomainEvent[]
 
-  apply(event: IBaseEvent) {
+  apply(event: BaseDomainEvent) {
     this.events.push(event)
   }
 }
