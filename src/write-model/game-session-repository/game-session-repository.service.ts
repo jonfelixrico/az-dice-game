@@ -4,12 +4,11 @@ import { GameSession } from 'src/domain/entities/game-session.entity'
 import { IUserRoll } from 'src/domain/entities/user-roll.interface'
 import { EventName } from 'src/domain/events/base-domain-event.interface'
 
-interface IBaseUserRoll extends Record<string | number, unknown> {
+interface IBaseRoll extends Record<string | number, unknown> {
   rollId: string
-  userId: string
 }
 
-interface EsdbUserRoll extends IUserRoll, IBaseUserRoll {}
+interface EsdbUserRoll extends IUserRoll, IBaseRoll {}
 
 @Injectable()
 export class GameSessionRepositoryService {
@@ -25,12 +24,13 @@ export class GameSessionRepositoryService {
     let lastRoll: IUserRoll
     let lastRev: bigint
 
-    const stream = this.client.readStream<
-      JSONEventType<EventName, IBaseUserRoll>
-    >([guildId, channelId].join('/'), {
-      direction: 'backwards',
-      fromRevision: 'end',
-    })
+    const stream = this.client.readStream<JSONEventType<EventName, IBaseRoll>>(
+      [guildId, channelId].join('/'),
+      {
+        direction: 'backwards',
+        fromRevision: 'end',
+      }
+    )
 
     for await (const { event } of stream) {
       const { type, data, revision } = event
