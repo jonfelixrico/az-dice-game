@@ -1,6 +1,6 @@
 import { random } from 'lodash'
-import { BaseDomain } from './base-domain.class'
-import { DomainError } from './domain-error.class'
+import { DomainError } from '../domain-error.class'
+import { BaseDomain } from './base-entity.class'
 import { DiceRoll, IUserRoll } from './user-roll.interface'
 
 function rollD6(): DiceRoll {

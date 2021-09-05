@@ -1,4 +1,4 @@
-export enum DomainErrorCodes {
+enum DomainErrorCodes {
   USER_WAS_LAST_ROLL = 'USER_WAS_LAST_ROLL',
 }
 
