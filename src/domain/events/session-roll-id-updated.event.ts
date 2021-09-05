@@ -6,7 +6,7 @@ export interface ISessionRollIdUpdatedEventPayload {
   rollId: string
 }
 
-export class RollCreatedEvent extends BaseDomainEvent<ISessionRollIdUpdatedEventPayload> {
+export class SessionRollIdUpdatedEvent extends BaseDomainEvent<ISessionRollIdUpdatedEventPayload> {
   constructor(payload: ISessionRollIdUpdatedEventPayload) {
     const { channelId, guildId } = payload
 
