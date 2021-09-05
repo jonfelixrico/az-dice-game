@@ -8,7 +8,8 @@ enum RollType {
 }
 
 export interface IUserRoll {
-  userId: string
+  rollOwner: string
+  rollExecutor: string
   roll: DiceRoll
   timestamp: Date
   type: keyof typeof RollType
