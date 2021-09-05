@@ -2,13 +2,19 @@ import { EventStoreDBClient, JSONEventType } from '@eventstore/db-client'
 import { Injectable } from '@nestjs/common'
 import { GameSession } from 'src/domain/entities/game-session.entity'
 import { IRoll } from 'src/domain/entities/user-roll.interface'
-import { EventName } from 'src/domain/events/base-domain-event.interface'
+import {
+  BaseEventPayload,
+  EventName,
+} from 'src/domain/events/base-domain-event.interface'
+import { IRollCreatedEventPayload } from 'src/domain/events/roll-created.event'
+import { IRollRemovedEventPayload } from 'src/domain/events/roll-removed.event'
+import { IRollRestoredEventPayload } from 'src/domain/events/roll-restored.event'
 
-interface IBaseRoll extends Record<string | number, unknown> {
-  rollId: string
-}
-
-interface EsdbRoll extends IRoll, IBaseRoll {}
+interface IBaseRoll
+  extends Pick<IRollCreatedEventPayload, 'rollId'>,
+    Pick<IRollRemovedEventPayload, 'rollId'>,
+    Pick<IRollRestoredEventPayload, 'rollId'>,
+    BaseEventPayload {}
 
 @Injectable()
 export class GameSessionRepositoryService {
@@ -59,7 +65,7 @@ export class GameSessionRepositoryService {
           continue
         }
 
-        lastRoll = data as EsdbRoll
+        lastRoll = data as IRollCreatedEventPayload
       }
     }
 
