@@ -26,27 +26,55 @@ export class CatchUpService implements OnApplicationBootstrap {
     return entry ? BigInt(entry.value) : null
   }
 
+  private async getTargetCommit(): Promise<bigint | null> {
+    const stream = this.esdb.readAll({
+      direction: 'backwards',
+      maxCount: 1,
+    })
+
+    for await (const evt of stream) {
+      return evt.commitPosition
+    }
+
+    return null
+  }
+
   private async doCatchUp() {
     const { esdb, typeorm } = this
-    const commit = await this.getCommit()
+    const startingCommit = await this.getCommit()
+    const targetCommit = await this.getTargetCommit()
 
     const stream = esdb.subscribeToAll({
-      fromPosition: commit
+      fromPosition: startingCommit
         ? {
-            commit,
-            prepare: commit,
+            commit: startingCommit,
+            prepare: startingCommit,
           }
         : 'start',
     })
 
     for await (const { commitPosition, event } of stream) {
-      await this.saveCommit(commitPosition)
+      try {
+        await this.saveCommit(commitPosition)
 
-      if (event.streamId.startsWith('$') || !event.isJson) {
-        continue
+        if (targetCommit === commitPosition) {
+          // TODO emit an event here, add logging
+        }
+
+        if (
+          // to ignore esdb server events
+          event.streamId.startsWith('$') ||
+          !event.isJson ||
+          // fromPosition is inclusive, so we're doing this to prevent duplicates
+          commitPosition === startingCommit
+        ) {
+          continue
+        }
+
+        // TODO call reducer fn here
+      } catch (e) {
+        console.error(e)
       }
-
-      // TODO call reducer fn here
     }
   }
 
