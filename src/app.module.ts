@@ -4,6 +4,7 @@ import { DiscordModule } from './discord/discord.module'
 import { GlobalModule } from './global/global.module'
 import { InteractionsModule } from './interactions/interactions.module'
 import { WriteModelModule } from './write-model/write-model.module'
+import { ReadModelModule } from './read-model/read-model.module'
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { WriteModelModule } from './write-model/write-model.module'
     DiscordModule,
     InteractionsModule,
     WriteModelModule,
+    ReadModelModule,
   ],
 })
 export class AppModule {}
