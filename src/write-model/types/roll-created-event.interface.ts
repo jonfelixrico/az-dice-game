@@ -1,4 +1,4 @@
-import { IBaseEvent } from './base-event.interface'
+import { IBaseEvent, IBaseEventPayload } from './base-event.interface'
 
 export enum IRollTypes {
   NATURAL = 'NATURAL',
@@ -7,7 +7,7 @@ export enum IRollTypes {
   PROXY = 'PROXY',
 }
 
-export interface IRollCreatedEventPayload extends Record<string, unknown> {
+export interface IRollCreatedEventPayload extends IBaseEventPayload {
   rollId: string
   roll: number[]
 

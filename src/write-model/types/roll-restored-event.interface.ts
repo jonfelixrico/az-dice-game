@@ -1,6 +1,6 @@
-import { IBaseEvent } from './base-event.interface'
+import { IBaseEvent, IBaseEventPayload } from './base-event.interface'
 
-export interface IRollRestoredEventPayload extends Record<string, unknown> {
+export interface IRollRestoredEventPayload extends IBaseEventPayload {
   rollId: string
   channelId: string
   guildId: string
