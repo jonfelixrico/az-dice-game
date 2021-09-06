@@ -26,7 +26,7 @@ export class CatchUpService implements OnApplicationBootstrap {
     return entry ? BigInt(entry.value) : null
   }
 
-  async onApplicationBootstrap() {
+  private async doCatchUp() {
     const { esdb, typeorm } = this
     const commit = await this.getCommit()
 
@@ -48,5 +48,10 @@ export class CatchUpService implements OnApplicationBootstrap {
 
       // TODO call reducer fn here
     }
+  }
+
+  onApplicationBootstrap() {
+    // we're not calling this as async because we want this to happen at the background
+    this.doCatchUp()
   }
 }
