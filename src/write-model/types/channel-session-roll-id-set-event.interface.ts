@@ -3,7 +3,6 @@ import { IBaseEvent, IBaseEventPayload } from './base-event.interface'
 export interface IRollCreatedEventPayload extends IBaseEventPayload {
   userId: string
   channelId: string
-  guildId: string
   rollId: string
 }
 
