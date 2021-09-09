@@ -5,8 +5,9 @@ import { REST } from '@discordjs/rest'
 import { ROLL_COMMAND } from './builders/roll.command-builder'
 import { Routes } from 'discord-api-types/v9'
 import { FORCE_ROLL_COMMAND } from './builders/force-roll.command-builder'
+import { PROXY_ROLL_COMMAND } from './builders/proxy-roll.command-builder'
 
-const COMMAND_BUILDERS = [ROLL_COMMAND, FORCE_ROLL_COMMAND]
+const COMMAND_BUILDERS = [ROLL_COMMAND, FORCE_ROLL_COMMAND, PROXY_ROLL_COMMAND]
 
 @Injectable()
 export class CommandRegistrationService implements OnApplicationBootstrap {
