@@ -6,6 +6,8 @@ import { RollInteractionHandlerService } from './handlers/roll-interaction-handl
 import { CommandRegistrationService } from './services/command-registration/command-registration.service'
 import { InteractionEventsRelayService } from './services/interaction-events-relay/interaction-events-relay.service'
 import { ForceRollInteractionHandlerService } from './handlers/force-roll-interaction-handler/force-roll-interaction-handler.service'
+import { ProxyRollInteractionHandlerService } from './handlers/proxy-roll-interaction-handler/proxy-roll-interaction-handler.service'
+import { ManualRollInteractionHandlerService } from './handlers/manual-roll-interaction-handler/manual-roll-interaction-handler.service'
 
 @Module({
   providers: [
@@ -13,6 +15,8 @@ import { ForceRollInteractionHandlerService } from './handlers/force-roll-intera
     CommandRegistrationService,
     InteractionEventsRelayService,
     ForceRollInteractionHandlerService,
+    ProxyRollInteractionHandlerService,
+    ManualRollInteractionHandlerService,
   ],
   imports: [DiscordModule, ReadModelModule, EventStoreDBClient],
 })
