@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common'
-import { ChannelWriteRepoService } from './channel-write-repo/channel-write-repo.service'
+import { EsdbHelperService } from './channel-write-repo/esdb-helper.service'
 import { esdbProvider } from './esdb.provider'
 
 @Module({
-  providers: [esdbProvider, ChannelWriteRepoService],
-  exports: [esdbProvider, ChannelWriteRepoService],
+  providers: [esdbProvider, EsdbHelperService],
+  exports: [esdbProvider, EsdbHelperService],
 })
 export class WriteModelModule {}

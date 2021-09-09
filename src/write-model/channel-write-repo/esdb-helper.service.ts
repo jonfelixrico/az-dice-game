@@ -3,10 +3,10 @@ import { Injectable } from '@nestjs/common'
 import { IBaseEvent } from '../types/base-event.interface'
 
 @Injectable()
-export class ChannelWriteRepoService {
+export class EsdbHelperService {
   constructor(private client: EventStoreDBClient) {}
 
-  async pushEvent({ payload, type }: IBaseEvent) {
+  async pushEvent<E extends IBaseEvent>({ payload, type }: E) {
     const { guildId, channelId } = payload
 
     await this.client.appendToStream(
