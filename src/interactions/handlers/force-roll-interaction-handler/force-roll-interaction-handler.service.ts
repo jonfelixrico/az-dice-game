@@ -6,7 +6,7 @@ export class ForceRollInteractionHandlerService
   implements IEventHandler<InteractionCreatedEvent>
 {
   async handle({ interaction }: InteractionCreatedEvent) {
-    if (!interaction.isCommand() || interaction.commandName !== 'roll') {
+    if (!interaction.isCommand() || interaction.commandName !== 'forceroll') {
       return
     }
 
