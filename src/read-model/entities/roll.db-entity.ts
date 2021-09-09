@@ -24,6 +24,9 @@ export class RollDbEntity {
   guildId: string
 
   @Column('varchar')
+  channelId: string
+
+  @Column('varchar')
   deleteBy: string
 
   @Column('timestamp with time zone')
