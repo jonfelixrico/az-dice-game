@@ -6,7 +6,8 @@ import { IBaseEvent } from '../types/base-event.interface'
 export class EsdbHelperService {
   constructor(private client: EventStoreDBClient) {}
 
-  async pushEvent<E extends IBaseEvent>({ payload, type }: E) {
+  async pushEvent<E extends IBaseEvent>(event: E): Promise<E> {
+    const { payload, type } = event
     const { guildId, channelId } = payload
 
     await this.client.appendToStream(
@@ -16,5 +17,7 @@ export class EsdbHelperService {
         data: payload,
       })
     )
+
+    return event
   }
 }
