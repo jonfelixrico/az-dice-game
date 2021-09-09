@@ -5,7 +5,7 @@ export const MANUAL_ROLL_COMMAND = new SlashCommandBuilder()
   .setDescription('Roll the dice for another user.')
   .addStringOption((option) =>
     option
-      .setName('d6string')
+      .setName('rollstring')
       .setDescription(
         'A 6-character string with each character consisting of an integer between 1 to 6.'
       )
