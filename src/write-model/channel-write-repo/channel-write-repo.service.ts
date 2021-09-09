@@ -9,7 +9,7 @@ export class ChannelWriteRepoService {
   async pushEvent({ payload, type }: IBaseEvent) {
     const { guildId, channelId } = payload
 
-    this.client.appendToStream(
+    await this.client.appendToStream(
       `${guildId}/${channelId}`,
       jsonEvent({
         type: type,
