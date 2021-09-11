@@ -1,3 +1,4 @@
+import { RollType } from 'src/write-model/types/roll-created-event.interface'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
 
 @Entity('roll')
@@ -21,7 +22,7 @@ export class RollDbEntity {
   rollOwner: string
 
   @Column('varchar')
-  type: string
+  type: RollType
 
   @Column('datetime')
   timestamp: Date
