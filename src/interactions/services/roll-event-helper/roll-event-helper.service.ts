@@ -65,7 +65,7 @@ export class RollEventHelperService {
         channelId,
         roll:
           type === 'MANUAL'
-            ? roll.roll
+            ? (roll as ManualRoll).roll
             : new Array(6).fill(0).map(() => random(1, 6)),
         rollId: nanoid(),
         rolledBy: user.id,
@@ -73,7 +73,9 @@ export class RollEventHelperService {
         type,
         rollOwner:
           // manual and proxy allows the user to have a target `rollOwner`
-          type === 'MANUAL' || type === 'PROXY' ? roll.rollOwner.id : user.id,
+          type === 'MANUAL' || type === 'PROXY'
+            ? (roll as BaseProxyRoll).rollOwner.id
+            : user.id,
       },
     }
 
