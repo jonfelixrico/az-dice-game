@@ -7,7 +7,6 @@ export interface IRollCreatedEventPayload extends IBaseEventPayload {
   roll: number[]
 
   type: RollType
-  rollDt: Date
 
   rolledBy: string
   rollOwner: string
