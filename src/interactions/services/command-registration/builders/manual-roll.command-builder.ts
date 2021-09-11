@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 
 export const MANUAL_ROLL_COMMAND = new SlashCommandBuilder()
-  .setName('proxyroll')
+  .setName('manualroll')
   .setDescription('Roll the dice for another user.')
   .addStringOption((option) =>
     option
