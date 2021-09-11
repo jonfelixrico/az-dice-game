@@ -1,4 +1,3 @@
-import { EventStoreDBClient } from '@eventstore/db-client'
 import { Module } from '@nestjs/common'
 import { DiscordModule } from 'src/discord/discord.module'
 import { ReadModelModule } from 'src/read-model/read-model.module'
@@ -9,6 +8,7 @@ import { ForceRollInteractionHandlerService } from './handlers/force-roll-intera
 import { ProxyRollInteractionHandlerService } from './handlers/proxy-roll-interaction-handler/proxy-roll-interaction-handler.service'
 import { ManualRollInteractionHandlerService } from './handlers/manual-roll-interaction-handler/manual-roll-interaction-handler.service'
 import { RollEventHelperService } from './services/roll-event-helper/roll-event-helper.service'
+import { WriteModelModule } from 'src/write-model/write-model.module'
 
 @Module({
   providers: [
@@ -20,6 +20,6 @@ import { RollEventHelperService } from './services/roll-event-helper/roll-event-
     ManualRollInteractionHandlerService,
     RollEventHelperService,
   ],
-  imports: [DiscordModule, ReadModelModule, EventStoreDBClient],
+  imports: [DiscordModule, ReadModelModule, WriteModelModule],
 })
 export class InteractionsModule {}
