@@ -20,7 +20,7 @@ export class ManualRollInteractionHandlerService
     const rollOwner = options.getUser('user') ?? interaction.user
     const rawRollString = options.getString('rollstring')
 
-    if (ROLL_STRING_REGEX.test(rawRollString)) {
+    if (!ROLL_STRING_REGEX.test(rawRollString)) {
       await interaction.reply({
         ephemeral: true,
         content:
