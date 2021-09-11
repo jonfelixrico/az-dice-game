@@ -8,6 +8,7 @@ import { InteractionEventsRelayService } from './services/interaction-events-rel
 import { ForceRollInteractionHandlerService } from './handlers/force-roll-interaction-handler/force-roll-interaction-handler.service'
 import { ProxyRollInteractionHandlerService } from './handlers/proxy-roll-interaction-handler/proxy-roll-interaction-handler.service'
 import { ManualRollInteractionHandlerService } from './handlers/manual-roll-interaction-handler/manual-roll-interaction-handler.service'
+import { RollEventHelperService } from './services/roll-event-helper/roll-event-helper.service'
 
 @Module({
   providers: [
@@ -17,6 +18,7 @@ import { ManualRollInteractionHandlerService } from './handlers/manual-roll-inte
     ForceRollInteractionHandlerService,
     ProxyRollInteractionHandlerService,
     ManualRollInteractionHandlerService,
+    RollEventHelperService,
   ],
   imports: [DiscordModule, ReadModelModule, EventStoreDBClient],
 })
