@@ -1,7 +1,8 @@
-import { EventStoreDBClient } from '@eventstore/db-client'
+import { EventStoreDBClient, JSONRecordedEvent } from '@eventstore/db-client'
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common'
 import { Connection } from 'typeorm'
 import { EntryDbEntity } from '../entities/entry.db-entity'
+import { ReducerFn, REDUCERS } from './reducers'
 
 const COMMIT = 'COMMIT'
 
@@ -39,8 +40,15 @@ export class CatchUpService implements OnApplicationBootstrap {
     return null
   }
 
+  private async runReducer(reducerFn: ReducerFn, event: JSONRecordedEvent) {
+    const { typeorm } = this
+    await typeorm.transaction<void>(
+      async (manager) => await reducerFn(event, manager)
+    )
+  }
+
   private async doCatchUp() {
-    const { esdb, typeorm } = this
+    const { esdb } = this
     const startingCommit = await this.getCommit()
     const targetCommit = await this.getTargetCommit()
 
@@ -71,7 +79,12 @@ export class CatchUpService implements OnApplicationBootstrap {
           continue
         }
 
-        // TODO call reducer fn here
+        const reducer = REDUCERS[event.type]
+        if (!reducer) {
+          continue
+        }
+
+        await this.runReducer(reducer, event)
       } catch (e) {
         console.error(e)
       }
