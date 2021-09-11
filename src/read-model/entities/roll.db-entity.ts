@@ -16,7 +16,7 @@ export class RollDbEntity {
   roll: number[]
 
   @Column('varchar')
-  rollExecutor: string
+  rolledBy: string
 
   @Column('varchar')
   rollOwner: string
