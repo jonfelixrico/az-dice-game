@@ -1,10 +1,13 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs'
 import { InteractionCreatedEvent } from 'src/interactions/services/interaction-events-relay/interaction-created.event'
+import { RollEventHelperService } from 'src/interactions/services/roll-event-helper/roll-event-helper.service'
 
 @EventsHandler(InteractionCreatedEvent)
 export class ProxyRollInteractionHandlerService
   implements IEventHandler<InteractionCreatedEvent>
 {
+  constructor(private rollHelper: RollEventHelperService) {}
+
   async handle({ interaction }: InteractionCreatedEvent) {
     if (!interaction.isCommand() || interaction.commandName !== 'proxyroll') {
       return
@@ -23,8 +26,13 @@ export class ProxyRollInteractionHandlerService
 
     await interaction.deferReply()
 
-    // TODO send roll event
+    const rolled = await this.rollHelper.createRoll({
+      interaction,
+      type: 'PROXY',
+      rollOwner,
+    })
 
-    await interaction.editReply('placeholder')
+    // TODO create formatter for this
+    await interaction.editReply(JSON.stringify(rolled.roll))
   }
 }
