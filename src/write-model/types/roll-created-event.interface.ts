@@ -1,6 +1,6 @@
 import { IBaseEvent, IBaseEventPayload } from './base-event.interface'
 
-type RollType = 'NATURAL' | 'NATURAL_FORCED_TURN' | 'MANUAL' | 'PROXY'
+export type RollType = 'NATURAL' | 'NATURAL_FORCED_TURN' | 'MANUAL' | 'PROXY'
 
 export interface IRollCreatedEventPayload extends IBaseEventPayload {
   rollId: string
