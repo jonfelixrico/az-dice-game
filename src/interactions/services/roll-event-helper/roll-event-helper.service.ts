@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { Interaction } from 'discord.js'
+import { Interaction, User } from 'discord.js'
 import { random } from 'lodash'
 import { nanoid } from 'nanoid'
 import { EsdbHelperService } from 'src/write-model/services/esdb-helper/esdb-helper.service'
@@ -19,7 +19,7 @@ interface NaturalRoll extends BaseRoll {
 
 interface BaseProxyRoll extends BaseRoll {
   type: 'MANUAL' | 'PROXY'
-  rollOwner: string
+  rollOwner: User
 }
 
 interface ManualRoll extends BaseProxyRoll {
@@ -53,7 +53,7 @@ export class RollEventHelperService {
         timestamp: new Date(),
         type,
         rollOwner:
-          type === 'MANUAL' || type === 'PROXY' ? roll.rollOwner : user.id,
+          type === 'MANUAL' || type === 'PROXY' ? roll.rollOwner.id : user.id,
       },
     }
 
