@@ -107,9 +107,9 @@ export class CatchUpService implements OnApplicationBootstrap {
         )
 
         if (successful) {
-          logger.debug(
+          logger.verbose(
             sprintf(
-              'Processed %s  -- %s/%s/%s',
+              'Processed %s -- %s/%s/%s',
               commitPosition,
               streamId,
               type,
@@ -118,9 +118,9 @@ export class CatchUpService implements OnApplicationBootstrap {
             CatchUpService.name
           )
         } else {
-          logger.debug(
+          logger.verbose(
             sprintf(
-              'Failed processing %s  -- %s/%s/%s',
+              'Failed processing %s -- %s/%s/%s',
               commitPosition,
               streamId,
               type,
