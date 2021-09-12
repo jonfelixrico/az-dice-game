@@ -1,6 +1,7 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs'
 import { InteractionCreatedEvent } from 'src/interactions/services/interaction-events-relay/interaction-created.event'
 import { RollEventHelperService } from 'src/interactions/services/roll-event-helper/roll-event-helper.service'
+import { RollPresentationSerializerService } from 'src/interactions/services/roll-presentation-serializer/roll-presentation-serializer.service'
 import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
 import { Connection, IsNull, Not } from 'typeorm'
 
@@ -10,7 +11,8 @@ export class RollInteractionHandlerService
 {
   constructor(
     private typeorm: Connection,
-    private rollHelper: RollEventHelperService
+    private rollHelper: RollEventHelperService,
+    private serializer: RollPresentationSerializerService
   ) {}
 
   async handle({ interaction }: InteractionCreatedEvent) {
@@ -38,7 +40,6 @@ export class RollInteractionHandlerService
       type: 'NATURAL',
     })
 
-    // TODO create formatter for this
-    await interaction.editReply(JSON.stringify(rolled.roll))
+    await interaction.editReply(this.serializer.serializeRoll(rolled.roll))
   }
 }
