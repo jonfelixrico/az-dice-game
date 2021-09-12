@@ -3,7 +3,7 @@ import { InteractionCreatedEvent } from 'src/interactions/services/interaction-e
 import { RollEventHelperService } from 'src/interactions/services/roll-event-helper/roll-event-helper.service'
 import { RollPresentationSerializerService } from 'src/interactions/services/roll-presentation-serializer/roll-presentation-serializer.service'
 import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
-import { Connection, IsNull, Not } from 'typeorm'
+import { Connection, IsNull } from 'typeorm'
 
 @EventsHandler(InteractionCreatedEvent)
 export class RollInteractionHandlerService
@@ -24,8 +24,11 @@ export class RollInteractionHandlerService
 
     const lastRoll = await this.typeorm.getRepository(RollDbEntity).findOne({
       where: {
-        deleteDt: Not(IsNull()),
+        deleteDt: IsNull(),
         channelId: interaction.channelId,
+      },
+      order: {
+        timestamp: 'DESC',
       },
     })
 
@@ -33,6 +36,7 @@ export class RollInteractionHandlerService
       await interaction.editReply(
         `The roll of ${interaction.user} was blocked because they were the owner of the last roll.`
       )
+      return
     }
 
     const rolled = await this.rollHelper.createRoll({
