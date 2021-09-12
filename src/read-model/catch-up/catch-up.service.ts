@@ -11,7 +11,7 @@ export class CatchUpService implements OnApplicationBootstrap {
   constructor(private esdb: EventStoreDBClient, private typeorm: Connection) {}
 
   private async saveCommit(commit: bigint) {
-    await this.typeorm.getRepository(EntryDbEntity).insert({
+    await this.typeorm.getRepository(EntryDbEntity).save({
       value: commit.toString(),
       key: COMMIT,
     })
