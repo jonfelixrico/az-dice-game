@@ -9,6 +9,7 @@ import { ProxyRollInteractionHandlerService } from './handlers/proxy-roll-intera
 import { ManualRollInteractionHandlerService } from './handlers/manual-roll-interaction-handler/manual-roll-interaction-handler.service'
 import { RollEventHelperService } from './services/roll-event-helper/roll-event-helper.service'
 import { WriteModelModule } from 'src/write-model/write-model.module'
+import { RollPresentationSerializerService } from './services/roll-presentation-serializer/roll-presentation-serializer.service'
 
 @Module({
   providers: [
@@ -19,6 +20,7 @@ import { WriteModelModule } from 'src/write-model/write-model.module'
     ProxyRollInteractionHandlerService,
     ManualRollInteractionHandlerService,
     RollEventHelperService,
+    RollPresentationSerializerService,
   ],
   imports: [DiscordModule, ReadModelModule, WriteModelModule],
 })
