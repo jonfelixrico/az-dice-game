@@ -11,7 +11,7 @@ import { RollDbEntity } from '../entities/roll.db-entity'
 export type ReducerFn<E extends JSONType = JSONType> = (
   event: JSONRecordedEvent<JSONEventType<string, E>>,
   manager: EntityManager
-) => Promise<void>
+) => Promise<boolean>
 
 const rollCreated: ReducerFn<IRollCreatedEventPayload> = async (
   { data },
@@ -38,6 +38,8 @@ const rollCreated: ReducerFn<IRollCreatedEventPayload> = async (
     type,
     rolledBy,
   })
+
+  return true
 }
 
 type ReducerMap = Record<string, ReducerFn>

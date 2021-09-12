@@ -3,6 +3,7 @@ import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common'
 import { Connection } from 'typeorm'
 import { EntryDbEntity } from '../entities/entry.db-entity'
 import { ReducerFn, REDUCERS } from './reducers'
+import { sprintf } from 'sprintf-js'
 
 const COMMIT = 'COMMIT'
 
@@ -46,13 +47,13 @@ export class CatchUpService implements OnApplicationBootstrap {
 
   private async runReducer(reducerFn: ReducerFn, event: JSONRecordedEvent) {
     const { typeorm } = this
-    await typeorm.transaction<void>(
+    return await typeorm.transaction<boolean>(
       async (manager) => await reducerFn(event, manager)
     )
   }
 
   private async doCatchUp() {
-    const { esdb } = this
+    const { esdb, logger } = this
     const startingCommit = await this.getCommit()
     const targetCommit = await this.getTargetCommit()
 
@@ -66,29 +67,68 @@ export class CatchUpService implements OnApplicationBootstrap {
     })
 
     for await (const { commitPosition, event } of stream) {
+      const { streamId, isJson, revision, type } = event
       try {
         await this.saveCommit(commitPosition)
 
         if (targetCommit === commitPosition) {
-          // TODO emit an event here, add logging
+          logger.debug(
+            sprintf(
+              'Skipped %s: matching commitPosition with initial.',
+              commitPosition
+            ),
+            CatchUpService.name
+          )
+          continue
         }
 
         if (
           // to ignore esdb server events
-          event.streamId.startsWith('$') ||
-          !event.isJson ||
+          streamId.startsWith('$') ||
+          !isJson ||
           // fromPosition is inclusive, so we're doing this to prevent duplicates
           commitPosition === startingCommit
         ) {
+          logger.debug(
+            sprintf('Skipped %s: server event', commitPosition),
+            CatchUpService.name
+          )
           continue
         }
 
-        const reducer = REDUCERS[event.type]
+        const reducer = REDUCERS[type]
         if (!reducer) {
           continue
         }
 
-        await this.runReducer(reducer, event)
+        const successful = await this.runReducer(
+          reducer,
+          event as JSONRecordedEvent
+        )
+
+        if (successful) {
+          logger.debug(
+            sprintf(
+              'Processed %s  -- %s/%s/%s',
+              commitPosition,
+              streamId,
+              type,
+              revision
+            ),
+            CatchUpService.name
+          )
+        } else {
+          logger.debug(
+            sprintf(
+              'Failed processing %s  -- %s/%s/%s',
+              commitPosition,
+              streamId,
+              type,
+              revision
+            ),
+            CatchUpService.name
+          )
+        }
       } catch (e) {
         this.logger.error(e.message, e.stack, CatchUpService.name)
       }
