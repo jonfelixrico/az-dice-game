@@ -11,6 +11,7 @@ import { ReadModelModule } from './read-model/read-model.module'
     ConfigModule.forRoot({
       envFilePath: ['.env', '.dev.env'],
       isGlobal: true,
+      cache: true,
     }),
     GlobalModule,
     DiscordModule,
