@@ -1,10 +1,10 @@
-import { Entity, PrimaryColumn } from 'typeorm'
+import { Column, Entity, PrimaryColumn } from 'typeorm'
 
 @Entity('entry')
 export class EntryDbEntity {
   @PrimaryColumn('varchar')
   key: string
 
-  @PrimaryColumn()
+  @Column()
   value: string
 }
