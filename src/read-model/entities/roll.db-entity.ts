@@ -33,9 +33,15 @@ export class RollDbEntity {
   @Column('varchar')
   channelId: string
 
-  @Column('varchar')
+  @Column({
+    nullable: true,
+    type: 'varchar',
+  })
   deleteBy: string
 
-  @Column('datetime')
+  @Column({
+    nullable: true,
+    type: 'datetime',
+  })
   deleteDt: Date
 }
