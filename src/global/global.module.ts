@@ -6,7 +6,7 @@ import {
   WinstonModule,
   WINSTON_MODULE_NEST_PROVIDER,
 } from 'nest-winston'
-import winston from 'winston'
+import * as winston from 'winston'
 
 const dynamicWinstonModule = WinstonModule.forRootAsync({
   useFactory: (cfg: ConfigService) => ({
