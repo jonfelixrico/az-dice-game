@@ -11,7 +11,7 @@ export const typeormProvider: Provider = {
   useFactory: (cfg: ConfigService) =>
     createConnection({
       type: 'sqlite',
-      database: 'azdicegamedb',
+      database: 'sqlite/azdb.sqlite',
       synchronize: !!cfg.get('TYPEORM_SYNC'),
       entities: [RollDbEntity, EntryDbEntity, ChannelDbEntity],
     }),
