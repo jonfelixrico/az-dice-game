@@ -6,7 +6,7 @@ import {
 import { EventTypes } from 'src/write-model/types/event-types.enum'
 import { IRollCreatedEventPayload } from 'src/write-model/types/roll-created-event.interface'
 import { EntityManager } from 'typeorm'
-import { RollDbEntity } from '../entities/roll.db-entity'
+import { RollDbEntity } from '../../entities/roll.db-entity'
 
 export type ReducerFn<E extends JSONType = JSONType> = (
   event: JSONRecordedEvent<JSONEventType<string, E>>,

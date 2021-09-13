@@ -1,11 +1,11 @@
 import { EventStoreDBClient, JSONRecordedEvent } from '@eventstore/db-client'
 import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common'
 import { Connection } from 'typeorm'
-import { EntryDbEntity } from '../entities/entry.db-entity'
+import { EntryDbEntity } from '../../entities/entry.db-entity'
 import { ReducerFn, REDUCERS } from './reducers'
 import { sprintf } from 'sprintf-js'
 import { EventBus } from '@nestjs/cqrs'
-import { ReadModelConsumedEvent } from '../read-model-consumed.event'
+import { ReadModelConsumedEvent } from '../../read-model-consumed.event'
 
 const COMMIT = 'COMMIT'
 
