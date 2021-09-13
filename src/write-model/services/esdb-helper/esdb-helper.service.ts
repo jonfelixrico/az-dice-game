@@ -4,6 +4,10 @@ import { EventBus } from '@nestjs/cqrs'
 import { WriteModelPublishedEvent } from 'src/write-model/write-model-published.event'
 import { IBaseEvent } from '../../types/base-event.interface'
 
+/**
+ * This is a helper service to push `IBaseEvent` instances into the ESDB.
+ * Emits an internal event to let downstream services that this app instance has pushed an event.
+ */
 @Injectable()
 export class EsdbHelperService {
   constructor(private client: EventStoreDBClient, private eventBus: EventBus) {}

@@ -9,6 +9,12 @@ import { ReadModelConsumedEvent } from '../read-model-consumed.event'
 
 const COMMIT = 'COMMIT'
 
+/**
+ * This service is in charge of watching changes in our ESDB instance and then applying those changes
+ * to our read model via the reducers that we've defined.
+ *
+ * Emits an event whenever we've succesfully consumed an event.
+ */
 @Injectable()
 export class CatchUpService implements OnApplicationBootstrap {
   constructor(
