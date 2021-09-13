@@ -4,6 +4,8 @@ import { Connection } from 'typeorm'
 import { EntryDbEntity } from '../entities/entry.db-entity'
 import { ReducerFn, REDUCERS } from './reducers'
 import { sprintf } from 'sprintf-js'
+import { EventBus } from '@nestjs/cqrs'
+import { ReadModelConsumedEvent } from '../read-model-consumed.event'
 
 const COMMIT = 'COMMIT'
 
@@ -12,7 +14,8 @@ export class CatchUpService implements OnApplicationBootstrap {
   constructor(
     private esdb: EventStoreDBClient,
     private typeorm: Connection,
-    private logger: Logger
+    private logger: Logger,
+    private eventBus: EventBus
   ) {}
 
   private async saveCommit(commit: bigint) {
@@ -117,6 +120,8 @@ export class CatchUpService implements OnApplicationBootstrap {
             ),
             CatchUpService.name
           )
+
+          this.eventBus.publish(new ReadModelConsumedEvent(event))
         } else {
           logger.verbose(
             sprintf(
