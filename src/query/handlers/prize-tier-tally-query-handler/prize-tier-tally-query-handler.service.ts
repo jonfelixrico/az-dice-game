@@ -5,7 +5,7 @@ import {
   PrizeTierTallyQueryOutput,
 } from 'src/query/prize-tier-tally-query'
 import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
-import { Connection, IsNull, MoreThan, Not } from 'typeorm'
+import { Connection, FindConditions, IsNull, MoreThan, Not } from 'typeorm'
 
 type PrizeTierMap = {
   [key: string]: PrizeTierTallyEntry
@@ -22,14 +22,19 @@ export class PrizeTierTallyQueryHandlerService
   }: PrizeTierTallyQuery): Promise<PrizeTierTallyQueryOutput> {
     const { channelId, guildId, startingTime } = input
 
+    const findConditions: FindConditions<RollDbEntity> = {
+      channelId,
+      guildId,
+      prizeRank: Not(IsNull()),
+      deleteDt: IsNull(),
+    }
+
+    if (startingTime) {
+      findConditions.timestamp = MoreThan(startingTime)
+    }
+
     const rolls = await this.typeorm.getRepository(RollDbEntity).find({
-      where: {
-        channelId,
-        guildId,
-        prizeRank: Not(IsNull()),
-        timestamp: MoreThan(startingTime),
-        deleteDt: IsNull(),
-      },
+      where: findConditions,
     })
 
     const tallyMap = rolls.reduce((map, { prizeRank, prizeSubrank }) => {
