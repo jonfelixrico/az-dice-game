@@ -3,7 +3,7 @@ import { IQuery } from '@nestjs/cqrs'
 export interface HighestWinningRollQueryInput {
   guildId: string
   channelId: string
-  startingTime: Date
+  startingTime?: Date
 }
 
 export interface HighestWinningRollQueryOutput {
