@@ -42,18 +42,14 @@ export class RollAnnouncerService
     }
 
     const embed: MessageEmbedOptions = {
-      description: [
-        this.serializer.serializeRoll(roll.roll),
-        '',
-        `<@${roll.rollOwner}> has rolled <rankplaceholder>.`,
-        '',
-      ].join(''),
+      description: `<@${roll.rollOwner}> has rolled <rankplaceholder>.`,
       footer: {
         text: roll.rollId,
       },
     }
 
     await interaction.editReply({
+      content: this.serializer.serializeRoll(roll.roll),
       embeds: [embed],
     })
   }
