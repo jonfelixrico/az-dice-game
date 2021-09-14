@@ -1,13 +1,18 @@
 import { Injectable } from '@nestjs/common'
 import { CommandInteraction, User } from 'discord.js'
 import { random } from 'lodash'
-import { nanoid } from 'nanoid'
+import { customAlphabet } from 'nanoid'
 import { InteractionCache } from 'src/interactions/providers/interaction-cache.class'
 import { EsdbHelperService } from 'src/write-model/services/esdb-helper/esdb-helper.service'
 import {
   IRollCreatedEvent,
   RollType,
 } from 'src/write-model/types/roll-created-event.interface'
+
+const generateId = customAlphabet(
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
+  12
+)
 
 interface BaseRoll {
   /**
@@ -59,7 +64,7 @@ export class RollEventHelperService {
     const { interaction, type } = roll
     const { guildId, channelId, user } = interaction
 
-    const rollId = nanoid()
+    const rollId = generateId()
 
     const event: IRollCreatedEvent = {
       type: 'ROLL_CREATED',
