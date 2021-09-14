@@ -8,7 +8,7 @@ export interface PrizeTierTallyQueryInput {
 
 export interface PrizeTierTallyEntry {
   rank: number
-  subrank?: number
+  subrank: number | null
   count: number
 }
 

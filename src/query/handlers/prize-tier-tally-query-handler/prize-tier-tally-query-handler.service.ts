@@ -44,7 +44,7 @@ export class PrizeTierTallyQueryHandlerService
       if (!entry) {
         map[key] = {
           rank: prizeRank,
-          subrank: prizeSubrank,
+          subrank: prizeSubrank ?? null,
           count: 1,
         }
       } else {
