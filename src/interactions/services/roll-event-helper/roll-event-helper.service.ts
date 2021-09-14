@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { Interaction, User } from 'discord.js'
 import { random } from 'lodash'
 import { nanoid } from 'nanoid'
@@ -6,7 +6,6 @@ import { InteractionCache } from 'src/interactions/providers/interaction-cache.c
 import { EsdbHelperService } from 'src/write-model/services/esdb-helper/esdb-helper.service'
 import {
   IRollCreatedEvent,
-  IRollCreatedEventPayload,
   RollType,
 } from 'src/write-model/types/roll-created-event.interface'
 
