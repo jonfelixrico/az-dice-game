@@ -6,6 +6,7 @@ import {
 import { evaluateRoll } from 'src/utils/roll-eval.utils'
 import { EventTypes } from 'src/write-model/types/event-types.enum'
 import { IRollCreatedEventPayload } from 'src/write-model/types/roll-created-event.interface'
+import { IRollRemovedEventPayload } from 'src/write-model/types/roll-removed-event.interface'
 import { EntityManager } from 'typeorm'
 import { RollDbEntity } from '../../entities/roll.db-entity'
 
@@ -48,10 +49,32 @@ const rollCreated: ReducerFn<IRollCreatedEventPayload> = async (
   return true
 }
 
+const rollRemoved: ReducerFn<IRollRemovedEventPayload> = async (
+  { data },
+  manager
+) => {
+  const { rollId, userId, timestamp, channelId, guildId } = data
+
+  await manager.getRepository(RollDbEntity).update(
+    {
+      rollId,
+      channelId,
+      guildId,
+    },
+    {
+      deleteDt: timestamp,
+      deleteBy: userId,
+    }
+  )
+
+  return true
+}
+
 type ReducerMap = Record<string, ReducerFn>
 
-const { ROLL_CREATED } = EventTypes
+const { ROLL_CREATED, ROLL_REMOVED } = EventTypes
 
 export const REDUCERS: ReducerMap = {
   [ROLL_CREATED]: rollCreated,
+  [ROLL_REMOVED]: rollRemoved,
 }
