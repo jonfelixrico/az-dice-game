@@ -4,9 +4,10 @@ import { InteractionCache } from 'src/interactions/providers/interaction-cache.c
 import { RollPresentationSerializerService } from 'src/interactions/services/roll-presentation-serializer/roll-presentation-serializer.service'
 import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
 import { ReadModelSyncedEvent } from 'src/read-model/read-model-synced.event'
-import { evaluateRoll, MatchingCombo } from 'src/utils/roll-eval.utils'
+import { PrizeTier } from 'src/utils/prize-tier'
 import { IRollCreatedEvent } from 'src/write-model/types/roll-created-event.interface'
 import { Connection } from 'typeorm'
+import { getPrizeTier } from './../../../utils/roll-eval.utils'
 
 function generateDudRollResponse(roll: RollDbEntity): MessageEmbedOptions {
   return {
@@ -16,7 +17,7 @@ function generateDudRollResponse(roll: RollDbEntity): MessageEmbedOptions {
 
 function generateWinningRollResponse(
   roll: RollDbEntity,
-  combo: MatchingCombo
+  combo: PrizeTier
 ): MessageEmbedOptions {
   return {
     description: `<@${roll.rollOwner}> has rolled **${combo.name}**`,
@@ -56,7 +57,7 @@ export class RollAnnouncerService
       return
     }
 
-    const evaluation = evaluateRoll(roll.roll)
+    const evaluation = getPrizeTier(roll.prizeRank, roll.prizeSubrank)
 
     const responseFragment = evaluation
       ? generateWinningRollResponse(roll, evaluation)
