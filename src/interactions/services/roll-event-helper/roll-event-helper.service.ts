@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { Interaction, User } from 'discord.js'
+import { CommandInteraction, User } from 'discord.js'
 import { random } from 'lodash'
 import { nanoid } from 'nanoid'
 import { InteractionCache } from 'src/interactions/providers/interaction-cache.class'
@@ -15,7 +15,7 @@ interface BaseRoll {
    * - channel information (guildId and channelId)
    * - rollOwner and rollBy
    */
-  interaction: Interaction
+  interaction: CommandInteraction
   type: RollType
 }
 
