@@ -4,9 +4,24 @@ import { InteractionCache } from 'src/interactions/providers/interaction-cache.c
 import { RollPresentationSerializerService } from 'src/interactions/services/roll-presentation-serializer/roll-presentation-serializer.service'
 import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
 import { ReadModelSyncedEvent } from 'src/read-model/read-model-synced.event'
+import { evaluateRoll, MatchingCombo } from 'src/utils/roll-eval.utils'
 import { IRollCreatedEvent } from 'src/write-model/types/roll-created-event.interface'
 import { Connection } from 'typeorm'
 
+function generateDudRollResponse(roll: RollDbEntity): MessageEmbedOptions {
+  return {
+    description: `<@${roll.rollOwner}> did not roll a winning combination.`,
+  }
+}
+
+function generateWinningRollResponse(
+  roll: RollDbEntity,
+  combo: MatchingCombo
+): MessageEmbedOptions {
+  return {
+    description: `<@${roll.rollOwner}> has rolled **${combo.name}**`,
+  }
+}
 @EventsHandler(ReadModelSyncedEvent)
 export class RollAnnouncerService
   implements IEventHandler<ReadModelSyncedEvent>
@@ -41,11 +56,17 @@ export class RollAnnouncerService
       return
     }
 
+    const evaluation = evaluateRoll(roll.roll)
+
+    const responseFragment = evaluation
+      ? generateWinningRollResponse(roll, evaluation)
+      : generateDudRollResponse(roll)
+
     const embed: MessageEmbedOptions = {
-      description: `<@${roll.rollOwner}> has rolled <rankplaceholder>.`,
       footer: {
         text: roll.rollId,
       },
+      ...responseFragment,
     }
 
     await interaction.editReply({
