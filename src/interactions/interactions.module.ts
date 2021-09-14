@@ -13,6 +13,7 @@ import { RollPresentationSerializerService } from './services/roll-presentation-
 import { interactionCacheProvider } from './providers/interaction-cache.provider'
 import { RollAnnouncerService } from './announcers/roll-announcer/roll-announcer.service'
 import { PrizeTallyInteractionHandlerService } from './handlers/prize-tally-interaction-handler/prize-tally-interaction-handler.service'
+import { HighestRollInteractionHandlerService } from './handlers/highest-roll-interaction-handler/highest-roll-interaction-handler.service'
 
 @Module({
   providers: [
@@ -27,6 +28,7 @@ import { PrizeTallyInteractionHandlerService } from './handlers/prize-tally-inte
     interactionCacheProvider,
     RollAnnouncerService,
     PrizeTallyInteractionHandlerService,
+    HighestRollInteractionHandlerService,
   ],
   imports: [DiscordModule, ReadModelModule, WriteModelModule],
 })
