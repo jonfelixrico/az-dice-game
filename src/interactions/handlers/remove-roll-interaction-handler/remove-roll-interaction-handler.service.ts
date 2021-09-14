@@ -7,7 +7,7 @@ import { IRollRemovedEvent } from 'src/write-model/types/roll-removed-event.inte
 import { Connection, IsNull } from 'typeorm'
 
 @EventsHandler(InteractionCreatedEvent)
-export class ProxyRollInteractionHandlerService
+export class RemoveRollInteractionHandlerService
   implements IEventHandler<InteractionCreatedEvent>
 {
   constructor(private typeorm: Connection, private helper: EsdbHelperService) {}
