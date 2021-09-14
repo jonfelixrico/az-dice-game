@@ -5,6 +5,7 @@ import { GlobalModule } from './global/global.module'
 import { InteractionsModule } from './interactions/interactions.module'
 import { WriteModelModule } from './write-model/write-model.module'
 import { ReadModelModule } from './read-model/read-model.module'
+import { QueryModule } from './query/query.module'
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ReadModelModule } from './read-model/read-model.module'
     InteractionsModule,
     WriteModelModule,
     ReadModelModule,
+    QueryModule,
   ],
 })
 export class AppModule {}
