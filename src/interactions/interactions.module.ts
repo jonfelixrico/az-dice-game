@@ -11,6 +11,7 @@ import { RollEventHelperService } from './services/roll-event-helper/roll-event-
 import { WriteModelModule } from 'src/write-model/write-model.module'
 import { RollPresentationSerializerService } from './services/roll-presentation-serializer/roll-presentation-serializer.service'
 import { interactionCacheProvider } from './providers/interaction-cache.provider'
+import { RollAnnouncerService } from './announcers/roll-announcer/roll-announcer.service'
 
 @Module({
   providers: [
@@ -23,6 +24,7 @@ import { interactionCacheProvider } from './providers/interaction-cache.provider
     RollEventHelperService,
     RollPresentationSerializerService,
     interactionCacheProvider,
+    RollAnnouncerService,
   ],
   imports: [DiscordModule, ReadModelModule, WriteModelModule],
 })
