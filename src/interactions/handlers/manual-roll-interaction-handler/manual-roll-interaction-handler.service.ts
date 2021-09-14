@@ -1,7 +1,6 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs'
 import { InteractionCreatedEvent } from 'src/interactions/services/interaction-events-relay/interaction-created.event'
 import { RollEventHelperService } from 'src/interactions/services/roll-event-helper/roll-event-helper.service'
-import { RollPresentationSerializerService } from 'src/interactions/services/roll-presentation-serializer/roll-presentation-serializer.service'
 
 const ROLL_STRING_REGEX = /^[123456]{6}$/
 
@@ -9,10 +8,7 @@ const ROLL_STRING_REGEX = /^[123456]{6}$/
 export class ManualRollInteractionHandlerService
   implements IEventHandler<InteractionCreatedEvent>
 {
-  constructor(
-    private rollHelper: RollEventHelperService,
-    private serializer: RollPresentationSerializerService
-  ) {}
+  constructor(private rollHelper: RollEventHelperService) {}
 
   async handle({ interaction }: InteractionCreatedEvent) {
     if (!interaction.isCommand() || interaction.commandName !== 'manualroll') {
@@ -37,13 +33,11 @@ export class ManualRollInteractionHandlerService
 
     await interaction.deferReply()
 
-    const rolled = await this.rollHelper.createRoll({
+    await this.rollHelper.createRoll({
       interaction,
       type: 'MANUAL',
       rollOwner,
       roll,
     })
-
-    await interaction.editReply(this.serializer.serializeRoll(rolled.roll))
   }
 }
