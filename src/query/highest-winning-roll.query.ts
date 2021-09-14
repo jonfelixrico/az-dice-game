@@ -9,6 +9,9 @@ export interface HighestWinningRollQueryInput {
 export interface HighestWinningRollQueryOutput {
   rank: number
   subrank?: number
+  rollOwner: string
+  roll: number[]
+  timestamp: Date
 }
 
 export class HighestWinningRollQuery implements IQuery {
