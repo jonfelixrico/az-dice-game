@@ -1,4 +1,54 @@
-import { Injectable } from '@nestjs/common'
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs'
+import {
+  PrizeTierTallyEntry,
+  PrizeTierTallyQuery,
+  PrizeTierTallyQueryOutput,
+} from 'src/query/prize-tier-tally-query'
+import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
+import { Connection, IsNull, MoreThan, Not } from 'typeorm'
 
-@Injectable()
-export class PrizeTierTallyQueryHandlerService {}
+type PrizeTierMap = {
+  [key: string]: PrizeTierTallyEntry
+}
+
+@QueryHandler(PrizeTierTallyQuery)
+export class PrizeTierTallyQueryHandlerService
+  implements IQueryHandler<PrizeTierTallyQuery>
+{
+  constructor(private typeorm: Connection) {}
+
+  async execute({
+    input,
+  }: PrizeTierTallyQuery): Promise<PrizeTierTallyQueryOutput> {
+    const { channelId, guildId, startingTime } = input
+
+    const rolls = await this.typeorm.getRepository(RollDbEntity).find({
+      where: {
+        channelId,
+        guildId,
+        prizeRank: Not(IsNull()),
+        timestamp: MoreThan(startingTime),
+        deleteDt: IsNull(),
+      },
+    })
+
+    const tallyMap = rolls.reduce((map, { prizeRank, prizeSubrank }) => {
+      const key = [prizeRank, prizeSubrank].join('/')
+      const entry = map[key]
+
+      if (!entry) {
+        map[key] = {
+          rank: prizeRank,
+          subrank: prizeSubrank,
+          count: 1,
+        }
+      } else {
+        entry.count++
+      }
+
+      return map
+    }, {} as PrizeTierMap)
+
+    return Object.values(tallyMap)
+  }
+}
