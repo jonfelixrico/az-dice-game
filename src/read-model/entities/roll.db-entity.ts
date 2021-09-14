@@ -44,4 +44,14 @@ export class RollDbEntity {
     type: 'datetime',
   })
   deleteDt: Date
+
+  @Column({
+    nullable: true,
+  })
+  prizeRank: number
+
+  @Column({
+    nullable: true,
+  })
+  prizeSubrank: number
 }

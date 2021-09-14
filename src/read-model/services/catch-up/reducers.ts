@@ -3,6 +3,7 @@ import {
   JSONRecordedEvent,
   JSONType,
 } from '@eventstore/db-client'
+import { evaluateRoll } from 'src/utils/roll-eval.utils'
 import { EventTypes } from 'src/write-model/types/event-types.enum'
 import { IRollCreatedEventPayload } from 'src/write-model/types/roll-created-event.interface'
 import { EntityManager } from 'typeorm'
@@ -28,6 +29,8 @@ const rollCreated: ReducerFn<IRollCreatedEventPayload> = async (
     type,
   } = data
 
+  const prize = evaluateRoll(roll)
+
   await manager.insert(RollDbEntity, {
     channelId,
     guildId,
@@ -37,6 +40,8 @@ const rollCreated: ReducerFn<IRollCreatedEventPayload> = async (
     timestamp,
     type,
     rolledBy,
+    prizeRank: prize?.rank,
+    prizeSubrank: prize?.subrank,
   })
 
   return true
