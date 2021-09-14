@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { Interaction, User } from 'discord.js'
 import { random } from 'lodash'
 import { nanoid } from 'nanoid'
+import { InteractionCache } from 'src/interactions/providers/interaction-cache.class'
 import { EsdbHelperService } from 'src/write-model/services/esdb-helper/esdb-helper.service'
 import {
   IRollCreatedEvent,
@@ -43,7 +44,10 @@ interface ProxyRoll extends BaseProxyRoll {
 
 @Injectable()
 export class RollEventHelperService {
-  constructor(private esdbHelper: EsdbHelperService) {}
+  constructor(
+    private esdbHelper: EsdbHelperService,
+    private interactionCache: InteractionCache
+  ) {}
 
   /**
    * Utility methods to make the creation of roll events simple. Makes use of
@@ -52,11 +56,11 @@ export class RollEventHelperService {
    * @param roll
    * @returns
    */
-  async createRoll(
-    roll: NaturalRoll | ManualRoll | ProxyRoll
-  ): Promise<IRollCreatedEventPayload> {
+  async createRoll(roll: NaturalRoll | ManualRoll | ProxyRoll): Promise<void> {
     const { interaction, type } = roll
     const { guildId, channelId, user } = interaction
+
+    const rollId = nanoid()
 
     const event: IRollCreatedEvent = {
       type: 'ROLL_CREATED',
@@ -67,7 +71,7 @@ export class RollEventHelperService {
           type === 'MANUAL'
             ? (roll as ManualRoll).roll
             : new Array(6).fill(0).map(() => random(1, 6)),
-        rollId: nanoid(),
+        rollId,
         rolledBy: user.id,
         timestamp: new Date(),
         type,
@@ -80,7 +84,6 @@ export class RollEventHelperService {
     }
 
     await this.esdbHelper.pushEvent(event)
-
-    return event.payload
+    this.interactionCache.set(rollId, interaction)
   }
 }
