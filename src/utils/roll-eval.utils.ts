@@ -87,3 +87,9 @@ export function evaluateRoll(roll: number[]): MatchingCombo | null {
 
   return null
 }
+
+export function getPrizeTier(rank: number, subrank?: number) {
+  return PRIZE_TIERS.find(
+    (tier) => (rank === tier.rank && subrank) ?? null === tier.subrank ?? null
+  )
+}
