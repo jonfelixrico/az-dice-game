@@ -1,5 +1,5 @@
 import { Provider } from '@nestjs/common'
-import LRUCache from 'lru-cache'
+import LRUCache = require('lru-cache')
 import { InteractionCache } from './interaction-cache.class'
 import { Interaction } from 'discord.js'
 
