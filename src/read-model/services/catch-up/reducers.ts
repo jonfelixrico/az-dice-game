@@ -32,6 +32,7 @@ const rollCreated: ReducerFn<IRollCreatedEventPayload> = async (
   const prize = evaluateRoll(roll)
 
   await manager.insert(RollDbEntity, {
+    id: [rollId, channelId].join('/'),
     channelId,
     guildId,
     roll,

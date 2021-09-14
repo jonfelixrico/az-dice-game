@@ -4,6 +4,9 @@ import { Column, Entity, PrimaryColumn } from 'typeorm'
 @Entity('roll')
 export class RollDbEntity {
   @PrimaryColumn('varchar')
+  id: string
+
+  @Column('varchar')
   rollId: string
 
   @Column({
