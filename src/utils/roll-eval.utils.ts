@@ -1,6 +1,6 @@
 import { PrizeTier, PrizeTierCombination, PRIZE_TIERS } from './prize-tier'
 
-interface MatchingCombo extends Omit<PrizeTier, 'combinations'> {
+export interface MatchingCombo extends Omit<PrizeTier, 'combinations'> {
   combination: PrizeTierCombination
 }
 
