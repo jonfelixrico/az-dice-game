@@ -8,6 +8,7 @@ import { FORCE_ROLL_COMMAND } from './builders/force-roll.command-builder'
 import { PROXY_ROLL_COMMAND } from './builders/proxy-roll.command-builder'
 import { MANUAL_ROLL_COMMAND } from './builders/manual-roll.command-builder'
 import { PRIZE_TALLY_COMMAND } from './builders/prize-tally-command-builder'
+import { HIGHEST_ROLL_COMMAND } from './builders/highest-roll.command-builder'
 
 const COMMAND_BUILDERS = [
   ROLL_COMMAND,
@@ -15,6 +16,7 @@ const COMMAND_BUILDERS = [
   PROXY_ROLL_COMMAND,
   MANUAL_ROLL_COMMAND,
   PRIZE_TALLY_COMMAND,
+  HIGHEST_ROLL_COMMAND,
 ]
 
 @Injectable()
