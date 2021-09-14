@@ -7,12 +7,14 @@ import { Routes } from 'discord-api-types/v9'
 import { FORCE_ROLL_COMMAND } from './builders/force-roll.command-builder'
 import { PROXY_ROLL_COMMAND } from './builders/proxy-roll.command-builder'
 import { MANUAL_ROLL_COMMAND } from './builders/manual-roll.command-builder'
+import { PRIZE_TALLY_COMMAND } from './builders/prize-tally-command-builder'
 
 const COMMAND_BUILDERS = [
   ROLL_COMMAND,
   FORCE_ROLL_COMMAND,
   PROXY_ROLL_COMMAND,
   MANUAL_ROLL_COMMAND,
+  PRIZE_TALLY_COMMAND,
 ]
 
 @Injectable()
