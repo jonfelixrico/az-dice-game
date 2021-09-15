@@ -33,15 +33,16 @@ export class RollAnnouncerService
     private serializer: RollPresentationSerializerService
   ) {}
 
-  async handle({ payload }: ReadModelSyncedEvent<IRollCreatedEvent>) {
-    if (payload.type !== 'ROLL_CREATED') {
+  async handle({ payload: event }: ReadModelSyncedEvent<IRollCreatedEvent>) {
+    const { payload, type } = event
+    if (type !== 'ROLL_CREATED') {
       // skipped since this handler is only for ROLL_CREATED
       return
     }
 
     const { interactions, typeorm } = this
 
-    const { rollId } = payload.payload
+    const { rollId } = payload
     const interaction = interactions.get(rollId)
 
     if (!interaction) {
