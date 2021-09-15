@@ -15,6 +15,7 @@ import { RollAnnouncerService } from './announcers/roll-announcer/roll-announcer
 import { PrizeTallyInteractionHandlerService } from './handlers/prize-tally-interaction-handler/prize-tally-interaction-handler.service'
 import { HighestRollInteractionHandlerService } from './handlers/highest-roll-interaction-handler/highest-roll-interaction-handler.service'
 import { RemoveRollInteractionHandlerService } from './handlers/remove-roll-interaction-handler/remove-roll-interaction-handler.service'
+import { RollRemovedAnnouncerService } from './announcers/roll-removed-announcer/roll-removed-announcer.service'
 
 @Module({
   providers: [
@@ -31,6 +32,7 @@ import { RemoveRollInteractionHandlerService } from './handlers/remove-roll-inte
     PrizeTallyInteractionHandlerService,
     HighestRollInteractionHandlerService,
     RemoveRollInteractionHandlerService,
+    RollRemovedAnnouncerService,
   ],
   imports: [DiscordModule, ReadModelModule, WriteModelModule],
 })
