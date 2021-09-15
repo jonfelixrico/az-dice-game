@@ -28,6 +28,7 @@ const rollCreated: ReducerFn<IRollCreatedEventPayload> = async (
     rolledBy,
     timestamp,
     type,
+    messageId,
   } = data
 
   const prize = evaluateRoll(roll)
@@ -44,6 +45,7 @@ const rollCreated: ReducerFn<IRollCreatedEventPayload> = async (
     rolledBy,
     prizeRank: prize?.rank,
     prizeSubrank: prize?.subrank,
+    messageId,
   })
 
   return true
