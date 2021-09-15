@@ -2,8 +2,8 @@ import { EventTypes } from './event-types.enum'
 
 export interface IBaseEventPayload extends Record<string, unknown> {
   channelId: string
-  rollId: string
   timestamp: Date
+  guildId: string
 }
 
 export interface IBaseEvent<
