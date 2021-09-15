@@ -22,6 +22,7 @@ interface BaseRoll {
    */
   interaction: CommandInteraction
   type: RollType
+  messageId: string
 }
 
 interface NaturalRoll extends BaseRoll {
@@ -84,6 +85,7 @@ export class RollEventHelperService {
           type === 'MANUAL' || type === 'PROXY'
             ? (roll as BaseProxyRoll).rollOwner.id
             : user.id,
+        messageId: roll.messageId,
       },
     }
 

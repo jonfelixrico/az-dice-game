@@ -24,12 +24,13 @@ export class ProxyRollInteractionHandlerService
       return
     }
 
-    await interaction.deferReply()
+    const response = await interaction.deferReply({ fetchReply: true })
 
     await this.rollHelper.createRoll({
       interaction,
       type: 'PROXY',
       rollOwner,
+      messageId: response.id,
     })
   }
 }

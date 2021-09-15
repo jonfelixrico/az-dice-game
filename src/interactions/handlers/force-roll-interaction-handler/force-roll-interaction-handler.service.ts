@@ -13,11 +13,14 @@ export class ForceRollInteractionHandlerService
       return
     }
 
-    await interaction.deferReply()
+    const response = await interaction.deferReply({
+      fetchReply: true,
+    })
 
     await this.rollHelper.createRoll({
       interaction,
       type: 'NATURAL_FORCED_TURN',
+      messageId: response.id,
     })
   }
 }

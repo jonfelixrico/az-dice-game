@@ -31,13 +31,14 @@ export class ManualRollInteractionHandlerService
 
     const roll = rawRollString.split('').map((intVal) => parseInt(intVal))
 
-    await interaction.deferReply()
+    const response = await interaction.deferReply({ fetchReply: true })
 
     await this.rollHelper.createRoll({
       interaction,
       type: 'MANUAL',
       rollOwner,
       roll,
+      messageId: response.id,
     })
   }
 }

@@ -13,6 +13,7 @@ export interface IRollCreatedEventPayload extends IBaseEventPayload {
 
   channelId: string
   guildId: string
+  messageId: string
 }
 
 export interface IRollCreatedEvent

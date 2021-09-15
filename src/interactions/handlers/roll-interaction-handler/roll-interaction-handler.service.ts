@@ -18,7 +18,7 @@ export class RollInteractionHandlerService
       return
     }
 
-    await interaction.deferReply()
+    const response = await interaction.deferReply({ fetchReply: true })
 
     const lastRoll = await this.typeorm.getRepository(RollDbEntity).findOne({
       where: {
@@ -40,6 +40,7 @@ export class RollInteractionHandlerService
     await this.rollHelper.createRoll({
       interaction,
       type: 'NATURAL',
+      messageId: response.id,
     })
   }
 }
