@@ -1,5 +1,6 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs'
 import { CommandInteraction, Interaction } from 'discord.js'
+import { InteractionCache } from 'src/interactions/providers/interaction-cache.class'
 import { InteractionCreatedEvent } from 'src/interactions/services/interaction-events-relay/interaction-created.event'
 import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
 import { EsdbHelperService } from 'src/write-model/services/esdb-helper/esdb-helper.service'
@@ -10,7 +11,11 @@ import { Connection, IsNull } from 'typeorm'
 export class RemoveRollInteractionHandlerService
   implements IEventHandler<InteractionCreatedEvent>
 {
-  constructor(private typeorm: Connection, private helper: EsdbHelperService) {}
+  constructor(
+    private typeorm: Connection,
+    private helper: EsdbHelperService,
+    private interactions: InteractionCache
+  ) {}
 
   private async removeRoll(
     rollId: string,
@@ -50,6 +55,7 @@ export class RemoveRollInteractionHandlerService
       return
     }
 
+    this.interactions.set(roll.rollId, interaction)
     await this.removeRoll(roll.rollId, interaction)
   }
 
@@ -74,6 +80,7 @@ export class RemoveRollInteractionHandlerService
       return
     }
 
+    this.interactions.set(lastRoll.rollId, interaction)
     await this.removeRoll(lastRoll.rollId, interaction)
   }
 
@@ -82,7 +89,7 @@ export class RemoveRollInteractionHandlerService
       return
     }
 
-    await interaction.deferReply()
+    await interaction.deferReply({ ephemeral: true })
 
     if (interaction.options.getString('rollid')) {
       await this.handleWithRollId(interaction)
