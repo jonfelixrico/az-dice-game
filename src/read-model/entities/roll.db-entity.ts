@@ -36,7 +36,10 @@ export class RollDbEntity {
   @Column('varchar')
   channelId: string
 
-  @Column('varchar')
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
   messageId: string
 
   @Column({
