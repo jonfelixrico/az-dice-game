@@ -2,6 +2,10 @@ import { EventsHandler, IEventHandler, QueryBus } from '@nestjs/cqrs'
 import { MessageEmbedOptions } from 'discord.js'
 import { InteractionCreatedEvent } from 'src/interactions/services/interaction-events-relay/interaction-created.event'
 import {
+  ChannelCutoffTimestampQuery,
+  ChannelCutoffTimestampQueryOutput,
+} from 'src/query/channel-cutoff-timestamp.query'
+import {
   PrizeTierTallyQuery,
   PrizeTierTallyQueryOutput,
 } from 'src/query/prize-tier-tally-query'
@@ -26,8 +30,17 @@ export class HistoryTallyInteractionHandlerService
 
     await interaction.deferReply()
 
+    const cutoff: ChannelCutoffTimestampQueryOutput =
+      await this.queryBus.execute(
+        new ChannelCutoffTimestampQuery({
+          guildId,
+          channelId,
+          useOriginDateIfNotFound: true,
+        })
+      )
+
     const tally: PrizeTierTallyQueryOutput = await this.queryBus.execute(
-      new PrizeTierTallyQuery({ guildId, channelId })
+      new PrizeTierTallyQuery({ guildId, channelId, startingTime: cutoff })
     )
 
     const prizeTiers = PRIZE_TIERS.map(({ name, subrank, rank }) => {
