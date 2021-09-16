@@ -6,7 +6,7 @@ import { InteractionCreatedEvent } from 'src/interactions/services/interaction-e
 export class HistoryExportInteractionHandlerService
   implements IEventHandler<InteractionCreatedEvent>
 {
-  constructor(private helper: HistoryExporterService) {}
+  constructor(private exporter: HistoryExporterService) {}
 
   async handle({ interaction }: InteractionCreatedEvent) {
     if (
@@ -17,14 +17,13 @@ export class HistoryExportInteractionHandlerService
       return
     }
 
-    await interaction.deferReply({
-      ephemeral: true,
-    })
+    await interaction.deferReply()
 
+    const data = await this.exporter.exportData(interaction)
     await interaction.editReply({
       files: [
         {
-          attachment: await this.helper.exportData(interaction),
+          attachment: data,
           name: 'yeet.xlsx',
         },
       ],
