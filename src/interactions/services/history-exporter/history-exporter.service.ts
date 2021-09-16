@@ -8,7 +8,7 @@ import {
   RollHistoryQueryOutputItem,
 } from 'src/query/roll-history.query'
 import { PrizeTier, PRIZE_TIERS } from 'src/utils/prize-tier'
-import XLSX from 'xlsx'
+import { utils, WorkSheet, write } from 'xlsx'
 
 interface PrizeTierGroup {
   name: string
@@ -73,7 +73,7 @@ function generateHistoryStream(
 }
 
 interface SheetToAdd {
-  sheet: XLSX.WorkSheet
+  sheet: WorkSheet
   name: string
 }
 
@@ -93,7 +93,7 @@ export class HistoryExporterService {
 
   private generateHistoryStreamSheet(
     rolls: RollHistoryQueryOutputItem[]
-  ): XLSX.WorkSheet {
+  ): WorkSheet {
     const streamFormat = generateHistoryStream(rolls).map(
       ({ roll, rollOwner, deleted, tierName, timestamp }) => {
         return {
@@ -107,16 +107,13 @@ export class HistoryExporterService {
     )
 
     const headers = ['timestamp', 'user', 'roll', 'prize', 'deleted']
-    const serialized = streamFormat.map((data) => JSON.stringify(data))
 
-    return XLSX.utils.json_to_sheet(serialized, {
+    return utils.json_to_sheet(streamFormat, {
       header: headers,
     })
   }
 
-  private generatePrizeHistory(
-    rolls: RollHistoryQueryOutputItem[]
-  ): XLSX.WorkSheet {
+  private generatePrizeHistory(rolls: RollHistoryQueryOutputItem[]): WorkSheet {
     const streamFormat = rolls.map(
       ({ roll, rollOwner, deleted, timestamp }) => {
         return {
@@ -129,9 +126,8 @@ export class HistoryExporterService {
     )
 
     const headers = ['timestamp', 'user', 'roll', 'deleted']
-    const serialized = streamFormat.map((data) => JSON.stringify(data))
 
-    return XLSX.utils.json_to_sheet(serialized, {
+    return utils.json_to_sheet(streamFormat, {
       header: headers,
     })
   }
@@ -150,12 +146,12 @@ export class HistoryExporterService {
       })
     }
 
-    const workBook = XLSX.utils.book_new()
-    for (const { sheet, name } of sheets) {
-      XLSX.utils.book_append_sheet(workBook, sheet, name)
-    }
+    const workBook = utils.book_new()
+    sheets.forEach(({ name, sheet }, index) => {
+      utils.book_append_sheet(workBook, sheet, [index, name].join('-'))
+    })
 
-    return XLSX.write(workBook, {
+    return write(workBook, {
       type: 'buffer',
     }) as Buffer
   }
