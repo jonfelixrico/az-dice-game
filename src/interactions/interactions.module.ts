@@ -16,6 +16,7 @@ import { RemoveRollInteractionHandlerService } from './handlers/remove-roll-inte
 import { RollRemovedAnnouncerService } from './announcers/roll-removed-announcer/roll-removed-announcer.service'
 import { HistoryTallyInteractionHandlerService } from './handlers/history-tally-interaction-handler/history-tally-interaction-handler.service'
 import { HistoryClearInteractionHandlerService } from './handlers/history-clear-interaction-handler/history-clear-interaction-handler.service'
+import { HistoryExporterService } from './services/history-exporter/history-exporter.service'
 
 @Module({
   providers: [
@@ -33,6 +34,7 @@ import { HistoryClearInteractionHandlerService } from './handlers/history-clear-
     RollRemovedAnnouncerService,
     HistoryTallyInteractionHandlerService,
     HistoryClearInteractionHandlerService,
+    HistoryExporterService,
   ],
   imports: [DiscordModule, ReadModelModule, WriteModelModule],
 })
