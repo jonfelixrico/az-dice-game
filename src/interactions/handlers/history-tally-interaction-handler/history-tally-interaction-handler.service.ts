@@ -40,7 +40,7 @@ export class HistoryTallyInteractionHandlerService
       )
 
     const tally: PrizeTierTallyQueryOutput = await this.queryBus.execute(
-      new PrizeTierTallyQuery({ guildId, channelId, startingTime: cutoff })
+      new PrizeTierTallyQuery({ guildId, channelId, startingFrom: cutoff })
     )
 
     const prizeTiers = PRIZE_TIERS.map(({ name, subrank, rank }) => {

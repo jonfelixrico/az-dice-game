@@ -20,7 +20,7 @@ export class PrizeTierTallyQueryHandlerService
   async execute({
     input,
   }: PrizeTierTallyQuery): Promise<PrizeTierTallyQueryOutput> {
-    const { channelId, guildId, startingTime } = input
+    const { channelId, guildId, startingFrom } = input
 
     const findConditions: FindConditions<RollDbEntity> = {
       channelId,
@@ -29,8 +29,8 @@ export class PrizeTierTallyQueryHandlerService
       deleteDt: IsNull(),
     }
 
-    if (startingTime) {
-      findConditions.timestamp = MoreThan(startingTime)
+    if (startingFrom) {
+      findConditions.timestamp = MoreThan(startingFrom)
     }
 
     const rolls = await this.typeorm.getRepository(RollDbEntity).find({

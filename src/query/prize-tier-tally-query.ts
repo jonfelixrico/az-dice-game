@@ -3,7 +3,9 @@ import { IQuery } from '@nestjs/cqrs'
 export interface PrizeTierTallyQueryInput {
   guildId: string
   channelId: string
-  startingTime?: Date
+
+  // includes only dates that LAPSES this date (exclusive)
+  startingFrom?: Date
 }
 
 export interface PrizeTierTallyEntry {
