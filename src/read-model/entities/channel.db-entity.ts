@@ -8,13 +8,22 @@ export class ChannelDbEntity {
   @Column('varchar')
   guildId: string
 
-  @Column('timestamptz')
+  @Column({
+    type: 'timestamptz',
+    nullable: true,
+  })
   cutoffTimestamp: Date
 
-  @Column('timestamptz')
+  @Column({
+    type: 'timestamptz',
+    nullable: true,
+  })
   setDt: Date
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
   setBy: string
 
   @Column({

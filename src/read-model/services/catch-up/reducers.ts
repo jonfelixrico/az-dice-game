@@ -18,7 +18,7 @@ export type ReducerFn<E extends JSONType = JSONType> = (
 ) => Promise<boolean>
 
 const rollCreated: ReducerFn<IRollCreatedEventPayload> = async (
-  { data },
+  { data, revision },
   manager
 ) => {
   const {
@@ -50,11 +50,17 @@ const rollCreated: ReducerFn<IRollCreatedEventPayload> = async (
     messageId,
   })
 
+  await manager.insert(ChannelDbEntity, {
+    channelId,
+    guildId,
+    revision,
+  })
+
   return true
 }
 
 const rollRemoved: ReducerFn<IRollRemovedEventPayload> = async (
-  { data },
+  { data, revision },
   manager
 ) => {
   const { rollId, userId, timestamp, channelId, guildId } = data
@@ -71,11 +77,17 @@ const rollRemoved: ReducerFn<IRollRemovedEventPayload> = async (
     }
   )
 
+  await manager.insert(ChannelDbEntity, {
+    channelId,
+    guildId,
+    revision,
+  })
+
   return true
 }
 
 const cutoffSet: ReducerFn<IChannelCutoffTimestampSetEventPayload> = async (
-  { data },
+  { data, revision },
   manager
 ) => {
   const { channelId, guildId, timestamp, userId, cutoffTimestamp } = data
@@ -86,6 +98,7 @@ const cutoffSet: ReducerFn<IChannelCutoffTimestampSetEventPayload> = async (
     cutoffTimestamp,
     setDt: timestamp,
     setBy: userId,
+    revision,
   })
 
   return true
