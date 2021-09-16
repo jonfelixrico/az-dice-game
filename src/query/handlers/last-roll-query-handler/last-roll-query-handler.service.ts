@@ -12,17 +12,19 @@ export class LastRollQueryHandlerService
   async execute({ input }: LastRollQuery): Promise<LastRollQueryOutput> {
     const { channelId, guildId, startingFrom } = input
 
-    const where: FindConditions<RollDbEntity> = {
+    const findConditions: FindConditions<RollDbEntity> = {
       channelId,
       guildId,
       deleteDt: IsNull(),
     }
 
     if (startingFrom) {
-      where.timestamp = MoreThan(startingFrom)
+      findConditions.timestamp = MoreThan(startingFrom)
     }
 
-    const lastRoll = await this.typeorm.getRepository(RollDbEntity).findOne({})
+    const lastRoll = await this.typeorm.getRepository(RollDbEntity).findOne({
+      where: findConditions,
+    })
 
     if (!lastRoll) {
       return null
