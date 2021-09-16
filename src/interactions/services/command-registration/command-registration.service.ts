@@ -11,6 +11,7 @@ import { PRIZE_TALLY_COMMAND } from './builders/prize-tally-command-builder'
 import { HIGHEST_ROLL_COMMAND } from './builders/highest-roll.command-builder'
 import { REMOVE_ROLL_COMMAND } from './builders/remove-roll.command-builder'
 import { CommandBuilderOutput } from './builders/builder.type'
+import { HISTORY_SUBCOMMANDS } from './builders/history.subcommands'
 
 const COMMAND_BUILDERS: CommandBuilderOutput[] = [
   ROLL_COMMAND,
@@ -20,6 +21,7 @@ const COMMAND_BUILDERS: CommandBuilderOutput[] = [
   PRIZE_TALLY_COMMAND,
   HIGHEST_ROLL_COMMAND,
   REMOVE_ROLL_COMMAND,
+  HISTORY_SUBCOMMANDS,
 ]
 
 @Injectable()
