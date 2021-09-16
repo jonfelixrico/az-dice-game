@@ -6,5 +6,8 @@ export class ChannelDbEntity {
   channelId: string
 
   @Column('varchar')
-  rollId: string
+  guildId: string
+
+  @Column()
+  cutoffTimestamp: Date
 }
