@@ -10,9 +10,10 @@ export const typeormProvider: Provider = {
   inject: [ConfigService],
   useFactory: (cfg: ConfigService) =>
     createConnection({
-      type: 'sqlite',
-      database: 'sqlite/azdb.sqlite',
-      synchronize: !!cfg.get('TYPEORM_SYNC'),
+      type: 'postgres',
+      database: 'readmodel',
       entities: [RollDbEntity, EntryDbEntity, ChannelDbEntity],
+      url: cfg.get('TYPEORM_URL'),
+      synchronize: !!cfg.get('TYPEORM_SYNCHRONIZE'),
     }),
 }

@@ -9,13 +9,7 @@ export class RollDbEntity {
   @Column('varchar')
   rollId: string
 
-  @Column({
-    type: 'text',
-    transformer: {
-      to: (roll: number[]) => JSON.stringify(roll),
-      from: (rollString: string) => JSON.parse(rollString),
-    },
-  })
+  @Column('json')
   roll: number[]
 
   @Column('varchar')
@@ -27,7 +21,7 @@ export class RollDbEntity {
   @Column('varchar')
   type: RollType
 
-  @Column('datetime')
+  @Column('timestamptz')
   timestamp: Date
 
   @Column('varchar')
@@ -50,7 +44,7 @@ export class RollDbEntity {
 
   @Column({
     nullable: true,
-    type: 'datetime',
+    type: 'timestamptz',
   })
   deleteDt: Date
 
