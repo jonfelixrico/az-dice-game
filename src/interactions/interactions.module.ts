@@ -12,7 +12,6 @@ import { WriteModelModule } from 'src/write-model/write-model.module'
 import { RollPresentationSerializerService } from './services/roll-presentation-serializer/roll-presentation-serializer.service'
 import { interactionCacheProvider } from './providers/interaction-cache.provider'
 import { RollAnnouncerService } from './announcers/roll-announcer/roll-announcer.service'
-import { PrizeTallyInteractionHandlerService } from './handlers/prize-tally-interaction-handler/prize-tally-interaction-handler.service'
 import { HighestRollInteractionHandlerService } from './handlers/highest-roll-interaction-handler/highest-roll-interaction-handler.service'
 import { RemoveRollInteractionHandlerService } from './handlers/remove-roll-interaction-handler/remove-roll-interaction-handler.service'
 import { RollRemovedAnnouncerService } from './announcers/roll-removed-announcer/roll-removed-announcer.service'
@@ -31,7 +30,6 @@ import { HistoryClearInteractionHandlerService } from './handlers/history-clear-
     RollPresentationSerializerService,
     interactionCacheProvider,
     RollAnnouncerService,
-    PrizeTallyInteractionHandlerService,
     HighestRollInteractionHandlerService,
     RemoveRollInteractionHandlerService,
     RollRemovedAnnouncerService,
