@@ -3,7 +3,9 @@ import {
   JSONRecordedEvent,
   JSONType,
 } from '@eventstore/db-client'
+import { ChannelDbEntity } from 'src/read-model/entities/channel.db-entity'
 import { evaluateRoll } from 'src/utils/roll-eval.utils'
+import { IChannelCutoffTimestampSetEventPayload } from 'src/write-model/types/channel-cutoff-timestamp-set.event'
 import { EventTypes } from 'src/write-model/types/event-types.enum'
 import { IRollCreatedEventPayload } from 'src/write-model/types/roll-created-event.interface'
 import { IRollRemovedEventPayload } from 'src/write-model/types/roll-removed-event.interface'
@@ -72,11 +74,29 @@ const rollRemoved: ReducerFn<IRollRemovedEventPayload> = async (
   return true
 }
 
+const cutoffSet: ReducerFn<IChannelCutoffTimestampSetEventPayload> = async (
+  { data },
+  manager
+) => {
+  const { channelId, guildId, timestamp, userId, cutoffTimestamp } = data
+
+  await manager.getRepository(ChannelDbEntity).save({
+    channelId,
+    guildId,
+    cutoffTimestamp,
+    setDt: timestamp,
+    setBy: userId,
+  })
+
+  return true
+}
+
 type ReducerMap = Record<string, ReducerFn>
 
-const { ROLL_CREATED, ROLL_REMOVED } = EventTypes
+const { ROLL_CREATED, ROLL_REMOVED, CHANNEL_CUTOFF_TIMESTAMP_SET } = EventTypes
 
 export const REDUCERS: ReducerMap = {
   [ROLL_CREATED]: rollCreated,
   [ROLL_REMOVED]: rollRemoved,
+  [CHANNEL_CUTOFF_TIMESTAMP_SET]: cutoffSet,
 }
