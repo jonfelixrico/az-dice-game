@@ -16,4 +16,13 @@ export class ChannelDbEntity {
 
   @Column()
   setBy: string
+
+  @Column({
+    type: 'bigint',
+    transformer: {
+      to: (val: bigint) => val,
+      from: (val: bigint | string) => BigInt(val),
+    },
+  })
+  revision: bigint
 }
