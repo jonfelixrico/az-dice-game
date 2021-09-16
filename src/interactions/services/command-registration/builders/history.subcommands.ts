@@ -4,6 +4,7 @@ import { CommandBuilderOutput } from './builder.type'
 export const HISTORY_SUBCOMMANDS: CommandBuilderOutput =
   new SlashCommandBuilder()
     .setName('history')
+    .setDescription('Contains subcommands related to the roll history')
     .addSubcommand((subcommand) =>
       subcommand
         .setName('tally')
@@ -12,6 +13,6 @@ export const HISTORY_SUBCOMMANDS: CommandBuilderOutput =
         )
     )
     .addSubcommand((subcommand) =>
-      subcommand.setName('clear').setDescription('Wipes the roll history.')
+      subcommand.setName('clear').setDescription('Wipes the roll history')
     )
     .toJSON()
