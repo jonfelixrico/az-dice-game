@@ -10,4 +10,10 @@ export class ChannelDbEntity {
 
   @Column()
   cutoffTimestamp: Date
+
+  @Column()
+  setDt: Date
+
+  @Column()
+  setBy: string
 }
