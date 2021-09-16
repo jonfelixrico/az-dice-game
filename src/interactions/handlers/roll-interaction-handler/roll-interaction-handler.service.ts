@@ -1,16 +1,19 @@
-import { EventsHandler, IEventHandler } from '@nestjs/cqrs'
+import { EventsHandler, IEventHandler, QueryBus } from '@nestjs/cqrs'
 import { InteractionCreatedEvent } from 'src/interactions/services/interaction-events-relay/interaction-created.event'
 import { RollEventHelperService } from 'src/interactions/services/roll-event-helper/roll-event-helper.service'
-import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
-import { Connection, IsNull } from 'typeorm'
+import {
+  ChannelCutoffTimestampQuery,
+  ChannelCutoffTimestampQueryOutput,
+} from 'src/query/channel-cutoff-timestamp.query'
+import { LastRollQuery, LastRollQueryOutput } from 'src/query/last-roll.query'
 
 @EventsHandler(InteractionCreatedEvent)
 export class RollInteractionHandlerService
   implements IEventHandler<InteractionCreatedEvent>
 {
   constructor(
-    private typeorm: Connection,
-    private rollHelper: RollEventHelperService
+    private rollHelper: RollEventHelperService,
+    private queryBus: QueryBus
   ) {}
 
   async handle({ interaction }: InteractionCreatedEvent) {
@@ -18,17 +21,18 @@ export class RollInteractionHandlerService
       return
     }
 
+    const { channelId, guildId } = interaction
+
     const response = await interaction.deferReply({ fetchReply: true })
 
-    const lastRoll = await this.typeorm.getRepository(RollDbEntity).findOne({
-      where: {
-        deleteDt: IsNull(),
-        channelId: interaction.channelId,
-      },
-      order: {
-        timestamp: 'DESC',
-      },
-    })
+    const cutoff: ChannelCutoffTimestampQueryOutput =
+      await this.queryBus.execute(
+        new ChannelCutoffTimestampQuery({ channelId, guildId })
+      )
+
+    const lastRoll: LastRollQueryOutput = await this.queryBus.execute(
+      new LastRollQuery({ channelId, guildId, startingFrom: cutoff })
+    )
 
     if (lastRoll && lastRoll.rollOwner === interaction.user.id) {
       await interaction.editReply(
