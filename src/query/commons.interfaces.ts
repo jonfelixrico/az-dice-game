@@ -13,7 +13,7 @@ export interface ChannelHistoryQueryParams {
  * Interface that represents a roll from a channel
  */
 export interface ChannelRoll {
-  rank: number
+  rank?: number
   subrank?: number
   rollOwner: string
   roll: number[]
