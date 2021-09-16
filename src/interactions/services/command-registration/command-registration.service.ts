@@ -7,7 +7,6 @@ import { Routes } from 'discord-api-types/v9'
 import { FORCE_ROLL_COMMAND } from './builders/force-roll.command-builder'
 import { PROXY_ROLL_COMMAND } from './builders/proxy-roll.command-builder'
 import { MANUAL_ROLL_COMMAND } from './builders/manual-roll.command-builder'
-import { HIGHEST_ROLL_COMMAND } from './builders/highest-roll.command-builder'
 import { REMOVE_ROLL_COMMAND } from './builders/remove-roll.command-builder'
 import { CommandBuilderOutput } from './builders/builder.type'
 import { HISTORY_SUBCOMMANDS } from './builders/history.subcommands'
@@ -17,7 +16,6 @@ const COMMAND_BUILDERS: CommandBuilderOutput[] = [
   FORCE_ROLL_COMMAND,
   PROXY_ROLL_COMMAND,
   MANUAL_ROLL_COMMAND,
-  HIGHEST_ROLL_COMMAND,
   REMOVE_ROLL_COMMAND,
   HISTORY_SUBCOMMANDS,
 ]
