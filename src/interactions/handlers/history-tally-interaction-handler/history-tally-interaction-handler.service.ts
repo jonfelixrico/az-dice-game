@@ -22,7 +22,7 @@ export class HistoryTallyInteractionHandlerService
 
     if (
       !interaction.isCommand() ||
-      interaction.commandName === 'history' ||
+      interaction.commandName !== 'history' ||
       interaction.options.getSubcommand() !== 'tally'
     ) {
       return

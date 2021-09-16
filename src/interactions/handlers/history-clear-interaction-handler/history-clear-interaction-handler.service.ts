@@ -13,7 +13,7 @@ export class HistoryClearInteractionHandlerService
   async handle({ interaction }: InteractionCreatedEvent) {
     if (
       !interaction.isCommand() ||
-      interaction.commandName === 'history' ||
+      interaction.commandName !== 'history' ||
       interaction.options.getSubcommand() !== 'clear'
     ) {
       return
