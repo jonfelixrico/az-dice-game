@@ -10,7 +10,7 @@ import { EventTypes } from 'src/write-model/types/event-types.enum'
 import { IRollCreatedEventPayload } from 'src/write-model/types/roll-created-event.interface'
 import { IRollRemovedEventPayload } from 'src/write-model/types/roll-removed-event.interface'
 import { EntityManager } from 'typeorm'
-import { RollDbEntity } from '../../entities/roll.db-entity'
+import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
 
 export type ReducerFn<E extends JSONType = JSONType> = (
   event: JSONRecordedEvent<JSONEventType<string, E>>,
@@ -50,7 +50,7 @@ const rollCreated: ReducerFn<IRollCreatedEventPayload> = async (
     messageId,
   })
 
-  await manager.insert(ChannelDbEntity, {
+  await manager.save(ChannelDbEntity, {
     channelId,
     guildId,
     revision,
@@ -77,7 +77,7 @@ const rollRemoved: ReducerFn<IRollRemovedEventPayload> = async (
     }
   )
 
-  await manager.insert(ChannelDbEntity, {
+  await manager.save(ChannelDbEntity, {
     channelId,
     guildId,
     revision,
