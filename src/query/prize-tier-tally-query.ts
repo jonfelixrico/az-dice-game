@@ -1,12 +1,7 @@
 import { IQuery } from '@nestjs/cqrs'
+import { ChannelHistoryQueryParams } from './commons.interfaces'
 
-export interface PrizeTierTallyQueryInput {
-  guildId: string
-  channelId: string
-
-  // includes only dates that LAPSES this date (exclusive)
-  startingFrom?: Date
-}
+export type PrizeTierTallyQueryInput = ChannelHistoryQueryParams
 
 export interface PrizeTierTallyEntry {
   rank: number
