@@ -1,6 +1,6 @@
 import { chain, sumBy } from 'lodash'
 
-enum PrizeTier {
+export enum PrizeTier {
   CHIONG_GUAN = 6,
   TWI_THENG = 5,
   SI_CHIN = 4,
@@ -25,32 +25,13 @@ type Histogram = {
   count: number
 }[]
 
-export function getHistogram(diceFaces: number[]): Histogram {
-  return (
-    chain(diceFaces)
-      /*
-       * Creates an object. Each object has a key of the dice face and a value
-       * of how many entries within `diceFaces` matches it
-       */
-      .countBy()
-      .toPairs()
-      .map(([faceString, count]) => {
-        return {
-          face: parseInt(faceString),
-          count,
-        }
-      })
-      .value()
-  )
-}
-
 interface PrizeTierEvaluator {
   tier: PrizeTier
   evaluator: (faceHistogram: Histogram) => number | null
   points: number
 }
 
-export const PRIZE_EVALUATORS: PrizeTierEvaluator[] = [
+const EVALUATORS: PrizeTierEvaluator[] = [
   {
     // six of a kind
     tier: CHIONG_GUAN,
@@ -175,3 +156,45 @@ export const PRIZE_EVALUATORS: PrizeTierEvaluator[] = [
     },
   },
 ]
+
+function getHistogram(diceFaces: number[]): Histogram {
+  return (
+    chain(diceFaces)
+      /*
+       * Creates an object. Each object has a key of the dice face and a value
+       * of how many entries within `diceFaces` matches it
+       */
+      .countBy()
+      .toPairs()
+      .map(([faceString, count]) => {
+        return {
+          face: parseInt(faceString),
+          count,
+        }
+      })
+      .value()
+  )
+}
+
+interface RollEvaluation {
+  tier: PrizeTier
+  points: number
+}
+
+export function evaluateRoll(diceFaces: number[]): RollEvaluation {
+  const histogram = getHistogram(diceFaces)
+
+  for (const { evaluator, points, tier } of EVALUATORS) {
+    const evaluatorResults = evaluator(histogram)
+    if (evaluatorResults === null) {
+      continue
+    }
+
+    return {
+      tier,
+      points: points + evaluatorResults,
+    }
+  }
+
+  return null
+}
