@@ -14,7 +14,6 @@ import { interactionCacheProvider } from './providers/interaction-cache.provider
 import { RollAnnouncerService } from './announcers/roll-announcer/roll-announcer.service'
 import { RemoveRollInteractionHandlerService } from './handlers/remove-roll-interaction-handler/remove-roll-interaction-handler.service'
 import { RollRemovedAnnouncerService } from './announcers/roll-removed-announcer/roll-removed-announcer.service'
-import { HistoryTallyInteractionHandlerService } from './handlers/history-tally-interaction-handler/history-tally-interaction-handler.service'
 import { HistoryClearInteractionHandlerService } from './handlers/history-clear-interaction-handler/history-clear-interaction-handler.service'
 import { HistoryExporterService } from './services/history-exporter/history-exporter.service'
 import { HistoryExportInteractionHandlerService } from './handlers/history-export-interaction-handler/history-export-interaction-handler.service'
@@ -33,7 +32,6 @@ import { HistoryExportInteractionHandlerService } from './handlers/history-expor
     RollAnnouncerService,
     RemoveRollInteractionHandlerService,
     RollRemovedAnnouncerService,
-    HistoryTallyInteractionHandlerService,
     HistoryClearInteractionHandlerService,
     HistoryExporterService,
     HistoryExportInteractionHandlerService,
