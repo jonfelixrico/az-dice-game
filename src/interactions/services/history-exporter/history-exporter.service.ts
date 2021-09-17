@@ -15,7 +15,7 @@ interface PrizeTierGroup {
   name: string
   rank: number
   subrank?: number
-  rolls: RollHistoryQueryOutputItem[]
+  rolls: ResolvedRoll[]
 }
 
 interface HistoryStreamItem extends RollHistoryQueryOutputItem {
@@ -24,7 +24,7 @@ interface HistoryStreamItem extends RollHistoryQueryOutputItem {
 
 interface ChannelHistory {
   grouped: PrizeTierGroup[]
-  rolls: RollHistoryQueryOutputItem[]
+  rolls: ResolvedRoll[]
 }
 
 interface TierProps {
@@ -35,9 +35,7 @@ interface TierProps {
 const keyFn = ({ rank, subrank }: TierProps) =>
   [rank ?? 0, subrank ?? 0].join('/')
 
-function generateGroups(
-  history: RollHistoryQueryOutputItem[]
-): PrizeTierGroup[] {
+function generateGroups(history: ResolvedRoll[]): PrizeTierGroup[] {
   const grouped = chain(history)
     .filter(({ rank }) => !!rank)
     .groupBy(keyFn)
@@ -129,7 +127,7 @@ export class HistoryExporterService {
   private async fetchAndFormatHistory(
     input: RollHistoryQueryInput
   ): Promise<ChannelHistory> {
-    const history = await this.queryBus.execute(new RollHistoryQuery(input))
+    const history = await this.fetchChannelHistory(input)
 
     return {
       grouped: generateGroups(history),
