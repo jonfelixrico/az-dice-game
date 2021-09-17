@@ -18,6 +18,11 @@ export const HISTORY_SUBCOMMANDS: CommandBuilderOutput =
     .addSubcommand((subcommand) =>
       subcommand
         .setName('highest')
-        .setDescription('Get the highest roll in the server.')
+        .setDescription('Get the highest roll in the channel.')
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName('last')
+        .setDescription('Get the last roll in the channel.')
     )
     .toJSON()
