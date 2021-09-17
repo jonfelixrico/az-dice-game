@@ -114,10 +114,10 @@ export class HistoryExporterService {
 
     const results: ResolvedRoll[] = []
 
-    for (const entry of history) {
-      const user = await userResolver(entry.rollOwner)
+    for (const record of history) {
+      const user = await userResolver(record.rollOwner)
       results.push({
-        ...entry,
+        ...record,
         nickname: user?.nickname,
         username: user?.user?.username,
       })
