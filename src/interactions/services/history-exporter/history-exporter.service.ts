@@ -2,6 +2,10 @@ import { Injectable } from '@nestjs/common'
 import { QueryBus } from '@nestjs/cqrs'
 import { Client, GuildMember, Interaction } from 'discord.js'
 import {
+  ChannelCutoffTimestampQuery,
+  ChannelCutoffTimestampQueryOutput,
+} from 'src/query/channel-cutoff-timestamp.query'
+import {
   RollHistoryQuery,
   RollHistoryQueryInput,
   RollHistoryQueryOutput,
@@ -140,7 +144,17 @@ export class HistoryExporterService {
   }
 
   async exportData({ channelId, guildId }: Interaction) {
-    const history = await this.fetchChannelHistory({ channelId, guildId })
+    const cutoff: ChannelCutoffTimestampQueryOutput =
+      await this.queryBus.execute(
+        new ChannelCutoffTimestampQuery({ channelId, guildId })
+      )
+
+    const history = await this.fetchChannelHistory({
+      channelId,
+      guildId,
+      startingFrom: cutoff,
+    })
+
     return this.generateSpreadsheet(history)
   }
 }
