@@ -11,6 +11,9 @@ export interface PrizeTierTallyEntry {
 
 export type PrizeTierTallyQueryOutput = PrizeTierTallyEntry[]
 
+/**
+ * @deprecated
+ */
 export class PrizeTierTallyQuery implements IQuery {
   constructor(readonly input: PrizeTierTallyQueryInput) {}
 }

@@ -11,6 +11,9 @@ type PrizeTierMap = {
   [key: string]: PrizeTierTallyEntry
 }
 
+/**
+ * @deprecated
+ */
 @QueryHandler(PrizeTierTallyQuery)
 export class PrizeTierTallyQueryHandlerService
   implements IQueryHandler<PrizeTierTallyQuery>
