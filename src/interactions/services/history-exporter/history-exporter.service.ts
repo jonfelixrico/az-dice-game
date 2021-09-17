@@ -121,7 +121,7 @@ export class HistoryExporterService {
       ({ roll, nickname, deleted, rank, subrank, timestamp }) => {
         return {
           roll: roll.sort().join(''),
-          user: nickname, // TODO convert this to the guild nickname
+          user: nickname,
           deleted: deleted ? 'YES' : 'NO',
           prize: tierMap[keyFn({ rank, subrank })]?.name,
           timestamp: timestamp.toISOString(),
@@ -136,17 +136,15 @@ export class HistoryExporterService {
     })
   }
 
-  private generatePrizeHistory(rolls: RollHistoryQueryOutputItem[]): WorkSheet {
-    const streamFormat = rolls.map(
-      ({ roll, rollOwner, deleted, timestamp }) => {
-        return {
-          roll: roll.sort().join(''),
-          user: rollOwner, // TODO convert this to the guild nickname
-          deleted: deleted ? 'YES' : 'NO',
-          timestamp: timestamp.toISOString(),
-        }
+  private generatePrizeSheet(rolls: ResolvedRoll[]): WorkSheet {
+    const streamFormat = rolls.map(({ roll, nickname, deleted, timestamp }) => {
+      return {
+        roll: roll.sort().join(''),
+        user: nickname,
+        deleted: deleted ? 'YES' : 'NO',
+        timestamp: timestamp.toISOString(),
       }
-    )
+    })
 
     const headers = ['timestamp', 'user', 'roll', 'deleted']
 
@@ -165,7 +163,7 @@ export class HistoryExporterService {
     for (const { rolls, name } of grouped) {
       sheets.push({
         name,
-        sheet: this.generatePrizeHistory(rolls),
+        sheet: this.generatePrizeSheet(rolls),
       })
     }
 
