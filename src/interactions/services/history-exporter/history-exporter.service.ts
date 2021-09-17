@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { QueryBus } from '@nestjs/cqrs'
 import { Client, GuildMember, Interaction } from 'discord.js'
-import { chain, keyBy } from 'lodash'
+import { keyBy } from 'lodash'
 import {
   RollHistoryQuery,
   RollHistoryQueryInput,
@@ -11,18 +11,6 @@ import {
 import { PrizeTier, PRIZE_TIERS } from 'src/utils/prize-tier'
 import { utils, WorkSheet, write } from 'xlsx'
 
-interface PrizeTierGroup {
-  name: string
-  rank: number
-  subrank?: number
-  rolls: ResolvedRoll[]
-}
-
-interface ChannelHistory {
-  grouped: PrizeTierGroup[]
-  rolls: ResolvedRoll[]
-}
-
 interface TierProps {
   rank?: number
   subrank?: number
@@ -31,33 +19,14 @@ interface TierProps {
 const keyFn = ({ rank, subrank }: TierProps) =>
   [rank ?? 0, subrank ?? 0].join('/')
 
-function generateGroups(history: ResolvedRoll[]): PrizeTierGroup[] {
-  const grouped = chain(history)
-    .filter(({ rank }) => !!rank)
-    .groupBy(keyFn)
-    .value()
-
-  return PRIZE_TIERS.concat()
-    .reverse()
-    .map((tier) => {
-      const { name, rank, subrank } = tier
-      return {
-        name,
-        rank,
-        subrank,
-        rolls: grouped[keyFn(tier)] || [],
-      }
-    })
-}
-
 interface SheetToAdd {
   sheet: WorkSheet
   name: string
 }
 
 interface ResolvedRoll extends RollHistoryQueryOutputItem {
-  username: string
-  nickname: string
+  userName: string
+  prizeName: string
 }
 
 type MemberResolver = (userId: string) => Promise<GuildMember>
@@ -66,7 +35,7 @@ type MemberResolver = (userId: string) => Promise<GuildMember>
 export class HistoryExporterService {
   constructor(private queryBus: QueryBus, private client: Client) {}
 
-  private async guildUserIdResolverFactory(
+  private async guildMemberResolverFactory(
     guildId: string
   ): Promise<MemberResolver> {
     const { client } = this
@@ -87,49 +56,39 @@ export class HistoryExporterService {
     const history: RollHistoryQueryOutput = await this.queryBus.execute(
       new RollHistoryQuery(input)
     )
-    const userResolver = await this.guildUserIdResolverFactory(input.guildId)
+
+    const tierMap = keyBy<PrizeTier>(PRIZE_TIERS, keyFn)
+    const memberResolver = await this.guildMemberResolverFactory(input.guildId)
 
     const results: ResolvedRoll[] = []
 
     for (const record of history) {
-      const user = await userResolver(record.rollOwner)
+      const member = await memberResolver(record.rollOwner)
+      const tier = tierMap[keyFn(record)]
+
       results.push({
         ...record,
-        nickname: user?.nickname,
-        username: user?.user?.username,
+        userName: member?.nickname || member?.user.username,
+        prizeName: tier?.name,
       })
     }
 
     return results
   }
 
-  private async fetchAndFormatHistory(
-    input: RollHistoryQueryInput
-  ): Promise<ChannelHistory> {
-    const history = await this.fetchChannelHistory(input)
-
-    return {
-      grouped: generateGroups(history),
-      rolls: history,
-    }
-  }
-
   private generateHistorySheet(rolls: ResolvedRoll[]): WorkSheet {
-    const tierMap = keyBy<PrizeTier>(PRIZE_TIERS, keyFn)
-
     const streamFormat = rolls.map(
-      ({ roll, nickname, deleted, rank, subrank, timestamp }) => {
+      ({ roll, userName, deleted, prizeName, timestamp }) => {
         return {
           roll: roll.sort().join(''),
-          user: nickname,
-          deleted: deleted ? 'YES' : 'NO',
-          prize: tierMap[keyFn({ rank, subrank })]?.name,
-          timestamp: timestamp.toISOString(),
+          user: userName,
+          timestamp: timestamp.toISOString(), // TODO add more user-friendly formatting
+          remarks: !deleted ? prizeName ?? '' : 'DELETED',
         }
       }
     )
 
-    const headers = ['timestamp', 'user', 'roll', 'prize', 'deleted']
+    const headers = ['timestamp', 'user', 'roll', 'remarks']
 
     return utils.json_to_sheet(streamFormat, {
       header: headers,
@@ -137,35 +96,45 @@ export class HistoryExporterService {
   }
 
   private generatePrizeSheet(rolls: ResolvedRoll[]): WorkSheet {
-    const streamFormat = rolls.map(({ roll, nickname, deleted, timestamp }) => {
+    const streamFormat = rolls.map(({ roll, userName, timestamp }) => {
       return {
         roll: roll.sort().join(''),
-        user: nickname,
-        deleted: deleted ? 'YES' : 'NO',
+        user: userName,
         timestamp: timestamp.toISOString(),
       }
     })
 
-    const headers = ['timestamp', 'user', 'roll', 'deleted']
+    const headers = ['timestamp', 'user', 'roll']
 
     return utils.json_to_sheet(streamFormat, {
       header: headers,
     })
   }
 
-  private async generateSpreadsheet({ rolls, grouped }: ChannelHistory) {
+  private async generateSpreadsheet(rolls: ResolvedRoll[]) {
     const sheets: SheetToAdd[] = []
     sheets.push({
       name: 'Overview',
       sheet: this.generateHistorySheet(rolls),
     })
 
-    for (const { rolls, name } of grouped) {
-      sheets.push({
-        name,
-        sheet: this.generatePrizeSheet(rolls),
+    const prizeSheets: SheetToAdd[] = PRIZE_TIERS.map((tier) => {
+      const isolatedRolls = rolls.filter((roll) => {
+        return (
+          !roll.deleted &&
+          roll.rank &&
+          roll.rank === tier.rank &&
+          (roll.rank ?? 0) === (tier.subrank ?? 0)
+        )
       })
-    }
+
+      return {
+        sheet: this.generatePrizeSheet(isolatedRolls),
+        name: tier.name,
+      }
+    })
+
+    sheets.push(...prizeSheets)
 
     const workBook = utils.book_new()
     sheets.forEach(({ name, sheet }, index) => {
@@ -178,7 +147,7 @@ export class HistoryExporterService {
   }
 
   async exportData({ channelId, guildId }: Interaction) {
-    const history = await this.fetchAndFormatHistory({ channelId, guildId })
+    const history = await this.fetchChannelHistory({ channelId, guildId })
     return this.generateSpreadsheet(history)
   }
 }
