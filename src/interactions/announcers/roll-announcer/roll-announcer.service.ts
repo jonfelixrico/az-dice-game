@@ -4,10 +4,9 @@ import { InteractionCache } from 'src/interactions/providers/interaction-cache.c
 import { RollPresentationSerializerService } from 'src/interactions/services/roll-presentation-serializer/roll-presentation-serializer.service'
 import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
 import { ReadModelSyncedEvent } from 'src/read-model/read-model-synced.event'
-import { PrizeTier } from 'src/utils/prize-tier'
 import { IRollCreatedEvent } from 'src/write-model/types/roll-created-event.interface'
 import { Connection } from 'typeorm'
-import { getPrizeTier } from './../../../utils/roll-eval.utils'
+import { PrizeTier, PrizeTierLabels } from 'src/utils/prize-eval'
 
 function generateDudRollResponse(roll: RollDbEntity): MessageEmbedOptions {
   return {
@@ -17,10 +16,10 @@ function generateDudRollResponse(roll: RollDbEntity): MessageEmbedOptions {
 
 function generateWinningRollResponse(
   roll: RollDbEntity,
-  combo: PrizeTier
+  rank: PrizeTier
 ): MessageEmbedOptions {
   return {
-    description: `<@${roll.rollOwner}> has rolled **${combo.name}**`,
+    description: `<@${roll.rollOwner}> has rolled **${PrizeTierLabels[rank]}**`,
   }
 }
 @EventsHandler(ReadModelSyncedEvent)
@@ -58,11 +57,10 @@ export class RollAnnouncerService
       return
     }
 
-    const evaluation = getPrizeTier(roll.prizeRank, roll.prizeSubrank)
-
-    const responseFragment = evaluation
-      ? generateWinningRollResponse(roll, evaluation)
-      : generateDudRollResponse(roll)
+    const responseFragment =
+      roll.prizeRank === null
+        ? generateDudRollResponse(roll)
+        : generateWinningRollResponse(roll, roll.prizeRank)
 
     const embed: MessageEmbedOptions = {
       footer: {
