@@ -25,4 +25,9 @@ export const HISTORY_SUBCOMMANDS: CommandBuilderOutput =
         .setName('last')
         .setDescription('Get the last roll in the channel.')
     )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName('breakdown')
+        .setDescription('Get the breakdown of rolls and prizes in the channel.')
+    )
     .toJSON()
