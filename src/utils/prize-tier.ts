@@ -11,10 +11,32 @@ export interface PrizeTier {
 
 export const PRIZE_TIERS: PrizeTier[] = [
   {
-    name: 'Chiong Guan (Tier 3)',
+    name: 'Chiong Guan',
     rank: 6,
-    subrank: 3,
     combinations: [
+      // four fours
+      {
+        roll: ['4', '4', '4', '4', '*', '*'],
+      },
+
+      // five of a kind
+      {
+        roll: ['6', '6', '6', '6', '6', '*'],
+      },
+      {
+        roll: ['5', '5', '5', '5', '5', '*'],
+      },
+      {
+        roll: ['3', '3', '3', '3', '3', '*'],
+      },
+      {
+        roll: ['2', '2', '2', '2', '2', '*'],
+      },
+      {
+        roll: ['1', '1', '1', '1', '1', '*'],
+      },
+
+      // six of a kind
       {
         roll: ['4', '4', '4', '4', '4', '4'],
       },
@@ -32,38 +54,6 @@ export const PRIZE_TIERS: PrizeTier[] = [
       },
       {
         roll: ['1', '1', '1', '1', '1', '1'],
-      },
-    ],
-  },
-  {
-    name: 'Chiong Guan (Tier 2)',
-    rank: 6,
-    subrank: 2,
-    combinations: [
-      {
-        roll: ['6', '6', '6', '6', '6', '*'],
-      },
-      {
-        roll: ['5', '5', '5', '5', '5', '*'],
-      },
-      {
-        roll: ['3', '3', '3', '3', '3', '*'],
-      },
-      {
-        roll: ['2', '2', '2', '2', '2', '*'],
-      },
-      {
-        roll: ['1', '1', '1', '1', '1', '*'],
-      },
-    ],
-  },
-  {
-    name: 'Chiong Guan (Tier 1)',
-    rank: 6,
-    subrank: 1,
-    combinations: [
-      {
-        roll: ['4', '4', '4', '4', '*', '*'],
       },
     ],
   },
