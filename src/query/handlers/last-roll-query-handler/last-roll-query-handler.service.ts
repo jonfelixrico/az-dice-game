@@ -31,6 +31,7 @@ export class LastRollQueryHandlerService
     }
 
     const {
+      rollId,
       roll,
       rollOwner,
       rolledBy,
@@ -46,6 +47,7 @@ export class LastRollQueryHandlerService
       rank,
       points,
       timestamp,
+      rollId,
     }
   }
 }

@@ -18,5 +18,6 @@ export interface ChannelRoll {
   rollOwner: string
   roll: number[]
   rolledBy: string
+  rollId: string
   timestamp: Date
 }

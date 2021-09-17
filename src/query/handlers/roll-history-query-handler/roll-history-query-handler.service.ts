@@ -16,6 +16,7 @@ function rollFormatFn({
   timestamp,
   deleteBy,
   deleteDt,
+  rollId,
 }: RollDbEntity): RollHistoryQueryOutputItem {
   const formatted: RollHistoryQueryOutputItem = {
     roll,
@@ -24,6 +25,7 @@ function rollFormatFn({
     rank,
     points,
     timestamp,
+    rollId,
   }
 
   if (deleteDt) {

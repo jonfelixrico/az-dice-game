@@ -1,5 +1,8 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs'
-import { HighestRollQuery } from 'src/query/highest-roll.query'
+import {
+  HighestRollQuery,
+  HighestRollQueryOutput,
+} from 'src/query/highest-roll.query'
 import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
 import { Connection } from 'typeorm'
 
@@ -9,14 +12,14 @@ export class HighestRollQueryHandlerService
 {
   constructor(private typeorm: Connection) {}
 
-  async execute({ input }: HighestRollQuery): Promise<any> {
+  async execute({ input }: HighestRollQuery): Promise<HighestRollQueryOutput> {
     const { channelId, guildId, startingFrom } = input
 
     let builder = this.typeorm
       .getRepository(RollDbEntity)
       .createQueryBuilder()
       .where('"channelId" = :channelId', { channelId })
-      .andWhere('"guildId = :guildId"', { guildId })
+      .andWhere('"guildId" = :guildId', { guildId })
       .andWhere('"deleteDt" IS NULL')
       .andWhere('"prizeRank" IS NOT NULL')
 
@@ -39,12 +42,14 @@ export class HighestRollQueryHandlerService
       roll,
       rollOwner,
       rolledBy,
+      rollId,
       prizeRank: rank,
       prizePoints: points,
       timestamp,
     } = highestRoll
 
     return {
+      rollId,
       roll,
       rollOwner,
       rolledBy,
