@@ -54,14 +54,6 @@ export class RollDbEntity {
   })
   prizeRank: PrizeTier
 
-  /**
-   * @deprecated
-   */
-  @Column({
-    nullable: true,
-  })
-  prizeSubrank: number
-
   @Column({
     nullable: true,
   })
