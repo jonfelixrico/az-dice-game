@@ -124,7 +124,7 @@ export class HistoryExporterService {
           !roll.deleted &&
           roll.rank &&
           roll.rank === tier.rank &&
-          (roll.rank ?? 0) === (tier.subrank ?? 0)
+          (roll.subrank ?? 0) === (tier.subrank ?? 0)
         )
       })
 
