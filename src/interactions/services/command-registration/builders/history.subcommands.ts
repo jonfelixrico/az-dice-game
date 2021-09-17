@@ -15,4 +15,11 @@ export const HISTORY_SUBCOMMANDS: CommandBuilderOutput =
     .addSubcommand((subcommand) =>
       subcommand.setName('clear').setDescription('Wipes the roll history')
     )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName('export')
+        .setDescription(
+          'Export the history and prize breakdown as an XLSX file.'
+        )
+    )
     .toJSON()

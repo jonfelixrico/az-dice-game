@@ -38,13 +38,13 @@ export class PrizeTierTallyQueryHandlerService
     })
 
     const tallyMap = rolls.reduce((map, { prizeRank, prizeSubrank }) => {
-      const key = [prizeRank, prizeSubrank].join('/')
+      const key = [prizeRank, prizeSubrank ?? 0].join('/')
       const entry = map[key]
 
       if (!entry) {
         map[key] = {
           rank: prizeRank,
-          subrank: prizeSubrank ?? null,
+          subrank: prizeSubrank ?? 0,
           count: 1,
         }
       } else {
