@@ -45,7 +45,7 @@ export class HistoryTallyInteractionHandlerService
 
     const prizeTiers = PRIZE_TIERS.map(({ name, subrank, rank }) => {
       const tallyEntry = tally.find(
-        (tally) => tally.rank === rank && tally.subrank === subrank
+        (tally) => tally.rank === rank && tally.subrank === (subrank ?? 0)
       )
 
       return {
