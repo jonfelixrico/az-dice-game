@@ -1,3 +1,4 @@
+import { PrizeTier } from 'src/utils/prize-eval'
 import { RollType } from 'src/write-model/types/roll-created-event.interface'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
 
@@ -51,10 +52,18 @@ export class RollDbEntity {
   @Column({
     nullable: true,
   })
-  prizeRank: number
+  prizeRank: PrizeTier
 
+  /**
+   * @deprecated
+   */
   @Column({
     nullable: true,
   })
   prizeSubrank: number
+
+  @Column({
+    nullable: true,
+  })
+  prizePoints: number
 }
