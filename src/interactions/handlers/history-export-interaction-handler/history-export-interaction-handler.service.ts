@@ -1,4 +1,5 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs'
+import { TextChannel } from 'discord.js'
 import { HistoryExporterService } from 'src/interactions/services/history-exporter/history-exporter.service'
 import { InteractionCreatedEvent } from 'src/interactions/services/interaction-events-relay/interaction-created.event'
 
@@ -24,7 +25,7 @@ export class HistoryExportInteractionHandlerService
       files: [
         {
           attachment: data,
-          name: 'yeet.xlsx',
+          name: `${(interaction.channel as TextChannel).name}.xlsx`,
         },
       ],
     })
