@@ -1,5 +1,4 @@
 export interface PrizeTierCombination {
-  tier?: number
   roll: string[]
 }
 
@@ -17,27 +16,21 @@ export const PRIZE_TIERS: PrizeTier[] = [
     subrank: 3,
     combinations: [
       {
-        tier: 6,
         roll: ['4', '4', '4', '4', '4', '4'],
       },
       {
-        tier: 5,
         roll: ['6', '6', '6', '6', '6', '6'],
       },
       {
-        tier: 4,
         roll: ['5', '5', '5', '5', '5', '5'],
       },
       {
-        tier: 3,
         roll: ['3', '3', '3', '3', '3', '3'],
       },
       {
-        tier: 2,
         roll: ['2', '2', '2', '2', '2', '2'],
       },
       {
-        tier: 1,
         roll: ['1', '1', '1', '1', '1', '1'],
       },
     ],
@@ -48,23 +41,18 @@ export const PRIZE_TIERS: PrizeTier[] = [
     subrank: 2,
     combinations: [
       {
-        tier: 5,
         roll: ['6', '6', '6', '6', '6', '*'],
       },
       {
-        tier: 4,
         roll: ['5', '5', '5', '5', '5', '*'],
       },
       {
-        tier: 3,
         roll: ['3', '3', '3', '3', '3', '*'],
       },
       {
-        tier: 2,
         roll: ['2', '2', '2', '2', '2', '*'],
       },
       {
-        tier: 1,
         roll: ['1', '1', '1', '1', '1', '*'],
       },
     ],
