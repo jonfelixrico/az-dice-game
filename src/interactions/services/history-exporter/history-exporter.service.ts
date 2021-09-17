@@ -18,10 +18,6 @@ interface PrizeTierGroup {
   rolls: ResolvedRoll[]
 }
 
-interface HistoryStreamItem extends RollHistoryQueryOutputItem {
-  tierName?: string
-}
-
 interface ChannelHistory {
   grouped: PrizeTierGroup[]
   rolls: ResolvedRoll[]
@@ -52,23 +48,6 @@ function generateGroups(history: ResolvedRoll[]): PrizeTierGroup[] {
         rolls: grouped[keyFn(tier)] || [],
       }
     })
-}
-
-function generateHistoryStream(
-  history: RollHistoryQueryOutputItem[]
-): HistoryStreamItem[] {
-  const tierMap = keyBy<PrizeTier>(PRIZE_TIERS, keyFn)
-
-  return history.map<HistoryStreamItem>((roll) => {
-    if (!roll.rank) {
-      return roll
-    }
-
-    return {
-      ...roll,
-      tierName: tierMap[keyFn(roll)]?.name,
-    }
-  })
 }
 
 interface SheetToAdd {
@@ -135,16 +114,16 @@ export class HistoryExporterService {
     }
   }
 
-  private generateHistoryStreamSheet(
-    rolls: RollHistoryQueryOutputItem[]
-  ): WorkSheet {
-    const streamFormat = generateHistoryStream(rolls).map(
-      ({ roll, rollOwner, deleted, tierName, timestamp }) => {
+  private generateHistorySheet(rolls: ResolvedRoll[]): WorkSheet {
+    const tierMap = keyBy<PrizeTier>(PRIZE_TIERS, keyFn)
+
+    const streamFormat = rolls.map(
+      ({ roll, nickname, deleted, rank, subrank, timestamp }) => {
         return {
           roll: roll.sort().join(''),
-          user: rollOwner, // TODO convert this to the guild nickname
+          user: nickname, // TODO convert this to the guild nickname
           deleted: deleted ? 'YES' : 'NO',
-          prize: tierName,
+          prize: tierMap[keyFn({ rank, subrank })]?.name,
           timestamp: timestamp.toISOString(),
         }
       }
@@ -180,7 +159,7 @@ export class HistoryExporterService {
     const sheets: SheetToAdd[] = []
     sheets.push({
       name: 'Overview',
-      sheet: this.generateHistoryStreamSheet(rolls),
+      sheet: this.generateHistorySheet(rolls),
     })
 
     for (const { rolls, name } of grouped) {
