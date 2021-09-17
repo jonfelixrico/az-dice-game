@@ -84,16 +84,10 @@ export const PRIZE_TIERS: PrizeTier[] = [
     rank: 5,
     combinations: [
       {
-        roll: ['1', '2', '3', '4', '5', '6'],
-      },
-    ],
-  },
-  {
-    name: 'Twi Theng',
-    rank: 5,
-    combinations: [
-      {
         roll: ['x', 'x', 'x', 'y', 'y', 'y'],
+      },
+      {
+        roll: ['1', '2', '3', '4', '5', '6'],
       },
     ],
   },
