@@ -6,13 +6,6 @@ export const HISTORY_SUBCOMMANDS: CommandBuilderOutput =
     .setName('history')
     .setDescription('Contains subcommands related to the roll history')
     .addSubcommand((subcommand) =>
-      subcommand
-        .setName('tally')
-        .setDescription(
-          'Show a tally of how many times a prize has been rolled'
-        )
-    )
-    .addSubcommand((subcommand) =>
       subcommand.setName('clear').setDescription('Wipes the roll history')
     )
     .addSubcommand((subcommand) =>

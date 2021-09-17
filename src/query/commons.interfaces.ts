@@ -14,7 +14,7 @@ export interface ChannelHistoryQueryParams {
  */
 export interface ChannelRoll {
   rank?: number
-  subrank?: number
+  points?: number
   rollOwner: string
   roll: number[]
   rolledBy: string

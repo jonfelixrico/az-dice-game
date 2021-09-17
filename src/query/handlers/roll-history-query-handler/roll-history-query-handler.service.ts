@@ -12,7 +12,7 @@ function rollFormatFn({
   rollOwner,
   rolledBy,
   prizeRank: rank,
-  prizeSubrank: subrank,
+  prizePoints: points,
   timestamp,
   deleteBy,
   deleteDt,
@@ -22,7 +22,7 @@ function rollFormatFn({
     rollOwner,
     rolledBy,
     rank,
-    subrank,
+    points,
     timestamp,
   }
 

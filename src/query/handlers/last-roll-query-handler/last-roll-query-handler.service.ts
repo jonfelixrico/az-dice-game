@@ -35,7 +35,7 @@ export class LastRollQueryHandlerService
       rollOwner,
       rolledBy,
       prizeRank: rank,
-      prizeSubrank: subrank,
+      prizePoints: points,
       timestamp,
     } = lastRoll
 
@@ -44,7 +44,7 @@ export class LastRollQueryHandlerService
       rollOwner,
       rolledBy,
       rank,
-      subrank,
+      points,
       timestamp,
     }
   }

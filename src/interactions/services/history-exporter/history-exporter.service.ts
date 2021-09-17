@@ -1,23 +1,24 @@
 import { Injectable } from '@nestjs/common'
 import { QueryBus } from '@nestjs/cqrs'
 import { Client, GuildMember, Interaction } from 'discord.js'
-import { keyBy } from 'lodash'
 import {
   RollHistoryQuery,
   RollHistoryQueryInput,
   RollHistoryQueryOutput,
   RollHistoryQueryOutputItem,
 } from 'src/query/roll-history.query'
-import { PrizeTier, PRIZE_TIERS } from 'src/utils/prize-tier'
+import { PrizeTier, PrizeTierLabels } from 'src/utils/prize-eval'
 import { utils, WorkSheet, write } from 'xlsx'
 
-interface TierProps {
-  rank?: number
-  subrank?: number
-}
-
-const keyFn = ({ rank, subrank }: TierProps) =>
-  [rank ?? 0, subrank ?? 0].join('/')
+const { IT_SIU, DI_KI, SAM_HONG, SI_CHIN, TWI_THENG, CHIONG_GUAN } = PrizeTier
+const RANK_DISPLAY_SEQUENCE = [
+  IT_SIU,
+  DI_KI,
+  SAM_HONG,
+  SI_CHIN,
+  TWI_THENG,
+  CHIONG_GUAN,
+]
 
 interface SheetToAdd {
   sheet: WorkSheet
@@ -56,20 +57,17 @@ export class HistoryExporterService {
     const history: RollHistoryQueryOutput = await this.queryBus.execute(
       new RollHistoryQuery(input)
     )
-
-    const tierMap = keyBy<PrizeTier>(PRIZE_TIERS, keyFn)
     const memberResolver = await this.guildMemberResolverFactory(input.guildId)
 
     const results: ResolvedRoll[] = []
 
     for (const record of history) {
       const member = await memberResolver(record.rollOwner)
-      const tier = tierMap[keyFn(record)]
 
       results.push({
         ...record,
         userName: member?.nickname || member?.user.username,
-        prizeName: tier?.name,
+        prizeName: PrizeTierLabels[record.rank],
       })
     }
 
@@ -118,19 +116,14 @@ export class HistoryExporterService {
       sheet: this.generateHistorySheet(rolls),
     })
 
-    const prizeSheets: SheetToAdd[] = PRIZE_TIERS.map((tier) => {
+    const prizeSheets: SheetToAdd[] = RANK_DISPLAY_SEQUENCE.map((tier) => {
       const isolatedRolls = rolls.filter((roll) => {
-        return (
-          !roll.deleted &&
-          roll.rank &&
-          roll.rank === tier.rank &&
-          (roll.subrank ?? 0) === (tier.subrank ?? 0)
-        )
+        return !roll.deleted && roll.rank === tier
       })
 
       return {
         sheet: this.generatePrizeSheet(isolatedRolls),
-        name: tier.name,
+        name: PrizeTierLabels[tier],
       }
     })
 

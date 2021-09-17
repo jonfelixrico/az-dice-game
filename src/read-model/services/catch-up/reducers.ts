@@ -4,13 +4,13 @@ import {
   JSONType,
 } from '@eventstore/db-client'
 import { ChannelDbEntity } from 'src/read-model/entities/channel.db-entity'
-import { evaluateRoll } from 'src/utils/roll-eval.utils'
 import { IChannelCutoffTimestampSetEventPayload } from 'src/write-model/types/channel-cutoff-timestamp-set.event'
 import { EventTypes } from 'src/write-model/types/event-types.enum'
 import { IRollCreatedEventPayload } from 'src/write-model/types/roll-created-event.interface'
 import { IRollRemovedEventPayload } from 'src/write-model/types/roll-removed-event.interface'
 import { EntityManager } from 'typeorm'
 import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
+import { evaluateRoll } from 'src/utils/prize-eval'
 
 export type ReducerFn<E extends JSONType = JSONType> = (
   event: JSONRecordedEvent<JSONEventType<string, E>>,
@@ -45,8 +45,8 @@ const rollCreated: ReducerFn<IRollCreatedEventPayload> = async (
     timestamp,
     type,
     rolledBy,
-    prizeRank: prize?.rank,
-    prizeSubrank: prize?.subrank,
+    prizeRank: prize?.tier,
+    prizePoints: prize?.points,
     messageId,
   })
 
