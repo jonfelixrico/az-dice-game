@@ -1,3 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
+import { ApplicationCommandTypes } from 'discord.js/typings/enums'
 
-export type CommandBuilderOutput = ReturnType<SlashCommandBuilder['toJSON']>
+export interface CommandBuilderOutput
+  extends ReturnType<SlashCommandBuilder['toJSON']> {
+  type?: ApplicationCommandTypes
+}
