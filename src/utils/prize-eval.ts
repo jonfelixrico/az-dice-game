@@ -128,7 +128,7 @@ export const PRIZE_EVALUATORS: PrizeTierEvaluator[] = [
     tier: SI_CHIN,
     points: 400,
     evaluator(histogram) {
-      // check if four dice faces are fours
+      // check if there are four of a kind
       const hasFourOfAKind = histogram.some(({ count }) => count === 4)
 
       if (hasFourOfAKind) {
