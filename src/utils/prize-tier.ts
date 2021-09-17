@@ -7,7 +7,6 @@ export interface PrizeTier {
   name: string
   rank: number
   subrank?: number
-  desc: string
   combinations: PrizeTierCombination[]
 }
 
@@ -16,7 +15,6 @@ export const PRIZE_TIERS: PrizeTier[] = [
     name: 'Chiong Guan (Tier 3)',
     rank: 6,
     subrank: 3,
-    desc: '6 same numbers',
     combinations: [
       {
         tier: 6,
@@ -48,7 +46,6 @@ export const PRIZE_TIERS: PrizeTier[] = [
     name: 'Chiong Guan (Tier 2)',
     rank: 6,
     subrank: 2,
-    desc: '5 same numbers',
     combinations: [
       {
         tier: 5,
@@ -76,7 +73,6 @@ export const PRIZE_TIERS: PrizeTier[] = [
     name: 'Chiong Guan (Tier 1)',
     rank: 6,
     subrank: 1,
-    desc: 'Four 4s',
     combinations: [
       {
         roll: ['4', '4', '4', '4', '*', '*'],
@@ -86,7 +82,6 @@ export const PRIZE_TIERS: PrizeTier[] = [
   {
     name: 'Twi Theng',
     rank: 5,
-    desc: 'Numbers from 1 to 6',
     combinations: [
       {
         roll: ['1', '2', '3', '4', '5', '6'],
@@ -96,7 +91,6 @@ export const PRIZE_TIERS: PrizeTier[] = [
   {
     name: 'Twi Theng',
     rank: 5,
-    desc: '2 groups of the same number',
     combinations: [
       {
         roll: ['x', 'x', 'x', 'y', 'y', 'y'],
@@ -106,7 +100,6 @@ export const PRIZE_TIERS: PrizeTier[] = [
   {
     name: 'Si Chin',
     rank: 4,
-    desc: '4 same numbers except 4',
     combinations: [
       {
         roll: ['x', 'x', 'x', 'x', '*', '*'],
@@ -116,7 +109,6 @@ export const PRIZE_TIERS: PrizeTier[] = [
   {
     name: 'Sam Hong',
     rank: 3,
-    desc: 'Three 4s',
     combinations: [
       {
         roll: ['4', '4', '4', '*', '*', '*'],
@@ -126,7 +118,6 @@ export const PRIZE_TIERS: PrizeTier[] = [
   {
     name: 'Di Ki',
     rank: 2,
-    desc: 'Two 4s',
     combinations: [
       {
         roll: ['4', '4', '*', '*', '*', '*'],
@@ -136,7 +127,6 @@ export const PRIZE_TIERS: PrizeTier[] = [
   {
     name: 'It Siu',
     rank: 1,
-    desc: 'One 4',
     combinations: [
       {
         roll: ['4', '*', '*', '*', '*', '*'],
