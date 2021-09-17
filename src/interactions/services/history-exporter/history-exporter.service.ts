@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import { QueryBus } from '@nestjs/cqrs'
-import { Interaction } from 'discord.js'
+import { Client, GuildMember, Interaction } from 'discord.js'
 import { chain, keyBy } from 'lodash'
 import {
   RollHistoryQuery,
   RollHistoryQueryInput,
+  RollHistoryQueryOutput,
   RollHistoryQueryOutputItem,
 } from 'src/query/roll-history.query'
 import { PrizeTier, PRIZE_TIERS } from 'src/utils/prize-tier'
@@ -77,14 +78,59 @@ interface SheetToAdd {
   name: string
 }
 
+interface ResolvedRoll extends RollHistoryQueryOutputItem {
+  username: string
+  nickname: string
+}
+
+type MemberResolver = (userId: string) => Promise<GuildMember>
+
 @Injectable()
 export class HistoryExporterService {
-  constructor(private queryBus: QueryBus) {}
+  constructor(private queryBus: QueryBus, private client: Client) {}
+
+  private async guildUserIdResolverFactory(
+    guildId: string
+  ): Promise<MemberResolver> {
+    const { client } = this
+
+    return async (userId: string) => {
+      const guild = await client.guilds.fetch(guildId)
+      if (!guild) {
+        return null
+      }
+
+      return await guild.members.fetch(userId)
+    }
+  }
+
+  private async fetchChannelHistory(
+    input: RollHistoryQueryInput
+  ): Promise<ResolvedRoll[]> {
+    const history: RollHistoryQueryOutput = await this.queryBus.execute(
+      new RollHistoryQuery(input)
+    )
+    const userResolver = await this.guildUserIdResolverFactory(input.guildId)
+
+    const results: ResolvedRoll[] = []
+
+    for (const entry of history) {
+      const user = await userResolver(entry.rollOwner)
+      results.push({
+        ...entry,
+        nickname: user?.nickname,
+        username: user?.user?.username,
+      })
+    }
+
+    return results
+  }
 
   private async fetchAndFormatHistory(
     input: RollHistoryQueryInput
   ): Promise<ChannelHistory> {
     const history = await this.queryBus.execute(new RollHistoryQuery(input))
+
     return {
       grouped: generateGroups(history),
       rolls: history,
