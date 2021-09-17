@@ -15,4 +15,9 @@ export const HISTORY_SUBCOMMANDS: CommandBuilderOutput =
           'Export the history and prize breakdown as an XLSX file.'
         )
     )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName('highest')
+        .setDescription('Get the highest roll in the server.')
+    )
     .toJSON()
