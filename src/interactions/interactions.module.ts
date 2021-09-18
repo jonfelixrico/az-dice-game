@@ -12,7 +12,6 @@ import { WriteModelModule } from 'src/write-model/write-model.module'
 import { RollPresentationSerializerService } from './services/roll-presentation-serializer/roll-presentation-serializer.service'
 import { interactionCacheProvider } from './providers/interaction-cache.provider'
 import { RollAnnouncerService } from './announcers/roll-announcer/roll-announcer.service'
-import { RemoveRollInteractionHandlerService } from './handlers/remove-roll-interaction-handler/remove-roll-interaction-handler.service'
 import { RollRemovedAnnouncerService } from './announcers/roll-removed-announcer/roll-removed-announcer.service'
 import { HistoryClearInteractionHandlerService } from './handlers/history-clear-interaction-handler/history-clear-interaction-handler.service'
 import { HistoryExporterService } from './services/history-exporter/history-exporter.service'
@@ -37,7 +36,6 @@ import { SetCheckpointContextmenuHandlerService } from './handlers/set-checkpoin
     RollPresentationSerializerService,
     interactionCacheProvider,
     RollAnnouncerService,
-    RemoveRollInteractionHandlerService,
     RollRemovedAnnouncerService,
     HistoryClearInteractionHandlerService,
     HistoryExporterService,
