@@ -28,6 +28,9 @@ export class LastRollQueryHandlerService
 
     const lastRoll = await this.typeorm.getRepository(RollDbEntity).findOne({
       where: findConditions,
+      order: {
+        timestamp: 'DESC',
+      },
     })
 
     return lastRoll ? formatRollRecordToQueryOutput(lastRoll) : null
