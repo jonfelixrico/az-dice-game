@@ -36,7 +36,10 @@ export class RollHistoryQueryHandlerService
     const findConditions: FindConditions<RollDbEntity> = {
       channelId,
       guildId,
-      timestamp: startingFrom && MoreThanOrEqual(startingFrom),
+    }
+
+    if (startingFrom) {
+      findConditions.timestamp = MoreThanOrEqual(startingFrom)
     }
 
     const rolls = await this.typeorm.getRepository(RollDbEntity).find({

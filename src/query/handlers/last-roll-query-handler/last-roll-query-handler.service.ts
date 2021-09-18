@@ -23,7 +23,10 @@ export class LastRollQueryHandlerService
     const findConditions: FindConditions<RollDbEntity> = {
       ...channelParams,
       deleteDt: IsNull(),
-      timestamp: startingFrom && MoreThanOrEqual(startingFrom),
+    }
+
+    if (startingFrom) {
+      findConditions.timestamp = MoreThanOrEqual(startingFrom)
     }
 
     const lastRoll = await this.typeorm.getRepository(RollDbEntity).findOne({
