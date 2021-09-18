@@ -34,14 +34,14 @@ export class HistoryLastInteractionHandlerService
     const cutoff: ChannelCutoffTimestampQueryOutput =
       await this.queryBus.execute(new ChannelCutoffTimestampQuery(input))
 
-    const highestRoll: LastRollQueryOutput = await this.queryBus.execute(
+    const lastRoll: LastRollQueryOutput = await this.queryBus.execute(
       new LastRollQuery({
         ...input,
         startingFrom: cutoff,
       })
     )
 
-    if (!highestRoll) {
+    if (!lastRoll) {
       await interaction.editReply({
         embeds: [
           {
@@ -55,7 +55,7 @@ export class HistoryLastInteractionHandlerService
       return
     }
 
-    const { rank, roll, rollOwner } = highestRoll
+    const { rank, roll, rollOwner } = lastRoll
 
     const description = !rank
       ? `The last roll in  ${interaction.channel} was made by <@${rollOwner}>.`
@@ -67,7 +67,7 @@ export class HistoryLastInteractionHandlerService
         {
           description,
           author: {
-            name: 'Highest Roll',
+            name: 'Last Roll',
           },
         },
       ],
