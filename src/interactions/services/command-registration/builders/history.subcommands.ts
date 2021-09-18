@@ -40,7 +40,10 @@ export const HISTORY_SUBCOMMANDS: CommandBuilderOutput =
         .setName('removeroll')
         .setDescription('Remove a specific roll by specifying its id.')
         .addStringOption((option) =>
-          option.setName('id').setDescription('The id of the roll to remove.')
+          option
+            .setName('id')
+            .setDescription('The id of the roll to remove.')
+            .setRequired(true)
         )
     )
     .toJSON()
