@@ -1,4 +1,6 @@
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs'
+import { IQueryHandler, QueryBus, QueryHandler } from '@nestjs/cqrs'
+import { pick } from 'lodash'
+import { ChannelCutoffTimestampQuery } from 'src/query/channel-cutoff-timestamp.query'
 import { LastRollQuery, LastRollQueryOutput } from 'src/query/last-roll.query'
 import { formatRollRecordToQueryOutput } from 'src/query/utils/roll-db-entity.utils'
 import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
@@ -8,14 +10,18 @@ import { Connection, FindConditions, IsNull, MoreThanOrEqual } from 'typeorm'
 export class LastRollQueryHandlerService
   implements IQueryHandler<LastRollQuery>
 {
-  constructor(private typeorm: Connection) {}
+  constructor(private typeorm: Connection, private queryBus: QueryBus) {}
 
   async execute({ input }: LastRollQuery): Promise<LastRollQueryOutput> {
-    const { channelId, guildId, startingFrom } = input
+    const channelParams = pick(input, ['guildId', 'channelId'])
+    const startingFrom: Date =
+      input.startingFrom ??
+      (await this.queryBus.execute(
+        new ChannelCutoffTimestampQuery(channelParams)
+      ))
 
     const findConditions: FindConditions<RollDbEntity> = {
-      channelId,
-      guildId,
+      ...channelParams,
       deleteDt: IsNull(),
       timestamp: startingFrom && MoreThanOrEqual(startingFrom),
     }
