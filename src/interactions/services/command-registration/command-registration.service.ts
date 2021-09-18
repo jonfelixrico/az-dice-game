@@ -27,26 +27,30 @@ const COMMAND_BUILDERS: Array<CommandBuilderOutput | MessageCommand> = [
 export class CommandRegistrationService implements OnApplicationBootstrap {
   constructor(private client: Client, private config: ConfigService) {}
 
-  get registrationRoute(): `/${string}` {
+  get registrationRoutes(): `/${string}`[] {
     const { client, config } = this
-    const commandGuildId: string = config.get('COMMAND_GUILD_ID')
+    const commandGuildIdEnvVar: string = config.get('COMMAND_GUILD_ID') ?? ''
 
-    if (commandGuildId) {
-      return Routes.applicationGuildCommands(
-        client.application.id,
-        commandGuildId
-      )
+    if (commandGuildIdEnvVar) {
+      return commandGuildIdEnvVar
+        .split(',')
+        .map((str) => str.trim())
+        .map((guildId) =>
+          Routes.applicationGuildCommands(client.application.id, guildId)
+        )
     }
 
-    return Routes.applicationCommands(client.application.id)
+    return [Routes.applicationCommands(client.application.id)]
   }
 
   async onApplicationBootstrap() {
-    const { client, registrationRoute } = this
+    const { client, registrationRoutes } = this
     const rest = new REST({ version: '9' }).setToken(client.token)
 
-    await rest.put(registrationRoute, {
-      body: COMMAND_BUILDERS.map((command) => command),
-    })
+    for (const route of registrationRoutes) {
+      await rest.put(route, {
+        body: COMMAND_BUILDERS.map((command) => command),
+      })
+    }
   }
 }
