@@ -20,6 +20,8 @@ import { HistoryExportInteractionHandlerService } from './handlers/history-expor
 import { HistoryHighestInteractionHandlerService } from './handlers/history-highest-interaction-handler/history-highest-interaction-handler.service'
 import { HistoryLastInteractionHandlerService } from './handlers/history-last-interaction-handler/history-last-interaction-handler.service'
 import { HistoryBreakdownInteractionHandlerService } from './handlers/history-breakdown-interaction-handler/history-breakdown-interaction-handler.service'
+import { HistoryRemoverollInteractionHandlerService } from './handlers/history-removeroll-interaction-handler/history-removeroll-interaction-handler.service'
+import { HistoryRemovelastrollInteractionHandlerService } from './handlers/history-removelastroll-interaction-handler/history-removelastroll-interaction-handler.service'
 
 @Module({
   providers: [
@@ -41,6 +43,8 @@ import { HistoryBreakdownInteractionHandlerService } from './handlers/history-br
     HistoryHighestInteractionHandlerService,
     HistoryLastInteractionHandlerService,
     HistoryBreakdownInteractionHandlerService,
+    HistoryRemoverollInteractionHandlerService,
+    HistoryRemovelastrollInteractionHandlerService,
   ],
   imports: [DiscordModule, ReadModelModule, WriteModelModule],
 })
