@@ -20,4 +20,5 @@ export interface ChannelRoll {
   rolledBy: string
   rollId: string
   timestamp: Date
+  messageId: string
 }

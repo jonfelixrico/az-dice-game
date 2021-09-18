@@ -9,6 +9,7 @@ export function formatRollRecordToQueryOutput({
   prizeRank: rank,
   prizePoints: points,
   timestamp,
+  messageId,
 }: RollDbEntity): ChannelRoll {
   return {
     rollId,
@@ -18,5 +19,6 @@ export function formatRollRecordToQueryOutput({
     rank,
     points,
     timestamp,
+    messageId,
   }
 }
