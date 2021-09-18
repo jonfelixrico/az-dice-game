@@ -4,29 +4,15 @@ import {
   RollHistoryQueryOutput,
   RollHistoryQueryOutputItem,
 } from 'src/query/roll-history.query'
+import { formatRollRecordToQueryOutput } from 'src/query/utils/roll-db-entity.utils'
 import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
 import { Connection, FindConditions, MoreThanOrEqual } from 'typeorm'
 
-function rollFormatFn({
-  roll,
-  rollOwner,
-  rolledBy,
-  prizeRank: rank,
-  prizePoints: points,
-  timestamp,
-  deleteBy,
-  deleteDt,
-  rollId,
-}: RollDbEntity): RollHistoryQueryOutputItem {
-  const formatted: RollHistoryQueryOutputItem = {
-    roll,
-    rollOwner,
-    rolledBy,
-    rank,
-    points,
-    timestamp,
-    rollId,
-  }
+function rollFormatFn(roll: RollDbEntity): RollHistoryQueryOutputItem {
+  const formatted: RollHistoryQueryOutputItem =
+    formatRollRecordToQueryOutput(roll)
+
+  const { deleteDt, deleteBy } = roll
 
   if (deleteDt) {
     formatted.deleted = {

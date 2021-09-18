@@ -3,6 +3,7 @@ import {
   HighestRollQuery,
   HighestRollQueryOutput,
 } from 'src/query/highest-roll.query'
+import { formatRollRecordToQueryOutput } from 'src/query/utils/roll-db-entity.utils'
 import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
 import { Connection } from 'typeorm'
 
@@ -34,28 +35,6 @@ export class HighestRollQueryHandlerService
     builder.addOrderBy('"timestamp"', 'ASC')
 
     const highestRoll = await builder.getOne()
-    if (!highestRoll) {
-      return null
-    }
-
-    const {
-      roll,
-      rollOwner,
-      rolledBy,
-      rollId,
-      prizeRank: rank,
-      prizePoints: points,
-      timestamp,
-    } = highestRoll
-
-    return {
-      rollId,
-      roll,
-      rollOwner,
-      rolledBy,
-      rank,
-      points,
-      timestamp,
-    }
+    return highestRoll ? formatRollRecordToQueryOutput(highestRoll) : null
   }
 }
