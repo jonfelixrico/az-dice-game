@@ -1,7 +1,9 @@
 import { IQuery } from '@nestjs/cqrs'
 import { ChannelHistoryQueryParams, ChannelRoll } from './commons.interfaces'
 
-export type RollHistoryQueryInput = ChannelHistoryQueryParams
+export interface RollHistoryQueryInput extends ChannelHistoryQueryParams {
+  excludeDeleted?: boolean
+}
 
 export interface RollHistoryQueryOutputItem extends ChannelRoll {
   deleted?: {

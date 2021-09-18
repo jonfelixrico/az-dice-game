@@ -49,6 +49,7 @@ export class HistoryBreakdownInteractionHandlerService
       new RollHistoryQuery({
         ...input,
         startingFrom: cutoff,
+        excludeDeleted: true,
       })
     )
 
