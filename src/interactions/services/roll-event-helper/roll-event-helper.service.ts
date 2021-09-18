@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { CommandInteraction, User } from 'discord.js'
 import { random } from 'lodash'
 import { customAlphabet } from 'nanoid'
+import { sprintf } from 'sprintf-js'
 import { InteractionCache } from 'src/interactions/providers/interaction-cache.class'
 import { EsdbHelperService } from 'src/write-model/services/esdb-helper/esdb-helper.service'
 import {
@@ -51,7 +52,8 @@ interface ProxyRoll extends BaseProxyRoll {
 export class RollEventHelperService {
   constructor(
     private esdbHelper: EsdbHelperService,
-    private interactionCache: InteractionCache
+    private interactionCache: InteractionCache,
+    private logger: Logger
   ) {}
 
   /**
@@ -90,6 +92,15 @@ export class RollEventHelperService {
     }
 
     await this.esdbHelper.pushEvent(event)
+    this.logger.verbose(
+      sprintf(
+        'Created roll %s in guild %s/channel %s',
+        rollId,
+        guildId,
+        channelId
+      ),
+      RollEventHelperService.name
+    )
     this.interactionCache.set(rollId, interaction)
   }
 }
