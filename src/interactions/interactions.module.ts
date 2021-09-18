@@ -22,6 +22,7 @@ import { HistoryLastInteractionHandlerService } from './handlers/history-last-in
 import { HistoryBreakdownInteractionHandlerService } from './handlers/history-breakdown-interaction-handler/history-breakdown-interaction-handler.service'
 import { HistoryRemoverollInteractionHandlerService } from './handlers/history-removeroll-interaction-handler/history-removeroll-interaction-handler.service'
 import { HistoryRemovelastrollInteractionHandlerService } from './handlers/history-removelastroll-interaction-handler/history-removelastroll-interaction-handler.service'
+import { DiscordHelperService } from './services/discord-helper/discord-helper.service'
 
 @Module({
   providers: [
@@ -45,6 +46,7 @@ import { HistoryRemovelastrollInteractionHandlerService } from './handlers/histo
     HistoryBreakdownInteractionHandlerService,
     HistoryRemoverollInteractionHandlerService,
     HistoryRemovelastrollInteractionHandlerService,
+    DiscordHelperService,
   ],
   imports: [DiscordModule, ReadModelModule, WriteModelModule],
 })
