@@ -43,7 +43,7 @@ export class HistoryRemovelastrollInteractionHandlerService
     })
 
     await interaction.editReply(
-      `Roll ${lastRoll.rollId} was successfully deleted.`
+      `You have successfully deleted roll \`${lastRoll.rollId}\`.`
     )
   }
 }
