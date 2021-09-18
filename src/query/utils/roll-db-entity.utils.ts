@@ -1,7 +1,7 @@
 import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
 import { ChannelRoll } from '../commons.interfaces'
 
-export function rollDbRecordFormatter({
+export function formatRollRecordToQueryOutput({
   roll,
   rollOwner,
   rolledBy,
