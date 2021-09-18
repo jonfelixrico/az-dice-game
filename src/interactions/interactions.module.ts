@@ -23,6 +23,7 @@ import { HistoryBreakdownInteractionHandlerService } from './handlers/history-br
 import { HistoryRemoverollInteractionHandlerService } from './handlers/history-removeroll-interaction-handler/history-removeroll-interaction-handler.service'
 import { HistoryRemovelastrollInteractionHandlerService } from './handlers/history-removelastroll-interaction-handler/history-removelastroll-interaction-handler.service'
 import { DiscordHelperService } from './services/discord-helper/discord-helper.service'
+import { SetCheckpointContextmenuHandlerService } from './handlers/set-checkpoint-contextmenu-handler/set-checkpoint-contextmenu-handler.service'
 
 @Module({
   providers: [
@@ -47,6 +48,7 @@ import { DiscordHelperService } from './services/discord-helper/discord-helper.s
     HistoryRemoverollInteractionHandlerService,
     HistoryRemovelastrollInteractionHandlerService,
     DiscordHelperService,
+    SetCheckpointContextmenuHandlerService,
   ],
   imports: [DiscordModule, ReadModelModule, WriteModelModule],
 })
