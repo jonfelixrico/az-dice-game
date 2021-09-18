@@ -74,9 +74,9 @@ export class HistoryBreakdownInteractionHandlerService
             ),
             `**No prize** - ${counts[DUD_KEY] ?? 0}`,
             '',
-            `There are **${history.length}** ${
-              history.length !== 1 ? 'rolls' : 'roll'
-            } made so far`,
+            history.length !== 1
+              ? `There are **${history.length}** rolls made so far.`
+              : 'There is **1** roll made so far.',
           ].join('\n'),
         },
       ],
