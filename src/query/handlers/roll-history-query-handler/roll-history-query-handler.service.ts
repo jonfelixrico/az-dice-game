@@ -5,7 +5,7 @@ import {
   RollHistoryQueryOutputItem,
 } from 'src/query/roll-history.query'
 import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
-import { Connection, FindConditions, MoreThan } from 'typeorm'
+import { Connection, FindConditions, MoreThanOrEqual } from 'typeorm'
 
 function rollFormatFn({
   roll,
@@ -50,10 +50,7 @@ export class RollHistoryQueryHandlerService
     const findConditions: FindConditions<RollDbEntity> = {
       channelId,
       guildId,
-    }
-
-    if (startingFrom) {
-      findConditions.timestamp = MoreThan(startingFrom)
+      timestamp: startingFrom && MoreThanOrEqual(startingFrom),
     }
 
     const rolls = await this.typeorm.getRepository(RollDbEntity).find({

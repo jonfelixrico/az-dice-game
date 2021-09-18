@@ -24,7 +24,7 @@ export class HighestRollQueryHandlerService
       .andWhere('"prizeRank" IS NOT NULL')
 
     if (startingFrom) {
-      builder = builder.andWhere('timestamp > :startingFrom', {
+      builder = builder.andWhere('timestamp >= :startingFrom', {
         startingFrom,
       })
     }

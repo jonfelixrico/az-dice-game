@@ -1,7 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs'
 import { LastRollQuery, LastRollQueryOutput } from 'src/query/last-roll.query'
 import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
-import { Connection, FindConditions, IsNull, MoreThan } from 'typeorm'
+import { Connection, FindConditions, IsNull, MoreThanOrEqual } from 'typeorm'
 
 @QueryHandler(LastRollQuery)
 export class LastRollQueryHandlerService
@@ -16,10 +16,7 @@ export class LastRollQueryHandlerService
       channelId,
       guildId,
       deleteDt: IsNull(),
-    }
-
-    if (startingFrom) {
-      findConditions.timestamp = MoreThan(startingFrom)
+      timestamp: startingFrom && MoreThanOrEqual(startingFrom),
     }
 
     const lastRoll = await this.typeorm.getRepository(RollDbEntity).findOne({

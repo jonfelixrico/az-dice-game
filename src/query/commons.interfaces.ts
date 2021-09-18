@@ -5,7 +5,7 @@ export interface ChannelHistoryQueryParams {
   channelId: string
   guildId: string
 
-  // providing this will only include rolls starting form the specified datetime; exclusive
+  // providing this will only include rolls starting form the specified datetime
   startingFrom?: Date
 }
 
