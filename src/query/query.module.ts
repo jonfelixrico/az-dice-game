@@ -4,6 +4,7 @@ import { ChannelCutoffTimestampQueryHandlerService } from './handlers/channel-cu
 import { LastRollQueryHandlerService } from './handlers/last-roll-query-handler/last-roll-query-handler.service'
 import { RollHistoryQueryHandlerService } from './handlers/roll-history-query-handler/roll-history-query-handler.service'
 import { HighestRollQueryHandlerService } from './handlers/highest-roll-query-handler/highest-roll-query-handler.service'
+import { FindRollWithMessageIdQueryHandlerService } from './handlers/find-roll-with-message-id-query-handler/find-roll-with-message-id-query-handler.service'
 
 @Module({
   providers: [
@@ -11,6 +12,7 @@ import { HighestRollQueryHandlerService } from './handlers/highest-roll-query-ha
     LastRollQueryHandlerService,
     RollHistoryQueryHandlerService,
     HighestRollQueryHandlerService,
+    FindRollWithMessageIdQueryHandlerService,
   ],
   imports: [ReadModelModule],
 })
