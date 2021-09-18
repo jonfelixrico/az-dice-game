@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common'
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs'
 import { Message, TextBasedChannels } from 'discord.js'
-import { InteractionCache } from 'src/interactions/providers/interaction-cache.class'
+import { DiscordHelperService } from 'src/interactions/services/discord-helper/discord-helper.service'
 import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
 import { ReadModelSyncedEvent } from 'src/read-model/read-model-synced.event'
 import { IRollRemovedEvent } from 'src/write-model/types/roll-removed-event.interface'
@@ -12,9 +12,9 @@ export class RollRemovedAnnouncerService
   implements IEventHandler<ReadModelSyncedEvent<IRollRemovedEvent>>
 {
   constructor(
-    private interactions: InteractionCache,
+    private typeorm: Connection,
     private logger: Logger,
-    private typeorm: Connection
+    private helper: DiscordHelperService
   ) {}
 
   private async fetchMessage(
@@ -36,30 +36,26 @@ export class RollRemovedAnnouncerService
       return
     }
 
-    const { interactions, typeorm } = this
-
+    const { typeorm } = this
     const { rollId } = payload
-
-    const interaction = interactions.get(rollId)
-    if (!interaction) {
-      // TODO add warn logging
-      return
-    }
-    interactions.del(rollId)
-
-    await interaction.editReply('Roll deletion complete.')
 
     const roll = await typeorm.getRepository(RollDbEntity).findOne({ rollId })
     if (!roll) {
-      // TODO add warn logging; this shouldnt be happening
+      this.logger.warn(
+        `Roll id ${rollId} was not found.`,
+        RollRemovedAnnouncerService.name
+      )
       return
     }
 
-    const { channel } = interaction
+    const channel = await this.helper.getTextChannel(
+      roll.guildId,
+      roll.channelId
+    )
 
     const message = await this.fetchMessage(channel, roll.messageId)
     if (!message) {
-      // TODO send alt message, this shouldnt be happening
+      // TODO send alt message containing roll details and who deleted it
       return
     }
 
