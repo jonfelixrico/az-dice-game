@@ -27,6 +27,12 @@ export class RollRemovedAnnouncerService
     private serializer: RollPresentationSerializerService
   ) {}
 
+  /**
+   * Edits and adds an extra text in the removed roll's embed to indicate that it has been removed.
+   * @param param0
+   * @param messageId
+   * @returns
+   */
   private async findAndEditMessage(
     { channel }: Interaction,
     messageId: string
@@ -34,7 +40,14 @@ export class RollRemovedAnnouncerService
     try {
       const message = await channel.messages.fetch(messageId, { force: true })
       const { content, embeds } = message
-      embeds[0]?.fields.push({
+
+      if (!embeds || !embeds.length) {
+        return
+      }
+
+      const embed = embeds[0]
+      // we're doing unshift here because there might be quips in the embed. we want to show the remove notice before the quip
+      embed.fields.unshift({
         name: 'This roll has been removed.',
         value: '\u200B',
         inline: false,
