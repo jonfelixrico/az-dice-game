@@ -1,4 +1,6 @@
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs'
+import { IQueryHandler, QueryBus, QueryHandler } from '@nestjs/cqrs'
+import { pick } from 'lodash'
+import { ChannelCutoffTimestampQuery } from 'src/query/channel-cutoff-timestamp.query'
 import {
   RollHistoryQuery,
   RollHistoryQueryOutput,
@@ -11,18 +13,24 @@ import { Connection, FindConditions, IsNull, MoreThanOrEqual } from 'typeorm'
 export class RollHistoryQueryHandlerService
   implements IQueryHandler<RollHistoryQuery>
 {
-  constructor(private typeorm: Connection) {}
+  constructor(private typeorm: Connection, private queryBus: QueryBus) {}
 
   async execute({ input }: RollHistoryQuery): Promise<RollHistoryQueryOutput> {
-    const { channelId, guildId, startingFrom, excludeDeleted } = input
+    const { excludeDeleted } = input
+    const channelInput = pick(input, 'channelId', 'guildId')
+
+    const startingFrom: Date =
+      input.startingFrom ??
+      (await this.queryBus.execute(
+        new ChannelCutoffTimestampQuery({
+          ...channelInput,
+          useOriginDateIfNotFound: true,
+        })
+      ))
 
     const findConditions: FindConditions<RollDbEntity> = {
-      channelId,
-      guildId,
-    }
-
-    if (startingFrom) {
-      findConditions.timestamp = MoreThanOrEqual(startingFrom)
+      ...channelInput,
+      timestamp: MoreThanOrEqual(startingFrom),
     }
 
     if (excludeDeleted) {
