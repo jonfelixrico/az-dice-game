@@ -1,47 +1,71 @@
 import { Logger } from '@nestjs/common'
-import { EventsHandler, IEventHandler } from '@nestjs/cqrs'
-import { Message, TextBasedChannels } from 'discord.js'
-import { DiscordHelperService } from 'src/interactions/services/discord-helper/discord-helper.service'
-import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
+import { EventsHandler, IEventHandler, QueryBus } from '@nestjs/cqrs'
+import {
+  Interaction,
+  MessageActionRow,
+  MessageButton,
+  MessageEmbedOptions,
+} from 'discord.js'
+import { InteractionCache } from 'src/interactions/providers/interaction-cache.class'
+import { RollPresentationSerializerService } from 'src/interactions/services/roll-presentation-serializer/roll-presentation-serializer.service'
+import {
+  FindRollByIdQuery,
+  FindRollByIdQueryOutput,
+} from 'src/query/find-roll-by-id.query'
 import { ReadModelSyncedEvent } from 'src/read-model/read-model-synced.event'
+import { PrizeTierLabels } from 'src/utils/prize-eval'
 import { IRollRemovedEvent } from 'src/write-model/types/roll-removed-event.interface'
-import { Connection } from 'typeorm'
 
 @EventsHandler(ReadModelSyncedEvent)
 export class RollRemovedAnnouncerService
   implements IEventHandler<ReadModelSyncedEvent<IRollRemovedEvent>>
 {
   constructor(
-    private typeorm: Connection,
+    private queryBus: QueryBus,
     private logger: Logger,
-    private helper: DiscordHelperService
+    private cache: InteractionCache,
+    private serializer: RollPresentationSerializerService
   ) {}
 
-  private async fetchMessage(
-    channel: TextBasedChannels,
+  private async findAndEditMessage(
+    { channel }: Interaction,
     messageId: string
-  ): Promise<Message | null> {
+  ) {
     try {
-      return channel.messages.fetch(messageId, { force: true })
+      const message = await channel.messages.fetch(messageId, { force: true })
+      const { content, embeds } = message
+      embeds[0]?.fields.push({
+        name: 'This roll has been removed.',
+        value: '\u200B',
+        inline: false,
+      })
+
+      await message.edit({
+        content,
+        embeds,
+      })
     } catch (e) {
-      this.logger.error(e.message, e.trace, RollRemovedAnnouncerService)
-      return null
+      this.logger.error(e.message, e.trace, RollRemovedAnnouncerService.name)
     }
   }
 
   async handle({
-    domainEvent: event,
+    domainEvent,
+    esdbEvent,
   }: ReadModelSyncedEvent<IRollRemovedEvent>) {
-    const { payload, type } = event
+    const { payload, type } = domainEvent
 
     if (type !== 'ROLL_REMOVED') {
       return
     }
 
-    const { typeorm } = this
+    const { queryBus, cache } = this
     const { rollId } = payload
 
-    const roll = await typeorm.getRepository(RollDbEntity).findOne({ rollId })
+    const roll: FindRollByIdQueryOutput = await queryBus.execute(
+      new FindRollByIdQuery({ rollId })
+    )
+
     if (!roll) {
       this.logger.warn(
         `Roll id ${rollId} was not found.`,
@@ -50,22 +74,45 @@ export class RollRemovedAnnouncerService
       return
     }
 
-    const channel = await this.helper.getTextChannel(
-      roll.guildId,
-      roll.channelId
-    )
+    const interaction = cache.get(esdbEvent.id)
+    if (!interaction) {
+      this.logger.warn(
+        `Wasn't able to find the interaction for ${esdbEvent.id}`,
+        RollRemovedAnnouncerService.name
+      )
+    }
+    cache.del(esdbEvent.id)
 
-    const message = await this.fetchMessage(channel, roll.messageId)
-    if (!message) {
-      // TODO send alt message containing roll details and who deleted it
-      return
+    await this.findAndEditMessage(interaction, roll.messageId)
+
+    const embed: MessageEmbedOptions = {
+      author: {
+        name: 'Roll Removed',
+      },
+      description: [
+        `${interaction.user} has removed roll \`${roll.rollId}\`.`,
+        '',
+        this.serializer.serializeRoll(roll.roll),
+        roll.rank
+          ? `**${PrizeTierLabels[roll.rank]}**; rolled by <@${roll.rollOwner}>`
+          : `Rolled by <@${roll.rollOwner}>`,
+      ].join('\n'),
     }
 
-    await channel.send({
-      reply: {
-        messageReference: message,
-      },
-      content: `This roll has been removed by <@${roll.deleteBy}>.`,
+    const { channelId, guildId } = interaction
+
+    const row = new MessageActionRow().addComponents(
+      new MessageButton()
+        .setLabel('See Roll')
+        .setStyle('LINK')
+        .setURL(
+          `https://discord.com/channels/${guildId}/${channelId}/${roll.messageId}`
+        )
+    )
+
+    await interaction.editReply({
+      embeds: [embed],
+      components: [row],
     })
   }
 }
