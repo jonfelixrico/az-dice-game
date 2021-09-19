@@ -57,6 +57,7 @@ export const HISTORY_SUBCOMMANDS: CommandBuilderOutput =
             .setName('limits')
             // TODO add proper description
             .setDescription('Limits for each prize.')
+            .setRequired(true)
         )
     )
     .toJSON()
