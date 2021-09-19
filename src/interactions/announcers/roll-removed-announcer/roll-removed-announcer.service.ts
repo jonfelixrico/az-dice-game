@@ -29,7 +29,9 @@ export class RollRemovedAnnouncerService
     }
   }
 
-  async handle({ payload: event }: ReadModelSyncedEvent<IRollRemovedEvent>) {
+  async handle({
+    domainEvent: event,
+  }: ReadModelSyncedEvent<IRollRemovedEvent>) {
     const { payload, type } = event
 
     if (type !== 'ROLL_REMOVED') {

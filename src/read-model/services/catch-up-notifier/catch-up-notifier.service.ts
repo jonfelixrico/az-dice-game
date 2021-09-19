@@ -20,16 +20,21 @@ export class CatchUpNotifierService implements OnApplicationBootstrap {
   /**
    * Creates an observable that waits until a `ReadModelConsumedEvent` for the specified `pubEvent` has
    * been consumed by the read model. Will wait until 30 seconds has passed without consumption. Emits once.
-   * @param pubEvent
+   * @param domainEvent
    * @returns
    */
-  private createConsumedEventObs(pubEvent: WriteModelPublishedEvent) {
+  private createConsumedEventObs(domainEvent: WriteModelPublishedEvent) {
     return this.eventBus.pipe(
       takeUntil(timer(TIMER_EXPIRATION)),
       ofType(ReadModelConsumedEvent),
-      filter(({ payload }) => payload.id === pubEvent.payload.eventId),
+      filter(({ payload }) => payload.id === domainEvent.payload.eventId),
       take(1),
-      map(() => pubEvent)
+      map((esdbEvent) => {
+        return {
+          esdbEvent,
+          domainEvent,
+        }
+      })
     )
   }
 
@@ -41,8 +46,10 @@ export class CatchUpNotifierService implements OnApplicationBootstrap {
         ofType(WriteModelPublishedEvent),
         mergeMap((evt) => this.createConsumedEventObs(evt))
       )
-      .subscribe(({ payload }) => {
-        eventBus.publish(new ReadModelSyncedEvent(payload.event))
+      .subscribe(({ domainEvent, esdbEvent }) => {
+        eventBus.publish(
+          new ReadModelSyncedEvent(domainEvent.payload.event, esdbEvent.payload)
+        )
       })
   }
 }

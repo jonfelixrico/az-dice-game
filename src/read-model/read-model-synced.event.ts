@@ -1,3 +1,4 @@
+import { AllStreamRecordedEvent } from '@eventstore/db-client'
 import { IEvent } from '@nestjs/cqrs'
 import { IBaseEvent } from 'src/write-model/types/base-event.interface'
 
@@ -7,5 +8,8 @@ import { IBaseEvent } from 'src/write-model/types/base-event.interface'
 export class ReadModelSyncedEvent<E extends IBaseEvent = IBaseEvent>
   implements IEvent
 {
-  constructor(readonly payload: E) {}
+  constructor(
+    readonly domainEvent: E,
+    readonly esdbEvent: AllStreamRecordedEvent
+  ) {}
 }

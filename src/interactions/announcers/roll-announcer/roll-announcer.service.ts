@@ -45,7 +45,9 @@ export class RollAnnouncerService
     private queryBus: QueryBus
   ) {}
 
-  async handle({ payload: event }: ReadModelSyncedEvent<IRollCreatedEvent>) {
+  async handle({
+    domainEvent: event,
+  }: ReadModelSyncedEvent<IRollCreatedEvent>) {
     const { payload, type } = event
     if (type !== 'ROLL_CREATED') {
       // skipped since this handler is only for ROLL_CREATED
