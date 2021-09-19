@@ -1,5 +1,6 @@
 import { EventsHandler, IEventHandler, QueryBus } from '@nestjs/cqrs'
 import { pick } from 'lodash'
+import { InteractionCache } from 'src/interactions/providers/interaction-cache.class'
 import { InteractionCreatedEvent } from 'src/interactions/services/interaction-events-relay/interaction-created.event'
 import {
   FindRollWithMessageIdQuery,
@@ -14,7 +15,8 @@ export class RemoveRollContextmenuHandlerService
 {
   constructor(
     private esdbHelper: EsdbHelperService,
-    private queryBus: QueryBus
+    private queryBus: QueryBus,
+    private cache: InteractionCache
   ) {}
 
   async handle({ interaction }: InteractionCreatedEvent) {
@@ -26,7 +28,7 @@ export class RemoveRollContextmenuHandlerService
       return
     }
 
-    await interaction.deferReply({ ephemeral: true })
+    await interaction.deferReply()
 
     const { targetId, user } = interaction
     const channelParams = pick(interaction, 'channelId', 'guildId')
@@ -43,7 +45,7 @@ export class RemoveRollContextmenuHandlerService
       return
     }
 
-    await this.esdbHelper.pushEvent<IRollRemovedEvent>({
+    const { id } = await this.esdbHelper.pushEvent<IRollRemovedEvent>({
       type: 'ROLL_REMOVED',
       payload: {
         ...channelParams,
@@ -53,8 +55,6 @@ export class RemoveRollContextmenuHandlerService
       },
     })
 
-    await interaction.editReply(
-      `You have successfully deleted roll \`${roll.rollId}\`.`
-    )
+    this.cache.set(id, interaction)
   }
 }
