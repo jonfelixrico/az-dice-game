@@ -2,15 +2,10 @@ import { EventsHandler, IEventHandler, QueryBus } from '@nestjs/cqrs'
 import { pick } from 'lodash'
 import { InteractionCreatedEvent } from 'src/interactions/services/interaction-events-relay/interaction-created.event'
 import {
-  ChannelCutoffTimestampQuery,
-  ChannelCutoffTimestampQueryOutput,
-} from 'src/query/channel-cutoff-timestamp.query'
-import {
   FindRollWithMessageIdQuery,
   FindRollWitHmessageIdQueryOutput,
 } from 'src/query/find-roll-with-message-id.query'
 import { EsdbHelperService } from 'src/write-model/services/esdb-helper/esdb-helper.service'
-import { IChannelCutoffTimestampSetEvent } from 'src/write-model/types/channel-cutoff-timestamp-set.event'
 import { IRollRemovedEvent } from 'src/write-model/types/roll-removed-event.interface'
 
 @EventsHandler(InteractionCreatedEvent)
@@ -31,7 +26,7 @@ export class RemoveRollContextmenuHandlerService
       return
     }
 
-    await interaction.deferReply()
+    await interaction.deferReply({ ephemeral: true })
 
     const { targetId, user } = interaction
     const channelParams = pick(interaction, 'channelId', 'guildId')
