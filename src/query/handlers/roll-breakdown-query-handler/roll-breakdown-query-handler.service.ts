@@ -124,7 +124,7 @@ export class RollBreakdownQueryHandlerService
 
     return {
       ...regrouped,
-      ALL: transformed,
+      all: transformed,
     }
   }
 }

@@ -14,7 +14,7 @@ export type RollBreakdownQueryOutputGroups = {
 }
 
 export type RollBreakdownQueryOutput = RollBreakdownQueryOutputGroups & {
-  ALL: RollBreakdownQueryOutputItem[]
+  all: RollBreakdownQueryOutputItem[]
 }
 
 export interface RollBreakdownQueryInput extends ChannelHistoryQueryParams {
