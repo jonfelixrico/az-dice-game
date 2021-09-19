@@ -57,6 +57,11 @@ function getIncludedInLimits(
   // we'll just get the first N rolls for each prize, with N being the limit
   for (const prize of PRIZES_WITH_NORMAL_HANDLING) {
     const prizeGroup = grouped[prize]
+
+    if (!prizeGroup) {
+      continue
+    }
+
     const limit = prizeLimits[prize]
 
     const limitedArr = limit === -1 ? prizeGroup : prizeGroup.slice(0, limit)
