@@ -1,6 +1,7 @@
 import {
   EventStoreDBClient,
   jsonEvent,
+  JSONEventData,
   JSONEventType,
 } from '@eventstore/db-client'
 import { Injectable } from '@nestjs/common'
@@ -18,7 +19,7 @@ export class EsdbHelperService {
 
   async pushEvent<E extends IBaseEvent>(
     event: E
-  ): Promise<JSONEventType<string, E['payload'], unknown>> {
+  ): Promise<JSONEventData<JSONEventType<string, E['payload'], unknown>>> {
     const { payload, type } = event
     const { guildId, channelId } = payload
 
