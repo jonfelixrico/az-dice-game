@@ -6,6 +6,7 @@ import { RollHistoryQueryHandlerService } from './handlers/roll-history-query-ha
 import { HighestRollQueryHandlerService } from './handlers/highest-roll-query-handler/highest-roll-query-handler.service'
 import { FindRollWithMessageIdQueryHandlerService } from './handlers/find-roll-with-message-id-query-handler/find-roll-with-message-id-query-handler.service'
 import { FindRollByIdQueryHandlerService } from './handlers/find-roll-by-id-query-handler/find-roll-by-id-query-handler.service'
+import { RollBreakdownQueryHandlerService } from './handlers/roll-breakdown-query-handler/roll-breakdown-query-handler.service'
 
 @Module({
   providers: [
@@ -15,6 +16,7 @@ import { FindRollByIdQueryHandlerService } from './handlers/find-roll-by-id-quer
     HighestRollQueryHandlerService,
     FindRollWithMessageIdQueryHandlerService,
     FindRollByIdQueryHandlerService,
+    RollBreakdownQueryHandlerService,
   ],
   imports: [ReadModelModule],
 })
