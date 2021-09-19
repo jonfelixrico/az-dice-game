@@ -1,9 +1,5 @@
 [
   {
-    "text": "Sorry ganito lang ako",
-    "whitelist": [0]
-  },
-  {
     "image": "https://preview.redd.it/bnrlltop3l561.jpg?width=683&format=pjpg&auto=webp&s=444566b743fe85945a73087f3cddee3be946d876",
     "whitelist": [0]
   },
@@ -14,5 +10,65 @@
   {
     "image": "https://i.pinimg.com/originals/82/0d/6e/820d6e2987fba0de0040b5828397bda5.jpg",
     "whitelist": [0]
+  },
+  {
+    "text": "Awit",
+    "whitelist": [0]
+  },
+  {
+    "text": "Gege",
+    "whitelist": [0]
+  },
+  {
+    "text": "Hingi ka nalang balato",
+    "whitelist": [0]
+  },
+  {
+    "text": "It really hurtz",
+    "whitelist": [0]
+  },
+  {
+    "text": "Pati ba naman sa dice game wala parin akong nakukuha",
+    "whitelist": [0]
+  },
+  {
+    "text": "Kahit it siu lang oh",
+    "whitelist": [0]
+  },
+  {
+    "text": "Sadlyf",
+    "whitelist": [0]
+  },
+  {
+    "text": "Better luck next time",
+    "whitelist": [0]
+  },
+  {
+    "text": ":(",
+    "whitelist": [0]
+  },
+  {
+    "text": "Salamat na lang sa lahat",
+    "whitelist": [0]
+  },
+  {
+    "text": "💸💸💸",
+    "blacklist": [0]
+  },
+  {
+    "text": "Ayos!",
+    "blacklist": [0]
+  },
+  {
+    "text": "Nice one",
+    "blacklist": [0]
+  },
+  {
+    "text": "Boss baka naman",
+    "whitelist": [5, 6]
+  },
+  {
+    "text": "Jackpot ka sis!!!",
+    "whitelist": [6]
   }
 ]
