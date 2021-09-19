@@ -2,14 +2,14 @@ import { IQuery } from '@nestjs/cqrs'
 import { PrizeTier } from 'src/utils/prize-eval'
 import { ChannelHistoryQueryParams, ChannelRoll } from './commons.interfaces'
 
-interface AugmentedChannelRoll extends ChannelRoll {
+export interface RollBreakdownQueryOutputItem extends ChannelRoll {
   excludeFromPrize: boolean
 }
 
 export type RollBreakdownQueryOutput = {
-  [key in PrizeTier]: AugmentedChannelRoll[]
+  [key in PrizeTier]: RollBreakdownQueryOutputItem[]
 } & {
-  ALL: AugmentedChannelRoll[]
+  ALL: RollBreakdownQueryOutputItem[]
 }
 
 export interface RollBreakdownQueryInput extends ChannelHistoryQueryParams {
