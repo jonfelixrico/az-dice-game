@@ -72,9 +72,22 @@ export class HistoryAdvancedbreakdownInteractionHandlerService
 
       return {
         label: PrizeTierLabels[rank],
-        included: included.length,
-        excluded: rankedEntry.length - included.length,
+        included: included,
+        excludedCount: rankedEntry.length - included.length,
+        limit: prizeLimits[rank],
       }
+    }).map(({ label, included, excludedCount, limit }) => {
+      const header = `**${label}**`
+      const subheader = `Limited to **${limit}**; with **${included.length}** matching and **${excludedCount}** dropped`
+      const userCount = chain(included)
+        .map(({ rollOwner }) => rollOwner)
+        .countBy()
+        .toPairs()
+        .orderBy(([key]) => key)
+        .map(([userId, count]) => `<@${userId}> (**${count}**)`)
+        .value()
+
+      return [header, subheader, ...userCount, ''].join('\n')
     })
 
     const duds = all.filter(({ rank }) => !rank)
@@ -87,10 +100,7 @@ export class HistoryAdvancedbreakdownInteractionHandlerService
           },
 
           description: [
-            ...rankEntries.map(
-              ({ label, included, excluded }) =>
-                `**${label}** - ${included} (${excluded} excluded)`
-            ),
+            ...rankEntries,
             `**No prize** - ${duds.length}`,
             '',
             all.length !== 1
