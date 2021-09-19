@@ -112,7 +112,7 @@ export class RollAnnouncerService
       embed.fields = [
         {
           name: '\u200B',
-          value: quip.text,
+          value: `> ${quip.text}`,
         },
       ]
     }
