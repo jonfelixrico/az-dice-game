@@ -14,7 +14,7 @@ export type Quip = Omit<QuipEntry, 'prizeTiers'>
 
 const ALL_TIERS = range(1, 7) // generate numbers 1-6
 
-const GROUPED_QUIPS = chain(quipsJson?.quips as QuipEntry[])
+const GROUPED_QUIPS = chain(quipsJson as QuipEntry[])
   .map((entry) => {
     const { prizeTiers } = entry
     const tierArray = prizeTiers && prizeTiers.length ? prizeTiers : ALL_TIERS
