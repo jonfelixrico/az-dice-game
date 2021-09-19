@@ -1,0 +1,17 @@
+{
+  "quips": [
+    {
+      "text": "text-quip-1",
+      "prizeTiers": [0, 1, 2, 3, 4, 5, 6]
+    },
+    {
+      "image": "https://preview.redd.it/bnrlltop3l561.jpg?width=683&format=pjpg&auto=webp&s=444566b743fe85945a73087f3cddee3be946d876",
+      "prizeTiers": [0, 1, 2, 3, 4, 5, 6]
+    },
+    {
+      "text": "ogeyy",
+      "image": "https://preview.redd.it/bnrlltop3l561.jpg?width=683&format=pjpg&auto=webp&s=444566b743fe85945a73087f3cddee3be946d876",
+      "prizeTiers": [0, 1, 2, 3, 4, 5, 6]
+    }
+  ]
+}
