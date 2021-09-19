@@ -7,7 +7,8 @@ import { PrizeTier } from 'src/utils/prize-eval'
 interface QuipEntry {
   text?: string
   image?: string
-  prizeTiers?: number[]
+  whitelist?: number[]
+  blacklist?: number[]
 }
 
 export type Quip = Omit<QuipEntry, 'prizeTiers'>
@@ -16,10 +17,19 @@ const ALL_TIERS = range(1, 7) // generate numbers 1-6
 
 const GROUPED_QUIPS = chain(quipsJson as QuipEntry[])
   .map((entry) => {
-    const { prizeTiers } = entry
-    const tierArray = prizeTiers && prizeTiers.length ? prizeTiers : ALL_TIERS
+    const { whitelist, blacklist } = entry
+    let tiers: number[]
 
-    return tierArray.map((tier) => {
+    if (whitelist && whitelist) {
+      tiers = whitelist
+    } else if (blacklist && blacklist.length) {
+      const blacklistSet = new Set(blacklist)
+      tiers = ALL_TIERS.filter((val) => !blacklistSet.has(val))
+    } else {
+      tiers = ALL_TIERS
+    }
+
+    return tiers.map((tier) => {
       return {
         entry,
         tier,

@@ -1,18 +1,18 @@
 [
   {
     "text": "Sorry ganito lang ako",
-    "prizeTiers": [0]
+    "whitelist": [0]
   },
   {
     "image": "https://preview.redd.it/bnrlltop3l561.jpg?width=683&format=pjpg&auto=webp&s=444566b743fe85945a73087f3cddee3be946d876",
-    "prizeTiers": [0]
+    "whitelist": [0]
   },
   {
     "image": "https://c.tenor.com/L1SOy0Q8O7gAAAAC/eyebrow-raise-shrek.gif",
-    "prizeTiers": [0]
+    "whitelist": [0]
   },
   {
     "image": "https://i.pinimg.com/originals/82/0d/6e/820d6e2987fba0de0040b5828397bda5.jpg",
-    "prizeTiers": [0]
+    "whitelist": [0]
   }
 ]
