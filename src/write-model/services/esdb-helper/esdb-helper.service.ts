@@ -1,4 +1,8 @@
-import { EventStoreDBClient, jsonEvent } from '@eventstore/db-client'
+import {
+  EventStoreDBClient,
+  jsonEvent,
+  JSONEventType,
+} from '@eventstore/db-client'
 import { Injectable } from '@nestjs/common'
 import { EventBus } from '@nestjs/cqrs'
 import { WriteModelPublishedEvent } from 'src/write-model/write-model-published.event'
@@ -12,11 +16,13 @@ import { IBaseEvent } from '../../types/base-event.interface'
 export class EsdbHelperService {
   constructor(private client: EventStoreDBClient, private eventBus: EventBus) {}
 
-  async pushEvent<E extends IBaseEvent>(event: E): Promise<E> {
+  async pushEvent<E extends IBaseEvent>(
+    event: E
+  ): Promise<JSONEventType<string, E['payload'], unknown>> {
     const { payload, type } = event
     const { guildId, channelId } = payload
 
-    const esdbEvent = jsonEvent({
+    const esdbEvent = jsonEvent<JSONEventType<string, E['payload'], unknown>>({
       type: type,
       data: payload,
     })
@@ -30,6 +36,6 @@ export class EsdbHelperService {
       })
     )
 
-    return event
+    return esdbEvent
   }
 }
