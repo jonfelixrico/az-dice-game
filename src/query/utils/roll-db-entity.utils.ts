@@ -10,6 +10,8 @@ export function formatRollRecordToQueryOutput({
   prizePoints: points,
   timestamp,
   messageId,
+  deleteBy,
+  deleteDt,
 }: RollDbEntity): ChannelRoll {
   return {
     rollId,
@@ -20,5 +22,11 @@ export function formatRollRecordToQueryOutput({
     points,
     timestamp,
     messageId,
+    deleted: deleteBy
+      ? {
+          timestamp: deleteDt,
+          userId: deleteBy,
+        }
+      : null,
   }
 }

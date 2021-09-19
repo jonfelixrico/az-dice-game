@@ -21,4 +21,8 @@ export interface ChannelRoll {
   rollId: string
   timestamp: Date
   messageId: string
+  deleted?: {
+    userId: string
+    timestamp: Date
+  }
 }

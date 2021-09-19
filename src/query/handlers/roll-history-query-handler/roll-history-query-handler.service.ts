@@ -2,27 +2,10 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs'
 import {
   RollHistoryQuery,
   RollHistoryQueryOutput,
-  RollHistoryQueryOutputItem,
 } from 'src/query/roll-history.query'
 import { formatRollRecordToQueryOutput } from 'src/query/utils/roll-db-entity.utils'
 import { RollDbEntity } from 'src/read-model/entities/roll.db-entity'
 import { Connection, FindConditions, IsNull, MoreThanOrEqual } from 'typeorm'
-
-function rollFormatFn(roll: RollDbEntity): RollHistoryQueryOutputItem {
-  const formatted: RollHistoryQueryOutputItem =
-    formatRollRecordToQueryOutput(roll)
-
-  const { deleteDt, deleteBy } = roll
-
-  if (deleteDt) {
-    formatted.deleted = {
-      timestamp: deleteDt,
-      userId: deleteBy,
-    }
-  }
-
-  return formatted
-}
 
 @QueryHandler(RollHistoryQuery)
 export class RollHistoryQueryHandlerService
@@ -53,6 +36,6 @@ export class RollHistoryQueryHandlerService
       },
     })
 
-    return rolls.map(rollFormatFn)
+    return rolls.map(formatRollRecordToQueryOutput)
   }
 }

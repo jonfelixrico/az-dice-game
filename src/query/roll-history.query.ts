@@ -5,13 +5,7 @@ export interface RollHistoryQueryInput extends ChannelHistoryQueryParams {
   excludeDeleted?: boolean
 }
 
-export interface RollHistoryQueryOutputItem extends ChannelRoll {
-  deleted?: {
-    timestamp: Date
-    userId: string
-  }
-}
-
+export type RollHistoryQueryOutputItem = ChannelRoll
 export type RollHistoryQueryOutput = RollHistoryQueryOutputItem[]
 
 export class RollHistoryQuery implements IQuery {
