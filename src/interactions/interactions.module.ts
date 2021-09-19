@@ -24,6 +24,7 @@ import { HistoryRemovelastrollInteractionHandlerService } from './handlers/histo
 import { DiscordHelperService } from './services/discord-helper/discord-helper.service'
 import { SetCheckpointContextmenuHandlerService } from './handlers/set-checkpoint-contextmenu-handler/set-checkpoint-contextmenu-handler.service'
 import { RemoveRollContextmenuHandlerService } from './handlers/remove-roll-contextmenu-handler/remove-roll-contextmenu-handler.service'
+import { QuipGeneratorService } from './services/quip-generator/quip-generator.service'
 
 @Module({
   providers: [
@@ -49,6 +50,7 @@ import { RemoveRollContextmenuHandlerService } from './handlers/remove-roll-cont
     DiscordHelperService,
     SetCheckpointContextmenuHandlerService,
     RemoveRollContextmenuHandlerService,
+    QuipGeneratorService,
   ],
   imports: [DiscordModule, ReadModelModule, WriteModelModule],
 })
