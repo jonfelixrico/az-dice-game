@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { Client } from 'discord.js'
+import { chain, countBy } from 'lodash'
 import { DateTime } from 'luxon'
 import {
   PrizeLimits,
@@ -77,6 +78,51 @@ export class AdvancedHistoryExporterService {
     return rows
   }
 
+  private async generatePerUserPrizeSheet(
+    rolls: RollBreakdownQueryOutputItem[]
+  ) {
+    const groupedByUser = chain(rolls)
+      .filter(({ excludeFromPrize }) => !excludeFromPrize)
+      .groupBy(({ rollOwner }) => rollOwner)
+      .toPairs()
+      .sortBy(([key]) => key)
+      .map((entry) => entry[1])
+      .value()
+
+    const sheetRows = []
+
+    for (const group of groupedByUser) {
+      const [firstRoll] = group
+      const { guildId, rollOwner } = firstRoll
+      const username = await this.getGuildMemberName(guildId, rollOwner)
+
+      const prizeTally = countBy(group, ({ rank }) => rank)
+
+      const prizesWon = chain(RANK_DISPLAY_SEQUENCE)
+        .map(
+          (rankCode) =>
+            [PrizeTierLabels[rankCode], prizeTally[rankCode] ?? 0] as [
+              string,
+              number
+            ]
+        )
+        .fromPairs()
+        .value()
+
+      sheetRows.push({
+        ...prizesWon,
+        username,
+      })
+    }
+
+    return utils.json_to_sheet(sheetRows, {
+      header: [
+        'username',
+        ...RANK_DISPLAY_SEQUENCE.map((code) => PrizeTierLabels[code]),
+      ],
+    })
+  }
+
   private async generateHistorySheet(
     rolls: RollBreakdownQueryOutputItem[]
   ): Promise<WorkSheet> {
@@ -136,6 +182,12 @@ export class AdvancedHistoryExporterService {
         sheetName
       )
     }
+
+    utils.book_append_sheet(
+      workBook,
+      await this.generatePerUserPrizeSheet(all),
+      'User Breakdown'
+    )
 
     return write(workBook, {
       type: 'buffer',
