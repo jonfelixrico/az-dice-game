@@ -26,6 +26,7 @@ import { SetCheckpointContextmenuHandlerService } from './handlers/set-checkpoin
 import { RemoveRollContextmenuHandlerService } from './handlers/remove-roll-contextmenu-handler/remove-roll-contextmenu-handler.service'
 import { QuipGeneratorService } from './services/quip-generator/quip-generator.service'
 import { HistoryAdvancedbreakdownInteractionHandlerService } from './handlers/history-advancedbreakdown-interaction-handler/history-advancedbreakdown-interaction-handler.service'
+import { AdvancedBreakdownReloadButtonHandlerService } from './handlers/advanced-breakdown-reload-button-handler/advanced-breakdown-reload-button-handler.service'
 
 @Module({
   providers: [
@@ -53,6 +54,7 @@ import { HistoryAdvancedbreakdownInteractionHandlerService } from './handlers/hi
     RemoveRollContextmenuHandlerService,
     QuipGeneratorService,
     HistoryAdvancedbreakdownInteractionHandlerService,
+    AdvancedBreakdownReloadButtonHandlerService,
   ],
   imports: [DiscordModule, ReadModelModule, WriteModelModule],
 })
