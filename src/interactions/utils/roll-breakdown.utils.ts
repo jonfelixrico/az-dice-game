@@ -64,6 +64,10 @@ export function rollBreakdownEmbedFormatter(
         ? `There are **${all.length}** rolls made so far.`
         : 'There is **1** roll made so far.',
     ].join('\n'),
+
+    footer: {
+      text: `limits: ${serializePrizeLimits(prizeLimits)}`,
+    },
   }
 }
 
