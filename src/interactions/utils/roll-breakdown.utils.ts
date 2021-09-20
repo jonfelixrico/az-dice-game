@@ -32,7 +32,8 @@ export function rollBreakdownEmbedFormatter(
     return {
       label: PrizeTierLabels[rank],
       included: included,
-      excludedCount: rankedEntry.length - included.length,
+      excludedCount:
+        rankedEntry.filter(({ deleted }) => !deleted).length - included.length,
       limit: prizeLimits[rank],
     }
   }).map(({ label, included, excludedCount, limit }) => {
@@ -49,7 +50,8 @@ export function rollBreakdownEmbedFormatter(
     return [header, subheader, ...userCount, ''].join('\n')
   })
 
-  const duds = all.filter(({ rank }) => !rank)
+  const modifiedAll = all.filter(({ deleted }) => !deleted)
+  const duds = modifiedAll.filter(({ rank }) => !rank)
 
   return {
     author: {
@@ -60,8 +62,8 @@ export function rollBreakdownEmbedFormatter(
       ...rankEntries,
       `**No prize** - ${duds.length}`,
       '',
-      all.length !== 1
-        ? `There are **${all.length}** rolls made so far.`
+      modifiedAll.length !== 1
+        ? `There are **${modifiedAll.length}** rolls made so far.`
         : 'There is **1** roll made so far.',
     ].join('\n'),
 
