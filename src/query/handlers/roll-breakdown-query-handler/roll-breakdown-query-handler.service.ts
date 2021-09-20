@@ -123,7 +123,7 @@ export class RollBreakdownQueryHandlerService
     })
 
     const regrouped = chain(transformed)
-      .filter(({ rank, deleted }) => !!rank && !deleted)
+      .filter(({ rank }) => !!rank)
       .groupBy(({ rank }) => rank)
       .value()
 
