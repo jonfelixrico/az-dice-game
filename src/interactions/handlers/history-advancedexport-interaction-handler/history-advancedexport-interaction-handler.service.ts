@@ -79,13 +79,12 @@ export class HistoryAdvancedexportInteractionHandlerService
 
     const channelName = (interaction.channel as TextChannel).name
     const nowString = DateTime.now()
-      .setZone('Asia/Manila')
       .toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS)
       .replace(/ /gi, '-')
 
-    const end = DateTime.now()
-      .setZone('Asia/Manila')
-      .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+    const end = DateTime.now().toLocaleString(
+      DateTime.DATETIME_MED_WITH_SECONDS
+    )
     const start = DateTime.fromJSDate(
       await this.queryBus.execute(
         new ChannelCutoffTimestampQuery({
@@ -93,9 +92,7 @@ export class HistoryAdvancedexportInteractionHandlerService
           useOriginDateIfNotFound: true,
         })
       )
-    )
-      .setZone('Asia/Manila')
-      .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+    ).toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
 
     const embed: MessageEmbedOptions = {
       author: {
