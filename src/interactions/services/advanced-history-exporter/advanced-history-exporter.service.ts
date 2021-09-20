@@ -63,9 +63,7 @@ export class AdvancedHistoryExporterService {
       username: await this.getGuildMemberName(guildId, rollOwner),
       deleted: deleted ? 'Y' : null,
       roll: roll.join('-'),
-      timestamp: DateTime.fromJSDate(timestamp).toLocaleString(
-        DateTime.DATETIME_FULL_WITH_SECONDS
-      ),
+      timestamp: DateTime.fromJSDate(timestamp).toFormat('yyyy/mm/dd HH:mm:ss'),
     }
   }
 
@@ -123,7 +121,7 @@ export class AdvancedHistoryExporterService {
     const workBook = utils.book_new()
     utils.book_append_sheet(
       workBook,
-      await this.generateHistorySheet(all),
+      await this.generateHistorySheet(all || []),
       'History'
     )
 
@@ -134,7 +132,7 @@ export class AdvancedHistoryExporterService {
           : `${PrizeTierLabels[tierCode]} (limited to ${limits[tierCode]})`
       utils.book_append_sheet(
         workBook,
-        await this.generateHistorySheet(ranks[tierCode]),
+        await this.generateTierSheet(ranks[tierCode] || []),
         sheetName
       )
     }
