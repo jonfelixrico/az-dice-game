@@ -12,6 +12,8 @@ export function formatRollRecordToQueryOutput({
   messageId,
   deleteBy,
   deleteDt,
+  channelId,
+  guildId,
 }: RollDbEntity): ChannelRoll {
   return {
     rollId,
@@ -28,5 +30,7 @@ export function formatRollRecordToQueryOutput({
           userId: deleteBy,
         }
       : null,
+    channelId,
+    guildId,
   }
 }

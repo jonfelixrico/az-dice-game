@@ -25,4 +25,6 @@ export interface ChannelRoll {
     userId: string
     timestamp: Date
   }
+  channelId: string
+  guildId: string
 }
