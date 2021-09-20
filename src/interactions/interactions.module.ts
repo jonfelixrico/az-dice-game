@@ -28,6 +28,7 @@ import { QuipGeneratorService } from './services/quip-generator/quip-generator.s
 import { HistoryAdvancedbreakdownInteractionHandlerService } from './handlers/history-advancedbreakdown-interaction-handler/history-advancedbreakdown-interaction-handler.service'
 import { AdvancedBreakdownReloadButtonHandlerService } from './handlers/advanced-breakdown-reload-button-handler/advanced-breakdown-reload-button-handler.service'
 import { HistoryAdvancedexportInteractionHandlerService } from './handlers/history-advancedexport-interaction-handler/history-advancedexport-interaction-handler.service'
+import { AdvancedHistoryExporterService } from './services/advanced-history-exporter/advanced-history-exporter.service'
 
 @Module({
   providers: [
@@ -57,6 +58,7 @@ import { HistoryAdvancedexportInteractionHandlerService } from './handlers/histo
     HistoryAdvancedbreakdownInteractionHandlerService,
     AdvancedBreakdownReloadButtonHandlerService,
     HistoryAdvancedexportInteractionHandlerService,
+    AdvancedHistoryExporterService,
   ],
   imports: [DiscordModule, ReadModelModule, WriteModelModule],
 })
