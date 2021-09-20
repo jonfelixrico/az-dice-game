@@ -1,24 +1,16 @@
 import { EventsHandler, IEventHandler, QueryBus } from '@nestjs/cqrs'
-import { chain, pick } from 'lodash'
+import { MessageActionRow, MessageButton } from 'discord.js'
+import { pick } from 'lodash'
 import { InteractionCreatedEvent } from 'src/interactions/services/interaction-events-relay/interaction-created.event'
 import {
+  parsePrizeLimits,
+  PRIZE_LIMITS_REGEXP,
+} from 'src/interactions/utils/roll-breakdown.utils'
+import {
   RollBreakdownQuery,
-  RollBreakdownQueryInput,
   RollBreakdownQueryOutput,
 } from 'src/query/roll-breakdown.query'
-import { PrizeTier, PrizeTierLabels } from 'src/utils/prize-eval'
-
-const LIMITS_REGEXP = /^\d+(?:,\d+){5}$/
-
-const { IT_SIU, DI_KI, SAM_HONG, SI_CHIN, TWI_THENG, CHIONG_GUAN } = PrizeTier
-const RANK_DISPLAY_SEQUENCE = [
-  CHIONG_GUAN,
-  TWI_THENG,
-  SI_CHIN,
-  SAM_HONG,
-  DI_KI,
-  IT_SIU,
-]
+import { rollBreakdownEmbedFormatter } from './../../utils/roll-breakdown.utils'
 
 @EventsHandler(InteractionCreatedEvent)
 export class HistoryAdvancedbreakdownInteractionHandlerService
@@ -36,7 +28,7 @@ export class HistoryAdvancedbreakdownInteractionHandlerService
     }
 
     const limitStr = interaction.options.getString('limits')
-    if (!LIMITS_REGEXP.test(limitStr)) {
+    if (!PRIZE_LIMITS_REGEXP.test(limitStr)) {
       await interaction.reply({
         ephemeral: true,
         content: 'Wrong format for `input`.',
@@ -44,11 +36,7 @@ export class HistoryAdvancedbreakdownInteractionHandlerService
       return
     }
 
-    const prizeLimits = chain(limitStr)
-      .split(',')
-      .map((val, idx) => [idx + 1, parseInt(val)] as [number, number])
-      .fromPairs()
-      .value() as RollBreakdownQueryInput['prizeLimits']
+    const prizeLimits = parsePrizeLimits(limitStr)
 
     await interaction.deferReply()
 
@@ -61,54 +49,18 @@ export class HistoryAdvancedbreakdownInteractionHandlerService
       })
     )
 
-    const { all, ...ranked } = breakdown
+    const embed = rollBreakdownEmbedFormatter(breakdown, prizeLimits)
 
-    const rankEntries = RANK_DISPLAY_SEQUENCE.map((rank) => {
-      const rankedEntry = ranked[rank] ?? []
-
-      const included = rankedEntry.filter(
-        ({ excludeFromPrize }) => !excludeFromPrize
-      )
-
-      return {
-        label: PrizeTierLabels[rank],
-        included: included,
-        excludedCount: rankedEntry.length - included.length,
-        limit: prizeLimits[rank],
-      }
-    }).map(({ label, included, excludedCount, limit }) => {
-      const header = `**${label}**`
-      const subheader = `Limited to **${limit}**; with **${included.length}** matching and **${excludedCount}** dropped`
-      const userCount = chain(included)
-        .map(({ rollOwner }) => rollOwner)
-        .countBy()
-        .toPairs()
-        .orderBy(([key]) => key)
-        .map(([userId, count]) => `<@${userId}> (**${count}**)`)
-        .value()
-
-      return [header, subheader, ...userCount, ''].join('\n')
-    })
-
-    const duds = all.filter(({ rank }) => !rank)
+    const row = new MessageActionRow().addComponents(
+      new MessageButton()
+        .setCustomId(`advancedbreakdown-${limitStr}`)
+        .setLabel('Reload')
+        .setStyle('PRIMARY')
+    )
 
     await interaction.editReply({
-      embeds: [
-        {
-          author: {
-            name: 'Roll Breakdown',
-          },
-
-          description: [
-            ...rankEntries,
-            `**No prize** - ${duds.length}`,
-            '',
-            all.length !== 1
-              ? `There are **${all.length}** rolls made so far.`
-              : 'There is **1** roll made so far.',
-          ].join('\n'),
-        },
-      ],
+      embeds: [embed],
+      components: [row],
     })
   }
 }
