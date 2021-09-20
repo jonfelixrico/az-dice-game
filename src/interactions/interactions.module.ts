@@ -27,6 +27,7 @@ import { RemoveRollContextmenuHandlerService } from './handlers/remove-roll-cont
 import { QuipGeneratorService } from './services/quip-generator/quip-generator.service'
 import { HistoryAdvancedbreakdownInteractionHandlerService } from './handlers/history-advancedbreakdown-interaction-handler/history-advancedbreakdown-interaction-handler.service'
 import { AdvancedBreakdownReloadButtonHandlerService } from './handlers/advanced-breakdown-reload-button-handler/advanced-breakdown-reload-button-handler.service'
+import { HistoryAdvancedexportInteractionHandlerService } from './handlers/history-advancedexport-interaction-handler/history-advancedexport-interaction-handler.service'
 
 @Module({
   providers: [
@@ -55,6 +56,7 @@ import { AdvancedBreakdownReloadButtonHandlerService } from './handlers/advanced
     QuipGeneratorService,
     HistoryAdvancedbreakdownInteractionHandlerService,
     AdvancedBreakdownReloadButtonHandlerService,
+    HistoryAdvancedexportInteractionHandlerService,
   ],
   imports: [DiscordModule, ReadModelModule, WriteModelModule],
 })
