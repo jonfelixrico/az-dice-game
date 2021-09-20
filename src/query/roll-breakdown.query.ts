@@ -17,10 +17,12 @@ export type RollBreakdownQueryOutput = RollBreakdownQueryOutputGroups & {
   all: RollBreakdownQueryOutputItem[]
 }
 
+export type PrizeLimits = {
+  [key in PrizeTier]: number
+}
+
 export interface RollBreakdownQueryInput extends ChannelHistoryQueryParams {
-  prizeLimits?: {
-    [key in PrizeTier]: number
-  }
+  prizeLimits?: PrizeLimits
 }
 
 export class RollBreakdownQuery implements IQuery {
