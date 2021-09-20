@@ -5,12 +5,12 @@ import { InteractionCreatedEvent } from 'src/interactions/services/interaction-e
 import {
   parsePrizeLimits,
   PRIZE_LIMITS_REGEXP,
+  rollBreakdownEmbedFormatter,
 } from 'src/interactions/utils/roll-breakdown.utils'
 import {
   RollBreakdownQuery,
   RollBreakdownQueryOutput,
 } from 'src/query/roll-breakdown.query'
-import { rollBreakdownEmbedFormatter } from './../../utils/roll-breakdown.utils'
 
 @EventsHandler(InteractionCreatedEvent)
 export class HistoryAdvancedbreakdownInteractionHandlerService
