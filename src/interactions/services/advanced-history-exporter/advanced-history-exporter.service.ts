@@ -63,7 +63,9 @@ export class AdvancedHistoryExporterService {
       username: await this.getGuildMemberName(guildId, rollOwner),
       deleted: deleted ? 'Y' : null,
       roll: roll.join('-'),
-      timestamp: DateTime.fromJSDate(timestamp).toFormat('yyyy/mm/dd HH:mm:ss'),
+      timestamp: DateTime.fromJSDate(timestamp)
+        .setZone('Asia/Manila')
+        .toFormat('yyyy/mm/dd HH:mm:ss'),
     }
   }
 
