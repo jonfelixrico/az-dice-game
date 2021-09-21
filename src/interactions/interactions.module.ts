@@ -29,6 +29,7 @@ import { HistoryAdvancedbreakdownInteractionHandlerService } from './handlers/hi
 import { AdvancedBreakdownReloadButtonHandlerService } from './handlers/advanced-breakdown-reload-button-handler/advanced-breakdown-reload-button-handler.service'
 import { HistoryAdvancedexportInteractionHandlerService } from './handlers/history-advancedexport-interaction-handler/history-advancedexport-interaction-handler.service'
 import { AdvancedHistoryExporterService } from './services/advanced-history-exporter/advanced-history-exporter.service'
+import { RollFormatterService } from './services/roll-formatter/roll-formatter.service'
 
 @Module({
   providers: [
@@ -59,6 +60,7 @@ import { AdvancedHistoryExporterService } from './services/advanced-history-expo
     AdvancedBreakdownReloadButtonHandlerService,
     HistoryAdvancedexportInteractionHandlerService,
     AdvancedHistoryExporterService,
+    RollFormatterService,
   ],
   imports: [DiscordModule, ReadModelModule, WriteModelModule],
 })
