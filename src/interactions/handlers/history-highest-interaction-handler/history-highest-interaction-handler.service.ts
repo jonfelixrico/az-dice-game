@@ -1,16 +1,17 @@
 import { EventsHandler, IEventHandler, QueryBus } from '@nestjs/cqrs'
+import {
+  MessageActionRow,
+  MessageButton,
+  MessageEmbedOptions,
+} from 'discord.js'
 import { pick } from 'lodash'
 import { InteractionCreatedEvent } from 'src/interactions/services/interaction-events-relay/interaction-created.event'
-import { RollPresentationSerializerService } from 'src/interactions/services/roll-presentation-serializer/roll-presentation-serializer.service'
-import {
-  ChannelCutoffTimestampQuery,
-  ChannelCutoffTimestampQueryOutput,
-} from 'src/query/channel-cutoff-timestamp.query'
+import { RollFormatterService } from 'src/interactions/services/roll-formatter/roll-formatter.service'
+import { getMessageLink } from 'src/interactions/utils/discord.utils'
 import {
   HighestRollQuery,
   HighestRollQueryOutput,
 } from 'src/query/highest-roll.query'
-import { PrizeTierLabels } from 'src/utils/prize-eval'
 
 @EventsHandler(InteractionCreatedEvent)
 export class HistoryHighestInteractionHandlerService
@@ -18,7 +19,7 @@ export class HistoryHighestInteractionHandlerService
 {
   constructor(
     private queryBus: QueryBus,
-    private serializer: RollPresentationSerializerService
+    private formatter: RollFormatterService
   ) {}
 
   async handle({ interaction }: InteractionCreatedEvent) {
@@ -34,14 +35,8 @@ export class HistoryHighestInteractionHandlerService
 
     const input = pick(interaction, ['channelId', 'guildId'])
 
-    const cutoff: ChannelCutoffTimestampQueryOutput =
-      await this.queryBus.execute(new ChannelCutoffTimestampQuery(input))
-
     const highestRoll: HighestRollQueryOutput = await this.queryBus.execute(
-      new HighestRollQuery({
-        ...input,
-        startingFrom: cutoff,
-      })
+      new HighestRollQuery(input)
     )
 
     if (!highestRoll) {
@@ -58,18 +53,29 @@ export class HistoryHighestInteractionHandlerService
       return
     }
 
-    const { rank, roll, rollOwner } = highestRoll
+    const formatted = await this.formatter.formatRoll(highestRoll)
+
+    const embed: MessageEmbedOptions = {
+      description: [
+        formatted.roll,
+        '',
+        `${formatted.user} holds the highest roll in ${interaction.channel} with **${formatted.rank}**.`,
+      ].join('\n'),
+      author: {
+        name: 'Highest Roll',
+      },
+    }
+
+    const row = new MessageActionRow().addComponents(
+      new MessageButton()
+        .setURL(getMessageLink(highestRoll))
+        .setLabel('Go to Roll')
+        .setStyle('LINK')
+    )
 
     await interaction.editReply({
-      content: this.serializer.serializeRoll(roll),
-      embeds: [
-        {
-          description: `<@${rollOwner}> holds the highest roll in ${interaction.channel} with **${PrizeTierLabels[rank]}**.`,
-          author: {
-            name: 'Highest Roll',
-          },
-        },
-      ],
+      embeds: [embed],
+      components: [row],
     })
   }
 }
