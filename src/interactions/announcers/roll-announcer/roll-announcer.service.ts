@@ -1,7 +1,6 @@
 import { EventsHandler, IEventHandler, QueryBus } from '@nestjs/cqrs'
 import { MessageEmbedOptions } from 'discord.js'
 import { InteractionCache } from 'src/interactions/providers/interaction-cache.class'
-import { RollPresentationSerializerService } from 'src/interactions/services/roll-presentation-serializer/roll-presentation-serializer.service'
 import { ReadModelSyncedEvent } from 'src/read-model/read-model-synced.event'
 import { IRollCreatedEvent } from 'src/write-model/types/roll-created-event.interface'
 import {
@@ -23,7 +22,6 @@ export class RollAnnouncerService
 {
   constructor(
     private interactions: InteractionCache,
-    private serializer: RollPresentationSerializerService,
     private queryBus: QueryBus,
     private quipGenerator: QuipGeneratorService,
     private formatter: RollFormatterService
