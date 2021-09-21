@@ -1,4 +1,5 @@
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs'
+import { IQueryHandler, QueryBus, QueryHandler } from '@nestjs/cqrs'
+import { ChannelCutoffTimestampQuery } from 'src/query/channel-cutoff-timestamp.query'
 import {
   HighestRollQuery,
   HighestRollQueryOutput,
@@ -11,10 +12,19 @@ import { Connection } from 'typeorm'
 export class HighestRollQueryHandlerService
   implements IQueryHandler<HighestRollQuery>
 {
-  constructor(private typeorm: Connection) {}
+  constructor(private typeorm: Connection, private queryBus: QueryBus) {}
 
   async execute({ input }: HighestRollQuery): Promise<HighestRollQueryOutput> {
-    const { channelId, guildId, startingFrom } = input
+    const { channelId, guildId } = input
+    const startingFrom: Date =
+      input.startingFrom ??
+      (await this.queryBus.execute(
+        new ChannelCutoffTimestampQuery({
+          channelId,
+          guildId,
+          useOriginDateIfNotFound: true,
+        })
+      ))
 
     let builder = this.typeorm
       .getRepository(RollDbEntity)
