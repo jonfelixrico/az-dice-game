@@ -4,6 +4,9 @@ import { ConfigService } from '@nestjs/config'
 const DEFAULT_FACE_MAPPING = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣']
 
 @Injectable()
+/**
+ * @deprectad
+ */
 export class RollPresentationSerializerService {
   private _cached: Record<number, string>
 
