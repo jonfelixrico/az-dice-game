@@ -32,26 +32,52 @@ export function rollBreakdownEmbedFormatter(
     return {
       label: PrizeTierLabels[rank],
       included: included,
-      excludedCount:
+      droppedCount:
         rankedEntry.filter(({ deleted }) => !deleted).length - included.length,
       limit: prizeLimits[rank],
     }
-  }).map(({ label, included, excludedCount, limit }) => {
-    const header = `**${label}**`
-    const subheader = `Limited to **${limit}**; with **${included.length}** matching and **${excludedCount}** dropped`
+  }).map(({ label, included, droppedCount, limit }) => {
+    let header = `**${label}**`
+    if (limit !== -1) {
+      header = `${header} - limited to **${limit}**`
+    }
+
+    const matchingRollsText =
+      included.length === 1
+        ? '**1** matching roll'
+        : `**${included.length}** matching rolls`
+
+    let subheader = matchingRollsText
+    if (limit !== -1 && droppedCount > 0) {
+      subheader = `${matchingRollsText}, **${droppedCount}** not included due to limit`
+    }
+
     const userCount = chain(included)
       .map(({ rollOwner }) => rollOwner)
       .countBy()
       .toPairs()
       .orderBy(([key]) => key)
-      .map(([userId, count]) => `<@${userId}> (**${count}**)`)
+      .map(([userId, count]) => {
+        const userStr = `<@${userId}>`
+        if (count === 1) {
+          return `> ${userStr}`
+        }
+
+        return `> ${userStr} (**${count}** times)`
+      })
       .value()
 
     return [header, subheader, ...userCount, ''].join('\n')
   })
 
-  const modifiedAll = all.filter(({ deleted }) => !deleted)
-  const duds = modifiedAll.filter(({ rank }) => !rank)
+  const notDeleted = all.filter(({ deleted }) => !deleted)
+  const duds = notDeleted.filter(({ rank }) => !rank)
+
+  const noMatchText = [
+    '**No match**',
+    duds.length === 1 ? '**1** roll' : `**${duds.length}** rolls`,
+    '',
+  ].join('\n')
 
   return {
     author: {
@@ -60,16 +86,11 @@ export function rollBreakdownEmbedFormatter(
 
     description: [
       ...rankEntries,
-      `**No prize** - ${duds.length}`,
-      '',
-      modifiedAll.length !== 1
-        ? `There are **${modifiedAll.length}** rolls made so far.`
+      noMatchText,
+      notDeleted.length !== 1
+        ? `There are **${notDeleted.length}** rolls made so far.`
         : 'There is **1** roll made so far.',
     ].join('\n'),
-
-    footer: {
-      text: `limits: ${serializePrizeLimits(prizeLimits)}`,
-    },
   }
 }
 
