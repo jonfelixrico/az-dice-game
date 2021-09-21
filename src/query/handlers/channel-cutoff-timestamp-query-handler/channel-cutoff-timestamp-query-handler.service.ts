@@ -20,7 +20,7 @@ export class ChannelCutoffTimestampQueryHandlerService
       .getRepository(ChannelDbEntity)
       .findOne(channelDetails)
 
-    if (!channelRecord) {
+    if (!channelRecord || !channelRecord.cutoffTimestamp) {
       // returns January 1, 1970 if `userOriginDateIfNotFound` is truthy
       return useOriginDateIfNotFound ? new Date(0) : null
     }
