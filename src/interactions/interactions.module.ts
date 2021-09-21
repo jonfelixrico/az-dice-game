@@ -9,7 +9,6 @@ import { ProxyRollInteractionHandlerService } from './handlers/proxy-roll-intera
 import { ManualRollInteractionHandlerService } from './handlers/manual-roll-interaction-handler/manual-roll-interaction-handler.service'
 import { RollEventHelperService } from './services/roll-event-helper/roll-event-helper.service'
 import { WriteModelModule } from 'src/write-model/write-model.module'
-import { RollPresentationSerializerService } from './services/roll-presentation-serializer/roll-presentation-serializer.service'
 import { interactionCacheProvider } from './providers/interaction-cache.provider'
 import { RollAnnouncerService } from './announcers/roll-announcer/roll-announcer.service'
 import { RollRemovedAnnouncerService } from './announcers/roll-removed-announcer/roll-removed-announcer.service'
@@ -40,7 +39,6 @@ import { RollFormatterService } from './services/roll-formatter/roll-formatter.s
     ProxyRollInteractionHandlerService,
     ManualRollInteractionHandlerService,
     RollEventHelperService,
-    RollPresentationSerializerService,
     interactionCacheProvider,
     RollAnnouncerService,
     RollRemovedAnnouncerService,
