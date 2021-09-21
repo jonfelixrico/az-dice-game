@@ -48,7 +48,7 @@ export const HISTORY_SUBCOMMANDS: CommandBuilderOutput =
     // )
     .addSubcommand((subcommand) =>
       subcommand
-        .setName('advancedbreakdown')
+        .setName('breakdown')
         .setDescription(
           'An advanced version of /history breakdown; allows you to limit prizes.'
         )
@@ -60,7 +60,7 @@ export const HISTORY_SUBCOMMANDS: CommandBuilderOutput =
     )
     .addSubcommand((subcommand) =>
       subcommand
-        .setName('advancedexport')
+        .setName('export')
         .setDescription(
           'An advanced version of /history export; allows you to limit prizes.'
         )

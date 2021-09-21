@@ -51,7 +51,7 @@ export class HistoryAdvancedexportInteractionHandlerService
     if (
       !interaction.isCommand() ||
       interaction.commandName !== 'history' ||
-      interaction.options.getSubcommand() !== 'advancedexport'
+      interaction.options.getSubcommand() !== 'export'
     ) {
       return
     }

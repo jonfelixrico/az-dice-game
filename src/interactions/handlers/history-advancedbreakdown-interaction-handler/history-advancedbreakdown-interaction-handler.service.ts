@@ -24,7 +24,7 @@ export class HistoryAdvancedbreakdownInteractionHandlerService
     if (
       !interaction.isCommand() ||
       interaction.commandName !== 'history' ||
-      interaction.options.getSubcommand() !== 'advancedbreakdown'
+      interaction.options.getSubcommand() !== 'breakdown'
     ) {
       return
     }
@@ -55,7 +55,7 @@ export class HistoryAdvancedbreakdownInteractionHandlerService
 
     const row = new MessageActionRow().addComponents(
       new MessageButton()
-        .setCustomId(`advancedbreakdown-${serializePrizeLimits(prizeLimits)}`)
+        .setCustomId(`breakdown-${serializePrizeLimits(prizeLimits)}`)
         .setLabel('Reload')
         .setStyle('PRIMARY')
     )
