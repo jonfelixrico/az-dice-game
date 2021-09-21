@@ -7,13 +7,13 @@ import {
   MessageEmbedOptions,
 } from 'discord.js'
 import { InteractionCache } from 'src/interactions/providers/interaction-cache.class'
-import { RollPresentationSerializerService } from 'src/interactions/services/roll-presentation-serializer/roll-presentation-serializer.service'
+import { RollFormatterService } from 'src/interactions/services/roll-formatter/roll-formatter.service'
+import { getMessageLink } from 'src/interactions/utils/discord.utils'
 import {
   FindRollByIdQuery,
   FindRollByIdQueryOutput,
 } from 'src/query/find-roll-by-id.query'
 import { ReadModelSyncedEvent } from 'src/read-model/read-model-synced.event'
-import { PrizeTierLabels } from 'src/utils/prize-eval'
 import { IRollRemovedEvent } from 'src/write-model/types/roll-removed-event.interface'
 
 @EventsHandler(ReadModelSyncedEvent)
@@ -24,7 +24,7 @@ export class RollRemovedAnnouncerService
     private queryBus: QueryBus,
     private logger: Logger,
     private cache: InteractionCache,
-    private serializer: RollPresentationSerializerService
+    private formatter: RollFormatterService
   ) {}
 
   /**
@@ -98,29 +98,28 @@ export class RollRemovedAnnouncerService
 
     await this.findAndEditMessage(interaction, roll.messageId)
 
+    const formatted = await this.formatter.formatRoll(roll)
+
     const embed: MessageEmbedOptions = {
       author: {
         name: 'Roll Removed',
       },
       description: [
-        `${interaction.user} has removed roll \`${roll.rollId}\`.`,
+        `${interaction.user} has removed roll \`${rollId}\`.`,
         '',
-        this.serializer.serializeRoll(roll.roll),
+        formatted.roll,
         roll.rank
-          ? `**${PrizeTierLabels[roll.rank]}**; rolled by <@${roll.rollOwner}>`
-          : `Rolled by <@${roll.rollOwner}>`,
+          ? `**${formatted.rank}**; rolled by ${formatted.user}`
+          : `Rolled by ${formatted.user}`,
       ].join('\n'),
+      color: formatted.color,
     }
-
-    const { channelId, guildId } = interaction
 
     const row = new MessageActionRow().addComponents(
       new MessageButton()
         .setLabel('See Roll')
         .setStyle('LINK')
-        .setURL(
-          `https://discord.com/channels/${guildId}/${channelId}/${roll.messageId}`
-        )
+        .setURL(getMessageLink(roll))
     )
 
     await interaction.editReply({
