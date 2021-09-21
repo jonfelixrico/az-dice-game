@@ -75,7 +75,7 @@ const EVALUATORS: PrizeTierEvaluator[] = [
 
       // the remaining dice (face is not 4) will be summed up
       return sumBy(
-        histogram.filter(({ face }) => face === 4),
+        histogram.filter(({ face }) => face !== 4),
         ({ face }) => face
       )
     },
