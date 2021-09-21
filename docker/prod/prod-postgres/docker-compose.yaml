@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  postgres.db:
+    image: postgres
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: root
+    volumes:
+      - type: volume
+        source: postgres-volume-data
+        target: /var/lib/postgresql/data
+      - ../../postgres-init:/docker-entrypoint-initdb.d
+
+volumes:
+  postgres-volume-data:

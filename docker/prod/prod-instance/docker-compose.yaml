@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+  discord.client:
+    depends_on:
+      - postgres.db
+      - eventstore.db
+    # points to the root of this repository
+    build: ../../../.
+    restart: unless-stopped
+    env_file:
+      - .discord.env
+    environment:
+      # points to a standalone esdb
+      - ESDB_URL=esdb://host.docker.internal:2113?tls=false
+      - TYPEORM_SYNCHRONIZE=true
+      - TYPEORM_URL=postgresql://root:password@postgres.db:5432/readmodel
+      - LOGGING_LEVEL=debug
+
+  postgres.db:
+    image: postgres
+    restart: unless-stopped
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: root
+    volumes:
+      - type: volume
+        source: postgres-volume-data
+        target: /var/lib/postgresql/data
+      - ../../postgres-init:/docker-entrypoint-initdb.d
+
+volumes:
+  postgres-volume-data:
