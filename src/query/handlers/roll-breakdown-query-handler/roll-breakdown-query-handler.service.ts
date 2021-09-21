@@ -1,5 +1,5 @@
 import { IQueryHandler, QueryBus, QueryHandler } from '@nestjs/cqrs'
-import { chain } from 'lodash'
+import { chain, orderBy } from 'lodash'
 import {
   RollBreakdownQuery,
   RollBreakdownQueryInput,
@@ -74,21 +74,7 @@ function getIncludedInLimits(
    */
   const cgGroup = grouped[CHIONG_GUAN]
   if (cgGroup) {
-    const sorted = cgGroup
-      .sort((a, b) => {
-        const pointsDiff = a.points - b.points
-        if (pointsDiff !== 0) {
-          return pointsDiff
-        }
-
-        if (a.timestamp <= b.timestamp) {
-          return 1
-        }
-
-        return -1
-      })
-      .reverse()
-
+    const sorted = orderBy(cgGroup, ['points', 'timestamp'], ['desc', 'asc'])
     const limit = prizeLimits[CHIONG_GUAN]
 
     const limitedArr = limit === -1 ? sorted : sorted.slice(0, limit)
