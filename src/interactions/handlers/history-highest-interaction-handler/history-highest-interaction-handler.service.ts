@@ -64,6 +64,7 @@ export class HistoryHighestInteractionHandlerService
       author: {
         name: 'Highest Roll',
       },
+      color: formatted.color,
     }
 
     const row = new MessageActionRow().addComponents(

@@ -61,6 +61,7 @@ export class HistoryLastInteractionHandlerService
       author: {
         name: 'Last Roll',
       },
+      color: formatted.color,
     }
 
     const row = new MessageActionRow().addComponents(
