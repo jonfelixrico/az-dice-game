@@ -11,7 +11,7 @@ import {
   RollBreakdownQueryOutput,
 } from 'src/query/roll-breakdown.query'
 
-const CUSTOM_ID_REGEXP = /advancedbreakdown-(.+)/
+const CUSTOM_ID_REGEXP = /breakdown-(.+)/
 
 @EventsHandler(InteractionCreatedEvent)
 export class AdvancedBreakdownReloadButtonHandlerService
@@ -46,7 +46,7 @@ export class AdvancedBreakdownReloadButtonHandlerService
 
     const row = new MessageActionRow().addComponents(
       new MessageButton()
-        .setCustomId(`advancedbreakdown-${limitStr}`)
+        .setCustomId(`breakdown-${limitStr}`)
         .setLabel('Reload')
         .setStyle('PRIMARY')
     )

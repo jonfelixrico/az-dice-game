@@ -3,9 +3,11 @@ import { MessageActionRow, MessageButton } from 'discord.js'
 import { pick } from 'lodash'
 import { InteractionCreatedEvent } from 'src/interactions/services/interaction-events-relay/interaction-created.event'
 import {
+  NO_PRIZE_LIMIT,
   parsePrizeLimits,
   PRIZE_LIMITS_REGEXP,
   rollBreakdownEmbedFormatter,
+  serializePrizeLimits,
 } from 'src/interactions/utils/roll-breakdown.utils'
 import {
   RollBreakdownQuery,
@@ -22,13 +24,13 @@ export class HistoryAdvancedbreakdownInteractionHandlerService
     if (
       !interaction.isCommand() ||
       interaction.commandName !== 'history' ||
-      interaction.options.getSubcommand() !== 'advancedbreakdown'
+      interaction.options.getSubcommand() !== 'breakdown'
     ) {
       return
     }
 
     const limitStr = interaction.options.getString('limits')
-    if (!PRIZE_LIMITS_REGEXP.test(limitStr)) {
+    if (limitStr && !PRIZE_LIMITS_REGEXP.test(limitStr)) {
       await interaction.reply({
         ephemeral: true,
         content: 'Wrong format for `input`.',
@@ -36,7 +38,7 @@ export class HistoryAdvancedbreakdownInteractionHandlerService
       return
     }
 
-    const prizeLimits = parsePrizeLimits(limitStr)
+    const prizeLimits = limitStr ? parsePrizeLimits(limitStr) : NO_PRIZE_LIMIT
 
     await interaction.deferReply()
 
@@ -53,7 +55,7 @@ export class HistoryAdvancedbreakdownInteractionHandlerService
 
     const row = new MessageActionRow().addComponents(
       new MessageButton()
-        .setCustomId(`advancedbreakdown-${limitStr}`)
+        .setCustomId(`breakdown-${serializePrizeLimits(prizeLimits)}`)
         .setLabel('Reload')
         .setStyle('PRIMARY')
     )
