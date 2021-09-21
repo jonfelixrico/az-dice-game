@@ -108,13 +108,15 @@ export function serializePrizeLimits(limits: PrizeLimits): string {
 export const PRIZE_LIMITS_REGEXP = /^\d+(?:,\d+){5}$/
 
 export function parsePrizeLimits(str: string): PrizeLimits | null {
-  if (!PRIZE_LIMITS_REGEXP.test(str)) {
-    return null
-  }
-
   return chain(str)
     .split(',')
     .map((val, idx) => [idx + 1, parseInt(val)] as [number, number])
     .fromPairs()
     .value() as PrizeLimits
 }
+
+export const NO_PRIZE_LIMIT = chain(new Array(6))
+  .fill(-1)
+  .map((val, idx) => [idx + 1, val] as [number, number])
+  .fromPairs()
+  .value() as PrizeLimits
