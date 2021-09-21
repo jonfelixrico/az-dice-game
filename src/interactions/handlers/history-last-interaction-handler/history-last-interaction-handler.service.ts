@@ -66,7 +66,7 @@ export class HistoryLastInteractionHandlerService
     const row = new MessageActionRow().addComponents(
       new MessageButton()
         .setURL(getMessageLink(lastRoll))
-        .setLabel('Go to Roll')
+        .setLabel('See Roll')
         .setStyle('LINK')
     )
 
