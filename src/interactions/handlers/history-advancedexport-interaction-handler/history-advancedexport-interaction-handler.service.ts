@@ -5,6 +5,7 @@ import { DateTime } from 'luxon'
 import { AdvancedHistoryExporterService } from 'src/interactions/services/advanced-history-exporter/advanced-history-exporter.service'
 import { InteractionCreatedEvent } from 'src/interactions/services/interaction-events-relay/interaction-created.event'
 import {
+  NO_PRIZE_LIMIT,
   parsePrizeLimits,
   PRIZE_LIMITS_REGEXP,
 } from 'src/interactions/utils/roll-breakdown.utils'
@@ -27,9 +28,14 @@ const RANK_DISPLAY_SEQUENCE = [
 ]
 
 function displayLimits(limits: PrizeLimits): string {
-  return RANK_DISPLAY_SEQUENCE.map(
-    (rankCode) => `**${limits[rankCode] ?? 0}** ${PrizeTierLabels[rankCode]}`
-  ).join('\n')
+  return RANK_DISPLAY_SEQUENCE.map((rankCode) => {
+    const label = PrizeTierLabels[rankCode]
+    const limit = limits[rankCode]
+
+    const limitText = limit === -1 ? 'no limits' : `limited to **${limit}**`
+
+    return `**${label}:** ${limitText}`
+  }).join('\n')
 }
 
 @EventsHandler(InteractionCreatedEvent)
@@ -51,7 +57,7 @@ export class HistoryAdvancedexportInteractionHandlerService
     }
 
     const limitStr = interaction.options.getString('limits')
-    if (!PRIZE_LIMITS_REGEXP.test(limitStr)) {
+    if (limitStr && !PRIZE_LIMITS_REGEXP.test(limitStr)) {
       await interaction.reply({
         ephemeral: true,
         content: 'Wrong format for `input`.',
@@ -59,7 +65,7 @@ export class HistoryAdvancedexportInteractionHandlerService
       return
     }
 
-    const prizeLimits = parsePrizeLimits(limitStr)
+    const prizeLimits = limitStr ? parsePrizeLimits(limitStr) : NO_PRIZE_LIMIT
 
     await interaction.deferReply()
 
@@ -101,7 +107,6 @@ export class HistoryAdvancedexportInteractionHandlerService
       description: [
         `Exported breakdown of rolls from **${start}** to **${end}**`,
         '',
-        '**Prize limits**',
         displayLimits(prizeLimits),
       ].join('\n'),
     }
