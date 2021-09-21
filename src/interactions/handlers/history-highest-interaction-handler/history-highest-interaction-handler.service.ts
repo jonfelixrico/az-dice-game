@@ -70,7 +70,7 @@ export class HistoryHighestInteractionHandlerService
     const row = new MessageActionRow().addComponents(
       new MessageButton()
         .setURL(getMessageLink(highestRoll))
-        .setLabel('See Roll')
+        .setLabel('Go to highest roll')
         .setStyle('LINK')
     )
 

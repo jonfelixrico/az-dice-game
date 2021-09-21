@@ -117,7 +117,7 @@ export class RollRemovedAnnouncerService
 
     const row = new MessageActionRow().addComponents(
       new MessageButton()
-        .setLabel('See Roll')
+        .setLabel('Go to removed roll')
         .setStyle('LINK')
         .setURL(getMessageLink(roll))
     )
