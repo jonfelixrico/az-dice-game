@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { Client, TextChannel } from 'discord.js'
+import { Client, GuildMember, TextChannel } from 'discord.js'
 
 @Injectable()
 export class DiscordHelperService {
@@ -17,5 +17,21 @@ export class DiscordHelperService {
     }
 
     return channel as TextChannel
+  }
+
+  /**
+   * Fetches the `GuildMember` object of the specified user in a guild
+   * @param guildId Snowflake of a guild
+   * @param userId Snoflake of a user
+   * @returns
+   */
+  async getGuildMember(guildId: string, userId: string): Promise<GuildMember> {
+    const guild = await this.client.guilds.fetch(guildId)
+
+    if (!guild) {
+      return null
+    }
+
+    return guild.members.fetch(userId)
   }
 }
