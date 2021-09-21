@@ -55,9 +55,7 @@ export const HISTORY_SUBCOMMANDS: CommandBuilderOutput =
         .addStringOption((option) =>
           option
             .setName('limits')
-            // TODO add proper description
-            .setDescription('Limits for each prize.')
-            .setRequired(true)
+            .setDescription('Set the limits for each prize.')
         )
     )
     .addSubcommand((subcommand) =>
