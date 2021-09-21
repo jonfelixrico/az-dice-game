@@ -13,7 +13,7 @@ services:
       - type: volume
         source: postgres-volume-data
         target: /var/lib/postgresql/data
-      - ../../postgres-init:/docker-entrypoint-initdb.d
+      - ../postgres-init:/docker-entrypoint-initdb.d
 
 volumes:
   postgres-volume-data:
