@@ -101,7 +101,7 @@ export class AdvancedHistoryExporterService {
       const prizesWon = chain(RANK_DISPLAY_SEQUENCE)
         .map(
           (rankCode) =>
-            [PrizeTierLabels[rankCode], prizeTally[rankCode] ?? 0] as [
+            [PrizeTierLabels[rankCode], prizeTally[rankCode] ?? ''] as [
               string,
               number
             ]
