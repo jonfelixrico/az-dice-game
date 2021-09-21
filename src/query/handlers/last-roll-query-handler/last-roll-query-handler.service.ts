@@ -17,7 +17,10 @@ export class LastRollQueryHandlerService
     const startingFrom: Date =
       input.startingFrom ??
       (await this.queryBus.execute(
-        new ChannelCutoffTimestampQuery(channelParams)
+        new ChannelCutoffTimestampQuery({
+          ...channelParams,
+          useOriginDateIfNotFound: true,
+        })
       ))
 
     const findConditions: FindConditions<RollDbEntity> = {
@@ -30,7 +33,11 @@ export class LastRollQueryHandlerService
     }
 
     const lastRoll = await this.typeorm.getRepository(RollDbEntity).findOne({
-      where: findConditions,
+      where: {
+        ...channelParams,
+        deleteDt: IsNull(),
+        timestamp: MoreThanOrEqual(startingFrom),
+      },
       order: {
         timestamp: 'DESC',
       },

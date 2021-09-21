@@ -9,7 +9,6 @@ import { ProxyRollInteractionHandlerService } from './handlers/proxy-roll-intera
 import { ManualRollInteractionHandlerService } from './handlers/manual-roll-interaction-handler/manual-roll-interaction-handler.service'
 import { RollEventHelperService } from './services/roll-event-helper/roll-event-helper.service'
 import { WriteModelModule } from 'src/write-model/write-model.module'
-import { RollPresentationSerializerService } from './services/roll-presentation-serializer/roll-presentation-serializer.service'
 import { interactionCacheProvider } from './providers/interaction-cache.provider'
 import { RollAnnouncerService } from './announcers/roll-announcer/roll-announcer.service'
 import { RollRemovedAnnouncerService } from './announcers/roll-removed-announcer/roll-removed-announcer.service'
@@ -29,6 +28,7 @@ import { HistoryAdvancedbreakdownInteractionHandlerService } from './handlers/hi
 import { AdvancedBreakdownReloadButtonHandlerService } from './handlers/advanced-breakdown-reload-button-handler/advanced-breakdown-reload-button-handler.service'
 import { HistoryAdvancedexportInteractionHandlerService } from './handlers/history-advancedexport-interaction-handler/history-advancedexport-interaction-handler.service'
 import { AdvancedHistoryExporterService } from './services/advanced-history-exporter/advanced-history-exporter.service'
+import { RollFormatterService } from './services/roll-formatter/roll-formatter.service'
 
 @Module({
   providers: [
@@ -39,7 +39,6 @@ import { AdvancedHistoryExporterService } from './services/advanced-history-expo
     ProxyRollInteractionHandlerService,
     ManualRollInteractionHandlerService,
     RollEventHelperService,
-    RollPresentationSerializerService,
     interactionCacheProvider,
     RollAnnouncerService,
     RollRemovedAnnouncerService,
@@ -59,6 +58,7 @@ import { AdvancedHistoryExporterService } from './services/advanced-history-expo
     AdvancedBreakdownReloadButtonHandlerService,
     HistoryAdvancedexportInteractionHandlerService,
     AdvancedHistoryExporterService,
+    RollFormatterService,
   ],
   imports: [DiscordModule, ReadModelModule, WriteModelModule],
 })

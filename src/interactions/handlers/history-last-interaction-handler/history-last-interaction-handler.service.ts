@@ -1,13 +1,14 @@
 import { EventsHandler, IEventHandler, QueryBus } from '@nestjs/cqrs'
+import {
+  MessageActionRow,
+  MessageButton,
+  MessageEmbedOptions,
+} from 'discord.js'
 import { pick } from 'lodash'
 import { InteractionCreatedEvent } from 'src/interactions/services/interaction-events-relay/interaction-created.event'
-import { RollPresentationSerializerService } from 'src/interactions/services/roll-presentation-serializer/roll-presentation-serializer.service'
-import {
-  ChannelCutoffTimestampQuery,
-  ChannelCutoffTimestampQueryOutput,
-} from 'src/query/channel-cutoff-timestamp.query'
+import { RollFormatterService } from 'src/interactions/services/roll-formatter/roll-formatter.service'
+import { getMessageLink } from 'src/interactions/utils/discord.utils'
 import { LastRollQuery, LastRollQueryOutput } from 'src/query/last-roll.query'
-import { PrizeTierLabels } from 'src/utils/prize-eval'
 
 @EventsHandler(InteractionCreatedEvent)
 export class HistoryLastInteractionHandlerService
@@ -15,7 +16,7 @@ export class HistoryLastInteractionHandlerService
 {
   constructor(
     private queryBus: QueryBus,
-    private serializer: RollPresentationSerializerService
+    private formatter: RollFormatterService
   ) {}
 
   async handle({ interaction }: InteractionCreatedEvent) {
@@ -30,15 +31,8 @@ export class HistoryLastInteractionHandlerService
     await interaction.deferReply()
 
     const input = pick(interaction, ['channelId', 'guildId'])
-
-    const cutoff: ChannelCutoffTimestampQueryOutput =
-      await this.queryBus.execute(new ChannelCutoffTimestampQuery(input))
-
     const lastRoll: LastRollQueryOutput = await this.queryBus.execute(
-      new LastRollQuery({
-        ...input,
-        startingFrom: cutoff,
-      })
+      new LastRollQuery(input)
     )
 
     if (!lastRoll) {
@@ -55,22 +49,31 @@ export class HistoryLastInteractionHandlerService
       return
     }
 
-    const { rank, roll, rollOwner } = lastRoll
+    const formatted = await this.formatter.formatRoll(lastRoll)
 
-    const description = !rank
-      ? `The last roll in  ${interaction.channel} was made by <@${rollOwner}>.`
-      : `The last roll in  ${interaction.channel} was a **${PrizeTierLabels[rank]}** by <@${rollOwner}>.`
+    let rollMessage = `The last roll in ${interaction.channel} was by ${formatted.user}.`
+    if (formatted.rank) {
+      rollMessage = `The last roll in ${interaction.channel} was a **${formatted.rank}** by${formatted.user}.`
+    }
+
+    const embed: MessageEmbedOptions = {
+      description: [formatted.roll, '', rollMessage].join('\n'),
+      author: {
+        name: 'Last Roll',
+      },
+      color: formatted.color,
+    }
+
+    const row = new MessageActionRow().addComponents(
+      new MessageButton()
+        .setURL(getMessageLink(lastRoll))
+        .setLabel('Go to last roll')
+        .setStyle('LINK')
+    )
 
     await interaction.editReply({
-      content: this.serializer.serializeRoll(roll),
-      embeds: [
-        {
-          description,
-          author: {
-            name: 'Last Roll',
-          },
-        },
-      ],
+      embeds: [embed],
+      components: [row],
     })
   }
 }
