@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { GuildMember } from 'discord.js'
+import { ColorResolvable, GuildMember } from 'discord.js'
 import { DateTime } from 'luxon'
 import { ChannelRoll } from 'src/query/commons.interfaces'
 import { PrizeTier, PrizeTierLabels } from 'src/utils/prize-eval'
@@ -10,13 +10,13 @@ export interface FormattedRoll {
   roll: string
   user: GuildMember
   rank: string
-  color: string
+  color: ColorResolvable
 }
 
 const { IT_SIU, DI_KI, SAM_HONG, SI_CHIN, TWI_THENG, CHIONG_GUAN } = PrizeTier
 
 export type PrizeColors = {
-  [key in PrizeTier]
+  [key in PrizeTier]: ColorResolvable
 }
 
 export const PRIZE_COLORS: PrizeColors = Object.freeze({
