@@ -8,13 +8,13 @@ export const HISTORY_SUBCOMMANDS: CommandBuilderOutput =
     .addSubcommand((subcommand) =>
       subcommand.setName('clear').setDescription('Wipes the roll history')
     )
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName('export')
-        .setDescription(
-          'Export the history and prize breakdown as an XLSX file.'
-        )
-    )
+    // .addSubcommand((subcommand) =>
+    //   subcommand
+    //     .setName('export')
+    //     .setDescription(
+    //       'Export the history and prize breakdown as an XLSX file.'
+    //     )
+    // )
     .addSubcommand((subcommand) =>
       subcommand
         .setName('highest')
@@ -25,11 +25,11 @@ export const HISTORY_SUBCOMMANDS: CommandBuilderOutput =
         .setName('last')
         .setDescription('Get the last roll in the channel.')
     )
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName('breakdown')
-        .setDescription('Get the breakdown of rolls and prizes in the channel.')
-    )
+    // .addSubcommand((subcommand) =>
+    //   subcommand
+    //     .setName('breakdown')
+    //     .setDescription('Get the breakdown of rolls and prizes in the channel.')
+    // )
     .addSubcommand((subcommand) =>
       subcommand
         .setName('removelastroll')
