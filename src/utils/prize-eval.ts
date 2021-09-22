@@ -33,12 +33,39 @@ interface PrizeTierEvaluator {
 
 const EVALUATORS: PrizeTierEvaluator[] = [
   {
+    // six 4s
+    tier: CHIONG_GUAN,
+    points: 999999, // highest roll in the game
+    evaluator(histogram) {
+      const sixFours = histogram.some(
+        ({ count, face }) => face === 4 && count === 6
+      )
+      return sixFours ? 0 : null
+    },
+  },
+  {
     // six of a kind
     tier: CHIONG_GUAN,
-    points: 100000,
+    points: 900000,
     evaluator(histogram) {
       const sixOfAKind = histogram.find(({ count }) => count === 6)
       return sixOfAKind?.face || null
+    },
+  },
+  {
+    // five 4s
+    tier: CHIONG_GUAN,
+    points: 500000,
+    evaluator(histogram) {
+      const fiveFours = histogram.some(
+        ({ count, face }) => face === 4 && count === 5
+      )
+      if (!fiveFours) {
+        return null
+      }
+
+      const kicker = histogram.find(({ count }) => count === 1)
+      return kicker.face
     },
   },
   {
