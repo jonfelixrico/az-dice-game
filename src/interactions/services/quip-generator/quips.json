@@ -118,5 +118,77 @@
   {
     "image": "https://c.tenor.com/1JPLCiEZojcAAAAC/shaq-dance.gif",
     "blacklist": [0]
+  },
+  {
+    "image": "https://c.tenor.com/WkhfbOjHMbYAAAAS/oh-my-god-scream.gif",
+    "whitelist": [6]
+  },
+  {
+    "image": "https://c.tenor.com/njTXSBvyMPoAAAAS/agatha-wink.gif",
+    "whitelist": [6]
+  },
+  {
+    "image": "https://c.tenor.com/OX-C2pXAxV0AAAAC/bimby-edi-dont.gif",
+    "whitelist": [0]
+  },
+  {
+    "image": "https://c.tenor.com/I7qgI3hGcM4AAAAC/crying-happy.gif",
+    "whitelist": [0]
+  },
+  {
+    "image": "https://c.tenor.com/ax0wvn_16NwAAAAC/sad-crying.gif",
+    "whitelist": [0]
+  },
+  {
+    "image": "https://c.tenor.com/11msF_DFe2wAAAAC/rosycheeks-mochi-peach.gif",
+    "whitelist": [0]
+  },
+  {
+    "image": "https://c.tenor.com/sh74YlnhaqIAAAAS/pakistan-cricket-fan-pakistan-fan.gif",
+    "whitelist": [0]
+  },
+  {
+    "image": "https://c.tenor.com/5PnyO3mIES8AAAAS/smiling-smiling-cat.gif",
+    "whitelist": [0]
+  },
+  {
+    "image": "https://c.tenor.com/QxHPuWubhJQAAAAS/awkward-blonde.gif",
+    "whitelist": [0]
+  },
+  {
+    "image": "https://c.tenor.com/Ubx6cadZqEgAAAAC/tonton-tonton-sticker.gif",
+    "whitelist": [0]
+  },
+  {
+    "image": "https://c.tenor.com/jY5lOohJrK8AAAAS/steve-carell-nooo.gif",
+    "whitelist": [0]
+  },
+  {
+    "image": "https://c.tenor.com/bEBxkuyFiucAAAAS/yes-nice.gif",
+    "blacklist": [0]
+  },
+  {
+    "image": "https://c.tenor.com/s0gOUeF1MykAAAAS/parks-and-rec-andy-dwyer.gif",
+    "blacklist": [0]
+  },
+  {
+    "image": "https://c.tenor.com/zUd4CywpLmAAAAAC/victory-dance.gif",
+    "blacklist": [0]
+  },
+  {
+    "image": "https://c.tenor.com/n_UO02SJckUAAAAC/happy-dance-happy.gif",
+    "blacklist": [0]
+  },
+  {
+    "image": "https://c.tenor.com/jYqfbfE5wU4AAAAS/yay-yes.gif",
+    "blacklist": [0]
+  },
+  {
+    "image": "https://c.tenor.com/xJ_mJ01nxmUAAAAC/yay-yes-yes-yes.gif",
+    "blacklist": [0]
+  },
+  {
+    "image": "https://c.tenor.com/6T1XY1msO1cAAAAC/panda-cute.gif",
+    "blacklist": [0]
   }
 ]
