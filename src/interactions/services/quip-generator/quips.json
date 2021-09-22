@@ -118,5 +118,69 @@
   {
     "image": "https://c.tenor.com/1JPLCiEZojcAAAAC/shaq-dance.gif",
     "blacklist": [0]
+  },
+  {
+    "image": "https://tenor.com/view/oh-my-god-scream-happy-yell-omg-gif-17318501",
+    "whitelist": [6]
+  },
+  {
+    "image": "https://tenor.com/view/agatha-wink-gif-20772888",
+    "whitelist": [6]
+  },
+  {
+    "image": "https://tenor.com/view/bimby-edi-dont-dont-attitude-wow-gif-19838856",
+    "whitelist": [0]
+  },
+  {
+    "image": "https://tenor.com/view/crying-happy-but-sad-face-gif-19422780",
+    "whitelist": [0]
+  },
+  {
+    "image": "https://tenor.com/view/rosycheeks-mochi-peach-mochi-cat-cute-kitty-peach-cat-gif-16992614",
+    "whitelist": [0]
+  },
+  {
+    "image": "https://tenor.com/view/pakistan-cricket-fan-pakistan-fan-cricket-angry-fan-angry-fan-angry-man-gif-19825067",
+    "whitelist": [0]
+  },
+  {
+    "image": "https://tenor.com/view/smiling-smiling-cat-cat-cute-kitty-gif-15081434",
+    "whitelist": [0]
+  },
+  {
+    "image": "https://tenor.com/view/awkward-blonde-child-gif-5376830",
+    "whitelist": [0]
+  },
+  {
+    "image": "https://tenor.com/view/tonton-tonton-sticker-mad-pissed-angry-gif-13636072",
+    "whitelist": [0]
+  },
+  {
+    "image": "https://tenor.com/view/steve-carell-nooo-pleasegodno-the-office-angry-gif-12174751",
+    "whitelist": [0]
+  },
+  {
+    "image": "https://tenor.com/view/yes-nice-nod-thumbs-up-gif-12292330",
+    "blacklist": [0]
+  },
+  {
+    "image": "https://tenor.com/view/parks-and-rec-andy-dwyer-chris-pratt-jaw-drop-shocked-gif-4421172",
+    "blacklist": [0]
+  },
+  {
+    "image": "https://tenor.com/view/victory-dance-weekend-vibe-gif-4519322",
+    "blacklist": [0]
+  },
+  {
+    "image": "https://tenor.com/view/happy-dance-happy-yay-dance-cute-gif-19818615",
+    "blacklist": [0]
+  },
+  {
+    "image": "https://tenor.com/view/yay-yes-yeahhh-cute-girl-happy-dance-gif-14559695",
+    "blacklist": [0]
+  },
+  {
+    "image": "https://tenor.com/view/panda-cute-approve-thumbs-up-teddy-bear-gif-17746493",
+    "blacklist": [0]
   }
 ]
