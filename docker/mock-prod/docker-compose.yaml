@@ -26,7 +26,7 @@ services:
       POSTGRES_USER: root
     volumes:
       - type: volume
-        source: postgres-volume-data
+        source: azdg-postgres-volume-data
         target: /var/lib/postgresql/data
       - ../postgres-init:/docker-entrypoint-initdb.d
 
@@ -37,7 +37,7 @@ services:
       - EVENTSTORE_CLUSTER_SIZE=1
       - EVENTSTORE_START_STANDARD_PROJECTIONS=true
       - EVENTSTORE_EXT_TCP_PORT=1113
-      - EVENTSTORE_EXT_HTTP_PORT=2113
+      - EVENTSTORE_HTTP_PORT=2113
       - EVENTSTORE_INSECURE=true
       - EVENTSTORE_ENABLE_EXTERNAL_TCP=true
       - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
@@ -47,13 +47,13 @@ services:
       - '2114:2113'
     volumes:
       - type: volume
-        source: eventstore-volume-data
+        source: azdg-eventstore-volume-data
         target: /var/lib/eventstore
       - type: volume
-        source: eventstore-volume-logs
+        source: azdg-eventstore-volume-logs
         target: /var/log/eventstore
 
 volumes:
-  eventstore-volume-data:
-  eventstore-volume-logs:
-  postgres-volume-data:
+  azdg-eventstore-volume-data:
+  azdg-eventstore-volume-logs:
+  azdg-postgres-volume-data:
