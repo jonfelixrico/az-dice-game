@@ -12,7 +12,7 @@
 # https://www.bretfisher.com/node-docker-good-defaults/
 # http://goldbergyoni.com/checklist-best-practice-of-node-js-in-production/
 
-FROM node:16.7-buster-slim as builder
+FROM node:16.17-buster-slim as builder
 
 ENV NODE_ENV build
 
@@ -26,7 +26,7 @@ RUN yarn build
 
 # ---
 
-FROM node:16.7-buster-slim
+FROM node:16.17-buster-slim
 
 ENV NODE_ENV production
 
